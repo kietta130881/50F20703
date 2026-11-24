@@ -3,318 +3,580 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sổ Thu Chi Hàng Ngày</title>
+  <title>Sổ Thu Chi · Xe 50F20703V</title>
   <style>
     :root {
-      --bg: #f4f6f9;
+      --teal-dark: #066346;
+      --teal: #0b7d58;
+      --teal-light: #e6f4ef;
+      --bg: #f3f6f5;
       --card: #ffffff;
-      --primary: #1b5e20;
-      --primary-light: #e8f5e9;
-      --danger: #b71c1c;
-      --danger-light: #ffebee;
-      --info: #0d47a1;
-      --info-light: #e3f2fd;
-      --text: #1f2937;
+      --text: #111827;
       --muted: #6b7280;
       --border: #e5e7eb;
+      --thu: #0f766e;
+      --thu-bg: #ccfbf1;
+      --chi: #dc2626;
+      --chi-bg: #fee2e2;
+      --ton: #1d4ed8;
+      --ton-bg: #dbeafe;
+      --vetc: #b45309;
+      --vetc-bg: #fef3c7;
     }
+
     * { box-sizing: border-box; font-family: 'Segoe UI', Roboto, Arial, sans-serif; }
-    body { margin: 0; background: var(--bg); color: var(--text); padding: 16px; }
-    .container { max-width: 680px; margin: 0 auto; }
-    h2 { margin: 0 0 14px; font-size: 20px; text-align: center; color: #111827; }
+    body { margin: 0; background: var(--bg); color: var(--text); padding-bottom: 76px; }
+
+    /* Header xanh ngọc */
+    .topbar {
+      background: linear-gradient(90deg, var(--teal-dark), var(--teal));
+      color: #fff;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+    }
+    .brand { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 16px; }
+    .plate-badge {
+      background: #f59e0b;
+      color: #111827;
+      font-weight: 800;
+      font-size: 12px;
+      padding: 2px 8px;
+      border-radius: 6px;
+    }
+    .sync-btn {
+      background: rgba(255,255,255,0.16);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.35);
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .sync-btn:hover { background: rgba(255,255,255,0.26); }
+
+    .container { max-width: 820px; margin: 0 auto; padding: 14px; }
+
+    /* Thanh tìm kiếm & bộ lọc */
+    .search-box {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #fff;
+      font-size: 14px;
+      outline: none;
+      margin-bottom: 10px;
+    }
+    .search-box:focus { border-color: var(--teal); }
+
+    .filter-row {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+      margin-bottom: 12px;
+    }
+    .chip {
+      border: 1px solid #d1d5db;
+      background: #fff;
+      color: #374151;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .chip.active {
+      background: var(--teal);
+      border-color: var(--teal);
+      color: #fff;
+    }
 
     /* Thẻ tổng quan */
-    .summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 16px; }
-    .stat-card { background: var(--card); border-radius: 12px; padding: 12px; text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
-    .stat-label { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; margin-bottom: 4px; }
-    .stat-val { font-size: 15px; font-weight: 700; }
-    .thu { color: var(--primary); }
-    .chi { color: var(--danger); }
-    .ton { color: var(--info); }
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    @media (min-width: 640px) {
+      .kpi-grid { grid-template-columns: repeat(4, 1fr); }
+    }
+    .kpi-card {
+      background: var(--card);
+      border-radius: 12px;
+      padding: 12px;
+      border: 1px solid var(--border);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+    }
+    .kpi-label { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; }
+    .kpi-val { font-size: 16px; font-weight: 800; margin-top: 4px; }
+    .c-thu { color: var(--thu); }
+    .c-chi { color: var(--chi); }
+    .c-ton { color: var(--ton); }
+    .c-vetc { color: var(--vetc); }
 
-    /* Form nhập liệu */
-    .card { background: var(--card); border-radius: 12px; padding: 16px; margin-bottom: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
-    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-    .full { grid-column: span 2; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+    .card-title { font-weight: 700; font-size: 14px; margin-bottom: 10px; color: var(--teal-dark); }
+
+    /* Danh sách giao dịch */
+    .tx-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid #f1f5f9;
+      gap: 10px;
+    }
+    .tx-row:last-child { border-bottom: none; }
+    .tx-cat { font-weight: 700; font-size: 14px; }
+    .tx-meta { font-size: 12px; color: var(--muted); margin-top: 2px; }
+    .tx-money { font-weight: 800; font-size: 14px; white-space: nowrap; }
+
+    /* Form tab Cập nhật */
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .span-2 { grid-column: span 2; }
     label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 4px; color: #374151; }
     input, select {
-      width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 8px;
-      font-size: 14px; background: #fff; outline: none;
+      width: 100%;
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 14px;
+      background: #fff;
     }
-    input:focus, select:focus { border-color: var(--primary); }
+    .btn-primary {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      background: var(--teal);
+      color: #fff;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .btn-primary:disabled { opacity: 0.6; }
 
-    .type-toggle { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-    .type-btn {
-      padding: 10px; border: 1px solid var(--border); border-radius: 8px; font-weight: 700;
-      cursor: pointer; background: #f9fafb; color: var(--muted); transition: 0.2s;
+    /* Bottom nav */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #fff;
+      border-top: 1px solid var(--border);
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      z-index: 30;
     }
-    .type-btn.active-thu { background: var(--primary-light); border-color: var(--primary); color: var(--primary); }
-    .type-btn.active-chi { background: var(--danger-light); border-color: var(--danger); color: var(--danger); }
+    .nav-btn {
+      padding: 10px 6px;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .nav-btn.active { color: var(--teal); background: var(--teal-light); }
 
-    .submit-btn {
-      width: 100%; padding: 12px; border: none; border-radius: 8px; background: #111827;
-      color: #fff; font-size: 15px; font-weight: 700; cursor: pointer; margin-top: 4px;
-    }
-    .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
-
-    /* Danh sách giao dịch gần đây */
-    .tx-item {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 10px 0; border-bottom: 1px solid var(--border);
-    }
-    .tx-item:last-child { border-bottom: none; }
-    .tx-title { font-weight: 600; font-size: 14px; }
-    .tx-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
-    .tx-amt { font-weight: 700; font-size: 14px; white-space: nowrap; }
+    .hidden { display: none; }
+    .empty-state { text-align: center; color: var(--muted); padding: 24px 10px; font-size: 13px; }
     .toast {
-      position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
-      background: #111827; color: #fff; padding: 10px 18px; border-radius: 8px;
-      font-size: 13px; display: none; z-index: 99;
+      position: fixed;
+      bottom: 74px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #111827;
+      color: #fff;
+      padding: 9px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      display: none;
+      z-index: 50;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h2>SỔ THU CHI HÀNG NGÀY (NKTC &amp; THDM)</h2>
+  <header class="topbar">
+    <div class="brand">
+      <span>Sổ Thu Chi</span>
+      <span class="plate-badge">50F20703V</span>
+    </div>
+    <button type="button" class="sync-btn" onclick="syncData(true)">Đồng bộ</button>
+  </header>
 
-    <!-- Thẻ tổng hợp từ THDM -->
-    <div class="summary-grid">
-      <div class="stat-card">
-        <div class="stat-label">Tổng Thu</div>
-        <div class="stat-val thu" id="valThu">0 đ</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">Tổng Chi</div>
-        <div class="stat-val chi" id="valChi">0 đ</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">Tồn Quỹ</div>
-        <div class="stat-val ton" id="valTon">0 đ</div>
-      </div>
+  <main class="container">
+    <input
+      type="text"
+      id="searchInput"
+      class="search-box"
+      placeholder="Tìm nội dung, ngày (vd: 20/11), trạm thu phí..."
+      oninput="applyFilters()"
+    />
+
+    <div class="filter-row" id="filterRow">
+      <button type="button" class="chip active" data-filter="all" onclick="setFilter('all', this)">
+        Tất cả (<span id="countAll">0</span>)
+      </button>
+      <button type="button" class="chip" data-filter="thu" onclick="setFilter('thu', this)">Khoản Thu</button>
+      <button type="button" class="chip" data-filter="chi" onclick="setFilter('chi', this)">Khoản Chi</button>
+      <button type="button" class="chip" data-filter="vetc" onclick="setFilter('vetc', this)">VETC</button>
+      <button type="button" class="chip" data-filter="sac" onclick="setFilter('sac', this)">Sạc pin</button>
+      <button type="button" class="chip" data-filter="khac" onclick="setFilter('khac', this)">Khác</button>
     </div>
 
-    <!-- Form ghi sổ vào NKTC -->
-    <div class="card">
-      <form id="txForm" class="form-grid">
-        <div class="full">
-          <label>Loại giao dịch</label>
-          <div class="type-toggle">
-            <button type="button" id="btnChi" class="type-btn active-chi" onclick="setLoai('Chi')">- KHOẢN CHI</button>
-            <button type="button" id="btnThu" class="type-btn" onclick="setLoai('Thu')">+ KHOẢN THU</button>
+    <!-- TAB 1: TỔNG QUAN -->
+    <section id="tab-overview">
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-label">Tổng Thu</div>
+          <div class="kpi-val c-thu" id="kpiThu">0 ₫</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Tổng Chi</div>
+          <div class="kpi-val c-chi" id="kpiChi">0 ₫</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Tồn Quỹ</div>
+          <div class="kpi-val c-ton" id="kpiTon">0 ₫</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Ví VETC</div>
+          <div class="kpi-val c-vetc" id="kpiVetc">0 ₫</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Tổng hợp theo danh mục (THDM &amp; NKTC)</div>
+        <div id="categorySummary" class="empty-state">Đang tải dữ liệu...</div>
+      </div>
+    </section>
+
+    <!-- TAB 2: CHI TIẾT -->
+    <section id="tab-detail" class="hidden">
+      <div class="card">
+        <div class="card-title">Nhật ký giao dịch (NKTC)</div>
+        <div id="detailList" class="empty-state">Đang tải dữ liệu...</div>
+      </div>
+    </section>
+
+    <!-- TAB 3: CẬP NHẬT -->
+    <section id="tab-update" class="hidden">
+      <div class="card">
+        <div class="card-title">Thêm giao dịch mới vào NKTC</div>
+        <form id="txForm" class="form-grid">
+          <div>
+            <label for="fLoai">Loại giao dịch</label>
+            <select id="fLoai" onchange="populateCategories()">
+              <option value="Chi">Khoản Chi</option>
+              <option value="Thu">Khoản Thu</option>
+            </select>
           </div>
-          <input type="hidden" id="loai" value="Chi" />
-        </div>
+          <div>
+            <label for="fNgay">Ngày</label>
+            <input type="date" id="fNgay" required />
+          </div>
+          <div>
+            <label for="fDanhMuc">Danh mục</label>
+            <select id="fDanhMuc" required></select>
+          </div>
+          <div>
+            <label for="fHinhThuc">Hình thức</label>
+            <select id="fHinhThuc">
+              <option value="Chuyển khoản">Chuyển khoản</option>
+              <option value="Tiền mặt">Tiền mặt</option>
+            </select>
+          </div>
+          <div class="span-2">
+            <label for="fSoTien">Số tiền (VNĐ)</label>
+            <input type="number" id="fSoTien" min="1" placeholder="VD: 150000" required />
+          </div>
+          <div class="span-2">
+            <label for="fGhiChu">Ghi chú / Nội dung</label>
+            <input type="text" id="fGhiChu" placeholder="VD: Sạc pin, trạm thu phí, ăn sáng..." />
+          </div>
+          <div class="span-2">
+            <button type="submit" id="btnSave" class="btn-primary">Lưu vào NKTC</button>
+          </div>
+        </form>
+      </div>
+    </section>
+  </main>
 
-        <div>
-          <label for="ngay">Ngày giao dịch</label>
-          <input type="date" id="ngay" required />
-        </div>
-
-        <div>
-          <label for="hinhThuc">Hình thức thanh toán</label>
-          <select id="hinhThuc" required>
-            <option value="Chuyển khoản">Chuyển khoản</option>
-            <option value="Tiền mặt">Tiền mặt</option>
-          </select>
-        </div>
-
-        <div>
-          <label for="danhMuc">Danh mục</label>
-          <select id="danhMuc" required></select>
-        </div>
-
-        <div>
-          <label for="soTien">Số tiền (VNĐ)</label>
-          <input type="number" id="soTien" placeholder="VD: 150000" min="1" required />
-        </div>
-
-        <div class="full">
-          <label for="ghiChu">Ghi chú / Diễn giải</label>
-          <input type="text" id="ghiChu" placeholder="Nhập nội dung chi tiết..." />
-        </div>
-
-        <div class="full">
-          <button type="submit" id="btnSubmit" class="submit-btn">Lưu vào sheet NKTC</button>
-        </div>
-      </form>
-    </div>
-
-    <!-- Giao dịch mới nhất -->
-    <div class="card">
-      <div style="font-weight:700; font-size:14px; margin-bottom:8px;">Giao dịch gần đây (NKTC)</div>
-      <div id="txList" style="font-size:13px; color:var(--muted);">Đang tải dữ liệu...</div>
-    </div>
-  </div>
+  <nav class="bottom-nav">
+    <button type="button" class="nav-btn active" id="nav-overview" onclick="switchTab('overview', this)">Tổng quan</button>
+    <button type="button" class="nav-btn" id="nav-detail" onclick="switchTab('detail', this)">Chi tiết</button>
+    <button type="button" class="nav-btn" id="nav-update" onclick="switchTab('update', this)">Cập nhật</button>
+  </nav>
 
   <div id="toast" class="toast"></div>
 
   <script>
     const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbymiRccSimgcBN5NU6OadwjRtgkB-yfCyuujX-xUMHWAftLaTKDBreuvd5dgJlhqHwY_Q/exec';
 
-    // Danh mục đồng bộ chính xác với bảng THDM trên Google Sheets
     const CATEGORIES = {
-      Thu: [
-        'Doanh thu dịch vụ/Lương',
-        'Thu nhập khác'
-      ],
-      Chi: [
-        'Sạc điện/Nhiên liệu',
-        'Ăn uống',
-        'Phí cầu đường/VETC',
-        'Bảo dưỡng/Sửa chữa',
-        'Sinh hoạt gia đình',
-        'Khác'
-      ]
+      Thu: ['Doanh thu dịch vụ/Lương', 'Thu nhập khác'],
+      Chi: ['Sạc điện/Nhiên liệu', 'Ăn uống', 'Phí cầu đường/VETC', 'Bảo dưỡng/Sửa chữa', 'Sinh hoạt gia đình', 'Khác']
     };
 
-    const hasAppsScript = typeof google !== 'undefined' && google.script && google.script.run;
+    const state = {
+      tongThu: 0,
+      tongChi: 0,
+      tonQuy: 0,
+      tongVetc: 0,
+      transactions: [],
+      filter: 'all',
+      search: ''
+    };
 
-    function formatVND(num) {
-      return Number(num || 0).toLocaleString('vi-VN') + ' đ';
+    function formatVND(n) {
+      return Number(n || 0).toLocaleString('vi-VN') + ' ₫';
     }
 
     function showToast(msg) {
-      const t = document.getElementById('toast');
-      t.textContent = msg;
-      t.style.display = 'block';
-      setTimeout(() => { t.style.display = 'none'; }, 3000);
+      const el = document.getElementById('toast');
+      el.textContent = msg;
+      el.style.display = 'block';
+      clearTimeout(window._toastTimer);
+      window._toastTimer = setTimeout(() => { el.style.display = 'none'; }, 2800);
     }
 
-    function setLoai(type) {
-      document.getElementById('loai').value = type;
-      document.getElementById('btnChi').className = 'type-btn' + (type === 'Chi' ? ' active-chi' : '');
-      document.getElementById('btnThu').className = 'type-btn' + (type === 'Thu' ? ' active-thu' : '');
+    function switchTab(tabName, btnEl) {
+      ['overview', 'detail', 'update'].forEach(t => {
+        document.getElementById('tab-' + t).classList.toggle('hidden', t !== tabName);
+      });
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+      if (btnEl) btnEl.classList.add('active');
+    }
 
-      const select = document.getElementById('danhMuc');
-      select.innerHTML = '';
-      CATEGORIES[type].forEach(cat => {
+    function populateCategories() {
+      const loai = document.getElementById('fLoai').value;
+      const sel = document.getElementById('fDanhMuc');
+      sel.innerHTML = '';
+      (CATEGORIES[loai] || []).forEach(c => {
         const opt = document.createElement('option');
-        opt.value = cat;
-        opt.textContent = cat;
-        select.appendChild(opt);
+        opt.value = c;
+        opt.textContent = c;
+        sel.appendChild(opt);
       });
     }
 
-    function renderData(res) {
-      if (!res) return;
-      if (res.error) {
-        showToast('Lỗi: ' + res.error);
+    function setFilter(filterKey, btnEl) {
+      state.filter = filterKey;
+      document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+      if (btnEl) btnEl.classList.add('active');
+      applyFilters();
+    }
+
+    function matchesFilter(tx) {
+      const loaiLower = String(tx.loai || '').toLowerCase();
+      const catLower = String(tx.danhMuc || '').toLowerCase();
+      const noteLower = String(tx.ghiChu || '').toLowerCase();
+      const dateLower = String(tx.ngay || '').toLowerCase();
+      const joined = `${loaiLower} ${catLower} ${noteLower} ${dateLower}`;
+
+      if (state.search) {
+        if (!joined.includes(state.search.toLowerCase())) return false;
+      }
+
+      if (state.filter === 'thu') return loaiLower.includes('thu');
+      if (state.filter === 'chi') return loaiLower.includes('chi');
+      if (state.filter === 'vetc') return joined.includes('vetc') || joined.includes('cầu đường');
+      if (state.filter === 'sac') return joined.includes('sạc') || joined.includes('nhiên liệu') || joined.includes('pin');
+      if (state.filter === 'khac') {
+        return !loaiLower.includes('thu') &&
+               !joined.includes('vetc') &&
+               !joined.includes('cầu đường') &&
+               !joined.includes('sạc') &&
+               !joined.includes('nhiên liệu');
+      }
+      return true;
+    }
+
+    function applyFilters() {
+      state.search = document.getElementById('searchInput').value.trim();
+      const filtered = state.transactions.filter(matchesFilter);
+
+      document.getElementById('countAll').textContent = filtered.length;
+      renderDetailList(filtered);
+      renderCategorySummary(filtered);
+    }
+
+    function renderCategorySummary(list) {
+      const box = document.getElementById('categorySummary');
+      if (!list || list.length === 0) {
+        box.innerHTML = '<div class="empty-state">Chưa có dữ liệu giao dịch phù hợp.</div>';
         return;
       }
 
-      document.getElementById('valThu').textContent = formatVND(res.tongThu);
-      document.getElementById('valChi').textContent = formatVND(res.tongChi);
-      document.getElementById('valTon').textContent = formatVND(res.tonQuy);
+      const map = {};
+      list.forEach(tx => {
+        const key = tx.danhMuc || 'Khác';
+        if (!map[key]) map[key] = { count: 0, total: 0, isThu: String(tx.loai || '').toLowerCase().includes('thu') };
+        map[key].count += 1;
+        map[key].total += Number(tx.soTien) || 0;
+      });
 
-      const list = document.getElementById('txList');
-      if (!res.transactions || res.transactions.length === 0) {
-        list.innerHTML = 'Chưa có giao dịch nào trong NKTC.';
-        return;
-      }
-
-      list.innerHTML = res.transactions.map(item => {
-        const isThu = String(item.loai || '').toLowerCase().includes('thu');
+      const rows = Object.keys(map).map(k => {
+        const item = map[k];
         return `
-          <div class="tx-item">
+          <div class="tx-row">
             <div>
-              <div class="tx-title">${item.danhMuc}</div>
-              <div class="tx-sub">${item.ngay} • ${item.hinhThuc}${item.ghiChu ? ' • ' + item.ghiChu : ''}</div>
+              <div class="tx-cat">${k}</div>
+              <div class="tx-meta">${item.count} giao dịch</div>
             </div>
-            <div class="tx-amt ${isThu ? 'thu' : 'chi'}">
-              ${isThu ? '+' : '-'}${formatVND(item.soTien)}
+            <div class="tx-money ${item.isThu ? 'c-thu' : 'c-chi'}">${formatVND(item.total)}</div>
+          </div>
+        `;
+      }).join('');
+
+      box.innerHTML = rows;
+    }
+
+    function renderDetailList(list) {
+      const box = document.getElementById('detailList');
+      if (!list || list.length === 0) {
+        box.innerHTML = '<div class="empty-state">Không tìm thấy giao dịch nào.</div>';
+        return;
+      }
+
+      box.innerHTML = list.map(tx => {
+        const isThu = String(tx.loai || '').toLowerCase().includes('thu');
+        return `
+          <div class="tx-row">
+            <div>
+              <div class="tx-cat">${tx.danhMuc || 'Giao dịch'}</div>
+              <div class="tx-meta">${tx.ngay} • ${tx.hinhThuc || ''}${tx.ghiChu ? ' • ' + tx.ghiChu : ''}</div>
+            </div>
+            <div class="tx-money ${isThu ? 'c-thu' : 'c-chi'}">
+              ${isThu ? '+' : '-'}${formatVND(tx.soTien)}
             </div>
           </div>
         `;
       }).join('');
     }
 
-    function loadInitialData() {
-      if (hasAppsScript) {
-        google.script.run
-          .withSuccessHandler(renderData)
-          .withFailureHandler(err => showToast('Lỗi tải dữ liệu: ' + err.message))
-          .getDashboardData();
+    function applyDashboardPayload(payload) {
+      const data = payload && payload.data ? payload.data : payload;
+      if (!data) return;
+      if (data.error) {
+        showToast('Lỗi: ' + data.error);
         return;
       }
 
-      if (!APPS_SCRIPT_URL) {
-        document.getElementById('txList').textContent = 'Chưa cấu hình APPS_SCRIPT_URL cho GitHub Pages.';
+      state.tongThu = Number(data.tongThu) || 0;
+      state.tongChi = Number(data.tongChi) || 0;
+      state.tonQuy = Number(data.tonQuy) || 0;
+      state.tongVetc = Number(data.tongVetc) || 0;
+      state.transactions = Array.isArray(data.transactions) ? data.transactions : [];
+
+      document.getElementById('kpiThu').textContent = formatVND(state.tongThu);
+      document.getElementById('kpiChi').textContent = formatVND(state.tongChi);
+      document.getElementById('kpiTon').textContent = formatVND(state.tonQuy);
+      document.getElementById('kpiVetc').textContent = formatVND(state.tongVetc);
+
+      applyFilters();
+    }
+
+    function syncData(showMsg) {
+      if (typeof google !== 'undefined' && google.script && google.script.run) {
+        google.script.run
+          .withSuccessHandler(res => {
+            applyDashboardPayload(res);
+            if (showMsg) showToast('Đã đồng bộ từ NKTC & THDM');
+          })
+          .withFailureHandler(err => showToast('Lỗi đồng bộ: ' + err.message))
+          .getDashboardData();
         return;
       }
 
       fetch(APPS_SCRIPT_URL + '?action=getDashboardData')
         .then(r => r.json())
-        .then(renderData)
-        .catch(err => showToast('Lỗi tải dữ liệu: ' + err.message));
-    }
-
-    function saveTransaction(payload) {
-      return new Promise((resolve, reject) => {
-        if (hasAppsScript) {
-          google.script.run
-            .withSuccessHandler(resolve)
-            .withFailureHandler(err => reject(new Error(err.message)))
-            .addTransaction(payload);
-          return;
-        }
-
-        if (!APPS_SCRIPT_URL) {
-          reject(new Error('Chưa cấu hình APPS_SCRIPT_URL'));
-          return;
-        }
-
-        fetch(APPS_SCRIPT_URL, {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-          body: JSON.stringify({ action: 'addTransaction', ...payload })
+        .then(res => {
+          applyDashboardPayload(res);
+          if (showMsg) showToast('Đã đồng bộ từ NKTC & THDM');
         })
-          .then(() => {
-            setTimeout(() => {
-              loadInitialData();
-              resolve(null);
-            }, 800);
-          })
-          .catch(reject);
-      });
+        .catch(err => showToast('Lỗi kết nối Web App: ' + err.message));
     }
 
-    // Khởi tạo ngày hôm nay & danh mục mặc định
-    document.getElementById('ngay').valueAsDate = new Date();
-    setLoai('Chi');
-    loadInitialData();
-
-    // Xử lý lưu giao dịch
     document.getElementById('txForm').addEventListener('submit', function(e) {
       e.preventDefault();
-      const btn = document.getElementById('btnSubmit');
+      const btn = document.getElementById('btnSave');
       btn.disabled = true;
       btn.textContent = 'Đang lưu...';
 
       const payload = {
-        loai: document.getElementById('loai').value,
-        ngay: document.getElementById('ngay').value,
-        hinhThuc: document.getElementById('hinhThuc').value,
-        danhMuc: document.getElementById('danhMuc').value,
-        soTien: document.getElementById('soTien').value,
-        ghiChu: document.getElementById('ghiChu').value
+        action: 'addTransaction',
+        loai: document.getElementById('fLoai').value,
+        ngay: document.getElementById('fNgay').value,
+        danhMuc: document.getElementById('fDanhMuc').value,
+        hinhThuc: document.getElementById('fHinhThuc').value,
+        soTien: document.getElementById('fSoTien').value,
+        ghiChu: document.getElementById('fGhiChu').value
       };
 
-      saveTransaction(payload)
-        .then(res => {
-          if (res) renderData(res);
-          document.getElementById('soTien').value = '';
-          document.getElementById('ghiChu').value = '';
-          btn.disabled = false;
-          btn.textContent = 'Lưu vào sheet NKTC';
-          showToast('Đã lưu giao dịch thành công!');
+      if (typeof google !== 'undefined' && google.script && google.script.run) {
+        google.script.run
+          .withSuccessHandler(res => {
+            applyDashboardPayload(res);
+            document.getElementById('fSoTien').value = '';
+            document.getElementById('fGhiChu').value = '';
+            btn.disabled = false;
+            btn.textContent = 'Lưu vào NKTC';
+            showToast('Đã lưu vào sheet NKTC!');
+          })
+          .withFailureHandler(err => {
+            btn.disabled = false;
+            btn.textContent = 'Lưu vào NKTC';
+            showToast('Lỗi lưu: ' + err.message);
+          })
+          .addTransaction(payload);
+        return;
+      }
+
+      fetch(APPS_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(payload)
+      })
+        .then(() => {
+          setTimeout(() => {
+            syncData(false);
+            document.getElementById('fSoTien').value = '';
+            document.getElementById('fGhiChu').value = '';
+            btn.disabled = false;
+            btn.textContent = 'Lưu vào NKTC';
+            showToast('Đã gửi giao dịch vào NKTC!');
+          }, 900);
         })
         .catch(err => {
           btn.disabled = false;
-          btn.textContent = 'Lưu vào sheet NKTC';
+          btn.textContent = 'Lưu vào NKTC';
           showToast('Lỗi: ' + err.message);
         });
     });
+
+    // Khởi tạo
+    document.getElementById('fNgay').valueAsDate = new Date();
+    populateCategories();
+    syncData(false);
   </script>
 </body>
 </html>
