@@ -279,6 +279,53 @@
     .panel-title { display: flex; align-items: center; gap: 7px; font-size: 14px; font-weight: 800; color: #0f172a; }
     .pill-badge { font-size: 11px; font-weight: 800; padding: 3px 9px; border-radius: 999px; background: #e2e8f0; color: #1e293b; }
 
+    /* Dòng tổng hợp theo bộ lọc ngay dưới số chứng từ ở tab Chi tiết */
+    .detail-filter-sum-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+      background: #eff6ff;
+      border: 1.5px solid #93c5fd;
+      border-radius: 10px;
+      padding: 8px 11px;
+      margin-bottom: 12px;
+      font-size: 12px;
+      font-weight: 800;
+      color: #1e3a8a;
+    }
+    .detail-filter-sum-main {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 900;
+      color: #1d4ed8;
+    }
+    .detail-filter-sum-sub {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      font-size: 11.5px;
+      font-weight: 800;
+    }
+    .sum-chip-thu {
+      background: #dcfce7;
+      color: #047857;
+      border: 1px solid #86efac;
+      padding: 2px 8px;
+      border-radius: 999px;
+    }
+    .sum-chip-chi {
+      background: #fee2e2;
+      color: #b91c1c;
+      border: 1px solid #fca5a5;
+      padding: 2px 8px;
+      border-radius: 999px;
+    }
+
     /* Biểu đồ tròn (Donut) + chú thích */
     .pie-layout { display: flex; flex-direction: column; align-items: center; gap: 14px; }
     @media (min-width: 600px) { .pie-layout { flex-direction: row; align-items: center; } }
@@ -885,8 +932,21 @@
             </svg>
             <span>Thẻ giao dịch chi tiết (NKTC)</span>
           </div>
-          <span class="pill-badge" id="detailCardCount">0 thẻ</span>
+          <span class="pill-badge" id="detailCardCount">0 chứng từ</span>
         </div>
+
+        <!-- Dòng tổng tiền theo bộ lọc đặt ngay dưới số chứng từ -->
+        <div id="detailFilterSumBar" class="detail-filter-sum-bar">
+          <div class="detail-filter-sum-main">
+            <span>Tổng tiền theo bộ lọc:</span>
+            <strong id="detailFilteredTotal">0 ₫</strong>
+          </div>
+          <div class="detail-filter-sum-sub">
+            <span class="sum-chip-thu" id="detailFilteredThu">Thu: 0 ₫</span>
+            <span class="sum-chip-chi" id="detailFilteredChi">Chi: 0 ₫</span>
+          </div>
+        </div>
+
         <div id="detailCardsStack" class="cards-stack"></div>
       </div>
     </section>
@@ -1334,6 +1394,36 @@
       });
     }
 
+    function computeFilteredTotals(list) {
+      let sumThu = 0;
+      let sumChi = 0;
+      const chiMap = {};
+      const thuMap = {};
+
+      list.forEach(tx => {
+        const amt = Number(tx.soTien) || 0;
+        const cat = tx.danhMuc || 'Khác';
+        if (checkThu(tx)) {
+          sumThu += amt;
+          thuMap[cat] = (thuMap[cat] || 0) + amt;
+        } else {
+          sumChi += amt;
+          chiMap[cat] = (chiMap[cat] || 0) + amt;
+        }
+      });
+
+      return {
+        count: list.length,
+        sumThu: sumThu,
+        sumChi: sumChi,
+        sumAll: sumThu + sumChi,
+        netFlow: sumThu - sumChi,
+        cuoiKy: state.dauKy + sumThu - sumChi,
+        chiMap: chiMap,
+        thuMap: thuMap
+      };
+    }
+
     function buildTotalRowHtml(labelText, totalAmount, modeType) {
       const cls = modeType === 'thu' ? 'total-thu' : 'total-chi';
       return `
@@ -1448,33 +1538,19 @@
       `;
     }
 
-    function renderOverview(list) {
-      let sumThu = 0;
-      let sumChi = 0;
-      const chiMap = {};
-      const thuMap = {};
-
-      list.forEach(tx => {
-        const amt = Number(tx.soTien) || 0;
-        const cat = tx.danhMuc || 'Khác';
-        if (checkThu(tx)) {
-          sumThu += amt;
-          thuMap[cat] = (thuMap[cat] || 0) + amt;
-        } else {
-          sumChi += amt;
-          chiMap[cat] = (chiMap[cat] || 0) + amt;
-        }
-      });
-
-      const cuoiKy = state.dauKy + sumThu - sumChi;
+    function renderOverview(list, totals) {
+      const t = totals || computeFilteredTotals(list);
+      const sumThu = t.sumThu;
+      const sumChi = t.sumChi;
+      const cuoiKy = t.cuoiKy;
 
       document.getElementById('valKpiDauKy').textContent = formatMoney(state.dauKy);
       document.getElementById('valKpiThu').textContent = formatMoney(sumThu);
       document.getElementById('valKpiChi').textContent = formatMoney(sumChi);
       document.getElementById('valKpiCuoiKy').textContent = formatMoney(cuoiKy);
 
-      const chiItems = Object.entries(chiMap).sort((a, b) => b[1] - a[1]);
-      const thuItems = Object.entries(thuMap).sort((a, b) => b[1] - a[1]);
+      const chiItems = Object.entries(t.chiMap).sort((a, b) => b[1] - a[1]);
+      const thuItems = Object.entries(t.thuMap).sort((a, b) => b[1] - a[1]);
 
       renderDonutAndLegend('pieChiArea', 'pieChiTotalBadge', 'Tổng chi', 'Tổng cộng CHI', 'chi', chiItems, CHI_COLORS);
       renderHorizontalBars('barChiArea', 'Tổng cộng CHI', 'chi', chiItems, CHI_COLORS);
@@ -1621,6 +1697,7 @@
       if (typeof google !== 'undefined' && google.script && google.script.run) {
         google.script.run
           .withSuccessHandler(res => {
+            if (res && res.data) applySheetPayload(res.data);
             setLoadingOverlay(false);
             showToast(res && res.reminder && res.reminder.message ? res.reminder.message : 'Đã đồng bộ lịch nhắc trước 3 ngày (02/12/2026)');
           })
@@ -1648,9 +1725,18 @@
         });
     }
 
-    function renderDetailCards(list) {
+    function renderDetailCards(list, totals) {
+      const t = totals || computeFilteredTotals(list);
       const stack = document.getElementById('detailCardsStack');
-      document.getElementById('detailCardCount').textContent = list.length + ' thẻ';
+      document.getElementById('detailCardCount').textContent = list.length + ' chứng từ';
+
+      const totalDisplay = (t.sumThu > 0 && t.sumChi > 0)
+        ? `${formatMoney(t.netFlow)} (Thu - Chi)`
+        : (t.sumThu > 0 ? formatMoney(t.sumThu) : formatMoney(t.sumChi));
+
+      document.getElementById('detailFilteredTotal').textContent = totalDisplay;
+      document.getElementById('detailFilteredThu').textContent = 'Thu: ' + formatMoney(t.sumThu);
+      document.getElementById('detailFilteredChi').textContent = 'Chi: ' + formatMoney(t.sumChi);
 
       if (!list || list.length === 0) {
         stack.innerHTML = '<div class="empty-msg">Không có thẻ giao dịch phù hợp bộ lọc.</div>';
@@ -1708,11 +1794,12 @@
 
     function runFilters() {
       const filtered = getFilteredList();
-      document.getElementById('filterSummaryPill').textContent = filtered.length + ' GD';
+      const totals = computeFilteredTotals(filtered);
+      document.getElementById('filterSummaryPill').textContent = filtered.length + ' chứng từ · ' + formatMoney(totals.sumThu + totals.sumChi);
 
-      renderOverview(filtered);
+      renderOverview(filtered, totals);
       renderLoans();
-      renderDetailCards(filtered);
+      renderDetailCards(filtered, totals);
     }
 
     function applySheetPayload(raw) {
