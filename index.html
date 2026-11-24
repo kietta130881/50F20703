@@ -22,7 +22,7 @@
       --tab-update: #b45309;
       --tab-update-soft: #fef3c7;
 
-      /* Màu đầu kỳ / thu / chi / cuối kỳ / vay */
+      /* Màu đầu kỳ / thu / chi / cuối kỳ */
       --dauk-bg: #ffffff;
       --dauk-border: #64748b;
       --dauk-txt: #1e293b;
@@ -38,6 +38,17 @@
       --ton: #2563eb;
       --ton-bg: #eff6ff;
       --ton-border: #60a5fa;
+
+      /* Màu riêng 2 khoản vay */
+      --ec-bg: #eff6ff;
+      --ec-border: #60a5fa;
+      --ec-accent: #1d4ed8;
+      --ec-badge: #dbeafe;
+
+      --vpb-bg: #f5f3ff;
+      --vpb-border: #a78bfa;
+      --vpb-accent: #6d28d9;
+      --vpb-badge: #ede9fe;
     }
 
     * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; -webkit-tap-highlight-color: transparent; }
@@ -128,7 +139,7 @@
     /* Container nội dung */
     .content { max-width: 860px; margin: 0 auto; padding: 12px; }
 
-    /* 4 khối dòng tiền: Đầu kỳ - Thu - Chi - Cuối kỳ */
+    /* 4 khối dòng tiền */
     .kpi-4 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 9px; margin-bottom: 12px; }
     @media (min-width: 640px) { .kpi-4 { grid-template-columns: repeat(4, 1fr); } }
     .kpi-box {
@@ -158,6 +169,7 @@
     .panel-hd {
       display: flex; align-items: center; justify-content: space-between; gap: 8px;
       margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid #f1f5f9;
+      flex-wrap: wrap;
     }
     .panel-title { display: flex; align-items: center; gap: 7px; font-size: 14px; font-weight: 800; color: #0f172a; }
     .pill-badge { font-size: 11px; font-weight: 800; padding: 3px 9px; border-radius: 999px; background: #e2e8f0; color: #1e293b; }
@@ -185,6 +197,32 @@
     .legend-left { display: flex; align-items: center; gap: 7px; font-weight: 700; color: #1e293b; }
     .swatch { width: 11px; height: 11px; border-radius: 3px; flex-shrink: 0; }
 
+    /* Dòng tổng 100% cuối mỗi biểu đồ */
+    .chart-total-row {
+      margin-top: 4px;
+      padding: 9px 11px;
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      font-size: 12.5px;
+      font-weight: 900;
+      border: 1.5px solid #94a3b8;
+      background: #f1f5f9;
+      color: #0f172a;
+    }
+    .chart-total-row.total-chi {
+      background: #fef2f2;
+      border-color: #f87171;
+      color: #991b1b;
+    }
+    .chart-total-row.total-thu {
+      background: #ecfdf5;
+      border-color: #34d399;
+      color: #065f46;
+    }
+
     /* Biểu đồ cột ngang */
     .hbar-list { display: flex; flex-direction: column; gap: 10px; }
     .hbar-item { display: flex; flex-direction: column; gap: 4px; }
@@ -204,7 +242,7 @@
     .analysis-row.thu-note { border-left-color: var(--thu); }
     .analysis-row.net-note { border-left-color: var(--ton); }
 
-    /* Tab Theo dõi vay */
+    /* Tab Theo dõi vay: 2 khối 2 màu khác nhau rõ rệt + 2 bộ lọc */
     .reminder-bar {
       background: #f0fdfa; border: 1px solid #5eead4; border-radius: 12px;
       padding: 10px 12px; margin-bottom: 12px;
@@ -215,30 +253,78 @@
       background: #0f766e; color: #fff; border: none; border-radius: 8px;
       padding: 7px 11px; font-size: 12px; font-weight: 800; cursor: pointer;
     }
+
     .loan-card {
-      background: #fff; border: 1.5px solid #cbd5e1; border-radius: 14px;
-      padding: 13px 14px; margin-bottom: 12px; box-shadow: 0 2px 6px rgba(15,23,42,0.04);
+      border-radius: 15px; padding: 14px; margin-bottom: 13px;
+      border: 2px solid #cbd5e1;
+      box-shadow: 0 3px 10px rgba(15, 23, 42, 0.06);
     }
-    .loan-hd { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
-    .loan-title { font-size: 14px; font-weight: 900; color: #0f172a; }
+    .loan-card.loan-ec {
+      background: var(--ec-bg);
+      border-color: var(--ec-border);
+    }
+    .loan-card.loan-ec .loan-title { color: var(--ec-accent); }
+    .loan-card.loan-ec .loan-tag {
+      background: var(--ec-badge); color: var(--ec-accent); border: 1px solid var(--ec-border);
+    }
+    .loan-card.loan-ec .lm-box {
+      background: rgba(255, 255, 255, 0.88); border-color: #bfdbfe;
+    }
+    .loan-card.loan-ec .loan-foot { border-top-color: #93c5fd; }
+
+    .loan-card.loan-vpb {
+      background: var(--vpb-bg);
+      border-color: var(--vpb-border);
+    }
+    .loan-card.loan-vpb .loan-title { color: var(--vpb-accent); }
+    .loan-card.loan-vpb .loan-tag {
+      background: var(--vpb-badge); color: var(--vpb-accent); border: 1px solid var(--vpb-border);
+    }
+    .loan-card.loan-vpb .lm-box {
+      background: rgba(255, 255, 255, 0.88); border-color: #ddd6fe;
+    }
+    .loan-card.loan-vpb .loan-foot { border-top-color: #c4b5fd; }
+
+    .loan-hd { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; flex-wrap: wrap; }
+    .loan-title { font-size: 14.5px; font-weight: 900; }
     .loan-tag {
-      font-size: 11px; font-weight: 800; padding: 3px 9px; border-radius: 999px;
-      background: var(--tab-loans-soft); color: var(--tab-loans); border: 1px solid #5eead4; white-space: nowrap;
+      font-size: 11px; font-weight: 800; padding: 3px 9px; border-radius: 999px; white-space: nowrap;
     }
-    .loan-sub { font-size: 11.5px; color: #475569; margin-top: 4px; font-weight: 600; }
+    .loan-sub { font-size: 11.5px; color: #334155; margin-top: 4px; font-weight: 600; }
     .loan-metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 10px; }
-    .lm-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 8px 9px; }
+    .lm-box { border: 1px solid #e2e8f0; border-radius: 10px; padding: 8px 9px; }
     .lm-lbl { font-size: 10px; font-weight: 700; color: var(--muted); }
     .lm-val { font-size: 12.5px; font-weight: 900; color: #0f172a; margin-top: 3px; }
     .loan-foot {
       margin-top: 10px; padding-top: 8px; border-top: 1px dashed #cbd5e1;
       font-size: 11.5px; font-weight: 700; color: #1e293b; display: flex; flex-direction: column; gap: 4px;
     }
-    .sched-table-wrap { overflow-x: auto; }
+
+    .loan-filter-grid {
+      display: grid; grid-template-columns: 1fr; gap: 8px; margin-bottom: 10px;
+      background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 10px; padding: 9px;
+    }
+    @media (min-width: 560px) { .loan-filter-grid { grid-template-columns: 1fr 1fr; } }
+    .lf-group { display: flex; flex-direction: column; gap: 4px; }
+    .lf-lbl { font-size: 11px; font-weight: 800; color: #334155; }
+    .lf-sel {
+      width: 100%; padding: 8px 10px; border: 1px solid #94a3b8; border-radius: 8px;
+      font-size: 12.5px; font-weight: 700; background: #fff; color: #0f172a;
+    }
+
+    .sched-table-wrap { overflow-x: auto; max-height: 460px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 10px; }
     .sched-tbl { width: 100%; border-collapse: collapse; font-size: 12px; }
-    .sched-tbl th { background: #0f766e; color: #fff; padding: 8px 8px; text-align: left; font-weight: 800; }
+    .sched-tbl th { background: #0f766e; color: #fff; padding: 8px 8px; text-align: left; font-weight: 800; position: sticky; top: 0; z-index: 5; }
     .sched-tbl td { padding: 8px 8px; border-bottom: 1px solid #e2e8f0; font-weight: 700; color: #0f172a; }
-    .sched-tbl tr:nth-child(even) td { background: #f8fafc; }
+    .sched-tbl tr.row-ec td { background: #f8fbff; }
+    .sched-tbl tr.row-vpb td { background: #faf8ff; }
+    .sched-pill {
+      display: inline-block; font-size: 10.5px; font-weight: 800; padding: 2px 7px; border-radius: 999px;
+    }
+    .sched-pill.st-paid { background: #d1fae5; color: #047857; }
+    .sched-pill.st-cur { background: #fee2e2; color: #dc2626; }
+    .sched-pill.st-next { background: #fef3c7; color: #b45309; }
+    .sched-pill.st-up { background: #e2e8f0; color: #334155; }
 
     /* Thẻ giao dịch ở tab Chi tiết */
     .cards-stack { display: flex; flex-direction: column; gap: 14px; }
@@ -340,7 +426,7 @@
     }
     .f-btn:disabled { opacity: 0.6; }
 
-    /* 4 tab dưới cùng theo đúng thứ tự: Tổng quan · Theo dõi vay · Chi tiết · Cập nhật */
+    /* 4 tab dưới cùng */
     .bottom-bar {
       position: fixed; bottom: 0; left: 0; right: 0; height: 64px;
       background: #ffffff; border-top: 1px solid #cbd5e1;
@@ -522,6 +608,7 @@
         </div>
       </div>
 
+      <!-- Biểu đồ 1: Tròn CHI -->
       <div class="panel">
         <div class="panel-hd">
           <div class="panel-title">
@@ -535,6 +622,7 @@
         <div id="pieChiArea" class="pie-layout"></div>
       </div>
 
+      <!-- Biểu đồ 2: Cột ngang CHI -->
       <div class="panel">
         <div class="panel-hd">
           <div class="panel-title">
@@ -548,6 +636,7 @@
         <div id="barChiArea" class="hbar-list"></div>
       </div>
 
+      <!-- Biểu đồ 3: Tròn THU -->
       <div class="panel">
         <div class="panel-hd">
           <div class="panel-title">
@@ -561,6 +650,7 @@
         <div id="pieThuArea" class="pie-layout"></div>
       </div>
 
+      <!-- Biểu đồ 4: Cột ngang THU -->
       <div class="panel">
         <div class="panel-hd">
           <div class="panel-title">
@@ -587,7 +677,7 @@
       </div>
     </section>
 
-    <!-- TAB 2: THEO DÕI VAY (chỉ 2 khoản vay: Easy Credit & VPBank; bỏ thấu chi MB Bank) -->
+    <!-- TAB 2: THEO DÕI VAY -->
     <section id="sec-loans" class="hide">
       <div class="reminder-bar">
         <span>📅 Nhắc trước 3 ngày đến hạn thanh toán vay (Hạn 05/12/2026 → Nhắc 02/12/2026)</span>
@@ -624,17 +714,42 @@
 
       <div class="panel">
         <div class="panel-hd">
-          <div class="panel-title"><span>Lịch trả góp sắp tới (2 khoản vay)</span></div>
-          <span class="pill-badge">Nhắc trước 3 ngày</span>
+          <div class="panel-title"><span>Lịch sử vay &amp; Kỳ trả góp (18 kỳ &amp; 84 kỳ)</span></div>
+          <span class="pill-badge" id="loanSchedCountBadge">0 kỳ</span>
         </div>
+
+        <div class="loan-filter-grid">
+          <div class="lf-group">
+            <label class="lf-lbl" for="selLoanFilterAccount">Bộ lọc 1 · Chọn khoản vay</label>
+            <select id="selLoanFilterAccount" class="lf-sel" onchange="renderLoanScheduleTable()">
+              <option value="all">Tất cả 2 khoản vay (EC 18 kỳ + VPB 84 kỳ)</option>
+              <option value="LTX4716547A">1. Easy Credit · LTX4716547A (18 kỳ)</option>
+              <option value="LD2631603041">2. VPBank · LD2631603041 (84 kỳ)</option>
+            </select>
+          </div>
+
+          <div class="lf-group">
+            <label class="lf-lbl" for="selLoanFilterPeriod">Bộ lọc 2 · Chọn phạm vi kỳ hiển thị</label>
+            <select id="selLoanFilterPeriod" class="lf-sel" onchange="renderLoanScheduleTable()">
+              <option value="current_next">Kỳ hiện tại &amp; kỳ tiếp theo</option>
+              <option value="nearest_1">Kỳ gần nhất (1 kỳ tới)</option>
+              <option value="nearest_5">5 kỳ gần nhất</option>
+              <option value="nearest_10">10 kỳ gần nhất</option>
+              <option value="paid_and_current">Đã trả + Kỳ hiện tại</option>
+              <option value="all">Tất cả các kỳ (18 kỳ / 84 kỳ)</option>
+            </select>
+          </div>
+        </div>
+
         <div class="sched-table-wrap">
           <table class="sched-tbl">
             <thead>
               <tr>
                 <th>Hạn trả</th>
-                <th>Nhắc trước 3 ngày</th>
+                <th>Nhắc 3 ngày</th>
                 <th>Khoản vay / Kỳ</th>
                 <th>Tổng góp</th>
+                <th>Trạng thái</th>
               </tr>
             </thead>
             <tbody id="loanScheduleBody"></tbody>
@@ -671,7 +786,6 @@
           </div>
         </div>
 
-        <!-- Nhập liệu bằng giọng nói -->
         <div class="voice-box">
           <div class="voice-top">
             <button type="button" id="btnVoiceInput" class="btn-voice" onclick="toggleVoiceInput()">
@@ -683,7 +797,6 @@
           <div id="voiceTranscript" class="voice-transcript">Chưa ghi âm giọng nói.</div>
         </div>
 
-        <!-- Tự động nhận diện kỳ góp khi nhập khoản chi trả góp -->
         <div id="loanAutoDetectBox" class="loan-detect-box hide">
           <span id="loanDetectText">Tự động nhận diện kỳ góp...</span>
           <button type="button" class="btn-apply-loan" onclick="applyDetectedInstallment()">Áp dụng kỳ góp</button>
@@ -796,6 +909,61 @@
     const CHI_COLORS = ['#dc2626', '#2563eb', '#7c3aed', '#0284c7', '#d97706', '#475569'];
     const THU_COLORS = ['#059669', '#f59e0b', '#0891b2', '#2563eb'];
 
+    function buildClientFallbackSchedules(ecPaidInstallments, vpbPaidInstallments) {
+      const list = [];
+      for (let i = 1; i <= 18; i++) {
+        const totalMonths = 11 + (i - 1);
+        const yr = 2026 + Math.floor((totalMonths - 1) / 12);
+        const mo = ((totalMonths - 1) % 12) + 1;
+        const mStr = String(mo).padStart(2, '0');
+        const amt = i === 18 ? 4413468 : 4425000;
+        const st = i <= ecPaidInstallments
+          ? 'Đã trả'
+          : (i === ecPaidInstallments + 1 ? 'Kỳ hiện tại' : (i === ecPaidInstallments + 2 ? 'Kỳ tiếp theo' : 'Sắp tới'));
+        list.push({
+          loanId: 'LTX4716547A',
+          loanShort: 'Easy Credit',
+          ky: i,
+          totalKy: 18,
+          date: `05/${mStr}/${yr}`,
+          reminderDate: `02/${mStr}/${yr}`,
+          sortKey: yr * 10000 + mo * 100 + 5,
+          loanName: `Easy Credit · Kỳ ${i}/18`,
+          total: amt,
+          status: st
+        });
+      }
+
+      let rem = 540000000;
+      for (let j = 1; j <= 84; j++) {
+        const totalMonths = 12 + (j - 1);
+        const yr = 2026 + Math.floor((totalMonths - 1) / 12);
+        const mo = ((totalMonths - 1) % 12) + 1;
+        const mStr = String(mo).padStart(2, '0');
+        const p = j === 84 ? rem : 6429000;
+        const intr = j === 1 ? 3640932 : Math.round((rem * 0.107) / 12);
+        const amt = p + intr;
+        rem = Math.max(0, rem - p);
+        const st = j <= vpbPaidInstallments
+          ? 'Đã trả'
+          : (j === vpbPaidInstallments + 1 ? 'Kỳ hiện tại' : (j === vpbPaidInstallments + 2 ? 'Kỳ tiếp theo' : 'Sắp tới'));
+        list.push({
+          loanId: 'LD2631603041',
+          loanShort: 'VPBank',
+          ky: j,
+          totalKy: 84,
+          date: `05/${mStr}/${yr}`,
+          reminderDate: `02/${mStr}/${yr}`,
+          sortKey: yr * 10000 + mo * 100 + 5,
+          loanName: `VPBank · Kỳ ${j}/84`,
+          total: amt,
+          status: st
+        });
+      }
+      list.sort((a, b) => a.sortKey - b.sortKey || a.loanId.localeCompare(b.loanId));
+      return list;
+    }
+
     const DEFAULT_LOAN_DATA = {
       totalOrigin: 619638468,
       totalPaid: 4425000,
@@ -804,6 +972,7 @@
       loans: [
         {
           id: 'LTX4716547A',
+          theme: 'ec',
           name: 'Easy Credit · HĐ LTX4716547A',
           orderCode: 'ĐH ORD37E9DB10 · VinFast Tâm Phong Đức Hoà',
           rateText: 'Lãi 0%/năm',
@@ -820,10 +989,11 @@
           reminderDate: '02/12/2026',
           finalInstallment: 4413468,
           finalDueDate: '05/04/2028',
-          note: 'Đã trả 1/18 kỳ · Kỳ tiếp theo: Kỳ 2/18 (05/12/2026) = 4.425.000 ₫ · Nhắc lịch 02/12/2026'
+          note: 'Đã trả 1/18 kỳ · Kỳ hiện tại: Kỳ 2/18 (05/12/2026) = 4.425.000 ₫ · Nhắc lịch 02/12/2026'
         },
         {
           id: 'LD2631603041',
+          theme: 'vpb',
           name: 'VPBank · Purchase Lending LD2631603041',
           orderCode: 'TK trích nợ 0937268550 · VPBANK TTKD OTO MIEN NAM',
           rateText: 'Lãi 10,7%/năm (điều chỉnh 12 tháng)',
@@ -841,15 +1011,10 @@
           firstPrincipal: 6429000,
           firstInterest: 3640932,
           remainingAfterFirst: 533571000,
-          note: 'Đã trả 0/84 kỳ · Kỳ đầu 05/12/2026: Gốc 6.429.000 ₫ + Lãi 3.640.932 ₫ = 10.069.932 ₫ · Nhắc lịch 02/12/2026'
+          note: 'Đã trả 0/84 kỳ · Kỳ hiện tại: Kỳ 1/84 (05/12/2026) = 10.069.932 ₫ (Gốc 6.429.000 ₫ + Lãi 3.640.932 ₫) · Nhắc lịch 02/12/2026'
         }
       ],
-      schedule: [
-        { date: '05/12/2026', reminderDate: '02/12/2026', loanName: 'Easy Credit · Kỳ 2', total: 4425000, status: 'Nhắc 02/12' },
-        { date: '05/12/2026', reminderDate: '02/12/2026', loanName: 'VPBank · Kỳ 1', total: 10069932, status: 'Nhắc 02/12' },
-        { date: '05/01/2027', reminderDate: '02/01/2027', loanName: 'Easy Credit · Kỳ 3', total: 4425000, status: 'Nhắc 02/01' },
-        { date: '05/01/2027', reminderDate: '02/01/2027', loanName: 'VPBank · Kỳ 2', total: 9921000, status: 'Nhắc 02/01' }
-      ]
+      schedule: buildClientFallbackSchedules(1, 0)
     };
 
     const state = {
@@ -1010,13 +1175,26 @@
       });
     }
 
-    function renderDonutAndLegend(targetId, badgeId, totalLabel, items, colors) {
+    function buildTotalRowHtml(labelText, totalAmount, modeType) {
+      const cls = modeType === 'thu' ? 'total-thu' : 'total-chi';
+      return `
+        <div class="chart-total-row ${cls}">
+          <span>${labelText} (100%)</span>
+          <span>${formatMoney(totalAmount)} · 100%</span>
+        </div>
+      `;
+    }
+
+    function renderDonutAndLegend(targetId, badgeId, totalLabel, totalRowLabel, modeType, items, colors) {
       const area = document.getElementById(targetId);
       const total = items.reduce((acc, x) => acc + x[1], 0);
       document.getElementById(badgeId).textContent = formatMoney(total);
 
       if (!items.length || total <= 0) {
-        area.innerHTML = '<div class="empty-msg">Chưa có dữ liệu theo bộ lọc.</div>';
+        area.innerHTML = `
+          <div class="empty-msg" style="width:100%;">Chưa có dữ liệu theo bộ lọc.</div>
+          <div style="width:100%;">${buildTotalRowHtml(totalRowLabel, 0, modeType)}</div>
+        `;
         return;
       }
 
@@ -1051,20 +1229,26 @@
             <span class="donut-hole-val">${Math.round(total / 1000).toLocaleString('vi-VN')}k</span>
           </div>
         </div>
-        <div class="legend-list">${legendHtml}</div>
+        <div class="legend-list">
+          ${legendHtml}
+          ${buildTotalRowHtml(totalRowLabel, total, modeType)}
+        </div>
       `;
     }
 
-    function renderHorizontalBars(targetId, items, colors) {
+    function renderHorizontalBars(targetId, totalRowLabel, modeType, items, colors) {
       const area = document.getElementById(targetId);
       const total = items.reduce((acc, x) => acc + x[1], 0);
       if (!items.length || total <= 0) {
-        area.innerHTML = '<div class="empty-msg">Chưa có dữ liệu biểu đồ cột ngang.</div>';
+        area.innerHTML = `
+          <div class="empty-msg">Chưa có dữ liệu biểu đồ cột ngang.</div>
+          ${buildTotalRowHtml(totalRowLabel, 0, modeType)}
+        `;
         return;
       }
 
       const maxVal = Math.max(...items.map(x => x[1]), 1);
-      area.innerHTML = items.map(([name, val], idx) => {
+      const barsHtml = items.map(([name, val], idx) => {
         const pct = ((val / total) * 100).toFixed(1);
         const widthPct = Math.max(2, (val / maxVal) * 100).toFixed(1);
         const c = colors[idx % colors.length];
@@ -1080,6 +1264,8 @@
           </div>
         `;
       }).join('');
+
+      area.innerHTML = barsHtml + buildTotalRowHtml(totalRowLabel, total, modeType);
     }
 
     function renderAnalysis(sumThu, sumChi, cuoiKy, chiItems, thuItems) {
@@ -1092,10 +1278,10 @@
 
       box.innerHTML = `
         <div class="analysis-row chi-note">
-          <strong>Cơ cấu CHI (${formatMoney(sumChi)}):</strong> ${topChi || 'Chưa có chi'}
+          <strong>Tổng cộng CHI (100% = ${formatMoney(sumChi)}):</strong> ${topChi || 'Chưa có chi'}
         </div>
         <div class="analysis-row thu-note">
-          <strong>Cơ cấu THU (${formatMoney(sumThu)}):</strong> ${topThu || 'Chưa có thu'}
+          <strong>Tổng cộng THU (100% = ${formatMoney(sumThu)}):</strong> ${topThu || 'Chưa có thu'}
         </div>
         <div class="analysis-row net-note">
           <strong>Cân đối dòng tiền:</strong> Chênh lệch Thu - Chi là <strong>${formatMoney(netFlow)}</strong> · Tỷ lệ Chi/Thu: <strong>${ratio}%</strong> · Cuối kỳ: <strong>${formatMoney(cuoiKy)}</strong>
@@ -1131,11 +1317,66 @@
       const chiItems = Object.entries(chiMap).sort((a, b) => b[1] - a[1]);
       const thuItems = Object.entries(thuMap).sort((a, b) => b[1] - a[1]);
 
-      renderDonutAndLegend('pieChiArea', 'pieChiTotalBadge', 'Tổng chi', chiItems, CHI_COLORS);
-      renderHorizontalBars('barChiArea', chiItems, CHI_COLORS);
-      renderDonutAndLegend('pieThuArea', 'pieThuTotalBadge', 'Tổng thu', thuItems, THU_COLORS);
-      renderHorizontalBars('barThuArea', thuItems, THU_COLORS);
+      // Đủ cả 4 biểu đồ đều có dòng Tổng 100% + tổng tiền tương ứng
+      renderDonutAndLegend('pieChiArea', 'pieChiTotalBadge', 'Tổng chi', 'Tổng cộng CHI', 'chi', chiItems, CHI_COLORS);
+      renderHorizontalBars('barChiArea', 'Tổng cộng CHI', 'chi', chiItems, CHI_COLORS);
+      renderDonutAndLegend('pieThuArea', 'pieThuTotalBadge', 'Tổng thu', 'Tổng cộng THU', 'thu', thuItems, THU_COLORS);
+      renderHorizontalBars('barThuArea', 'Tổng cộng THU', 'thu', thuItems, THU_COLORS);
       renderAnalysis(sumThu, sumChi, cuoiKy, chiItems, thuItems);
+    }
+
+    function renderLoanScheduleTable() {
+      const ld = state.loanData || DEFAULT_LOAN_DATA;
+      const fullList = (Array.isArray(ld.schedule) && ld.schedule.length > 4)
+        ? ld.schedule
+        : buildClientFallbackSchedules(
+            (ld.loans && ld.loans[0] && ld.loans[0].paidInstallments) || 1,
+            (ld.loans && ld.loans[1] && ld.loans[1].paidInstallments) || 0
+          );
+
+      const accFilter = document.getElementById('selLoanFilterAccount').value;
+      const periodFilter = document.getElementById('selLoanFilterPeriod').value;
+
+      let rows = accFilter === 'all'
+        ? fullList.slice()
+        : fullList.filter(item => item.loanId === accFilter);
+
+      const upcomingRows = rows.filter(r => r.status !== 'Đã trả');
+      if (periodFilter === 'current_next') {
+        rows = rows.filter(r => r.status === 'Kỳ hiện tại' || r.status === 'Kỳ tiếp theo');
+      } else if (periodFilter === 'nearest_1') {
+        rows = upcomingRows.slice(0, accFilter === 'all' ? 2 : 1);
+      } else if (periodFilter === 'nearest_5') {
+        rows = upcomingRows.slice(0, accFilter === 'all' ? 10 : 5);
+      } else if (periodFilter === 'nearest_10') {
+        rows = upcomingRows.slice(0, accFilter === 'all' ? 20 : 10);
+      } else if (periodFilter === 'paid_and_current') {
+        rows = rows.filter(r => r.status === 'Đã trả' || r.status === 'Kỳ hiện tại');
+      }
+
+      document.getElementById('loanSchedCountBadge').textContent = rows.length + ' kỳ';
+
+      const schedBody = document.getElementById('loanScheduleBody');
+      if (!rows.length) {
+        schedBody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:16px;">Không có kỳ góp nào khớp bộ lọc.</td></tr>';
+        return;
+      }
+
+      schedBody.innerHTML = rows.map(s => {
+        const rowCls = s.loanId === 'LTX4716547A' ? 'row-ec' : 'row-vpb';
+        const stCls = s.status === 'Đã trả'
+          ? 'st-paid'
+          : (s.status === 'Kỳ hiện tại' ? 'st-cur' : (s.status === 'Kỳ tiếp theo' ? 'st-next' : 'st-up'));
+        return `
+          <tr class="${rowCls}">
+            <td>${s.date}</td>
+            <td>${s.reminderDate || '02/12/2026'}</td>
+            <td>${s.loanName}</td>
+            <td>${formatMoney(s.total)}</td>
+            <td><span class="sched-pill ${stCls}">${s.status}</span></td>
+          </tr>
+        `;
+      }).join('');
     }
 
     function renderLoans() {
@@ -1152,9 +1393,10 @@
         const ratio = ld.totalOrigin > 0 ? ((ln.principalAmount / ld.totalOrigin) * 100).toFixed(1) : '0.0';
         const paidKy = ln.paidInstallments != null ? ln.paidInstallments : (idx === 0 ? 1 : 0);
         const nextKy = ln.nextInstallmentNum != null ? ln.nextInstallmentNum : (paidKy + 1);
-        const statusBadge = `Đã trả ${paidKy}/${ln.termMonths} kỳ · Kỳ tới: K${nextKy}`;
+        const themeCls = (ln.theme === 'vpb' || ln.id === 'LD2631603041') ? 'loan-vpb' : 'loan-ec';
+        const statusBadge = `Đã trả ${paidKy}/${ln.termMonths} kỳ · Kỳ hiện tại: K${nextKy}`;
         return `
-          <div class="loan-card">
+          <div class="loan-card ${themeCls}">
             <div class="loan-hd">
               <div>
                 <div class="loan-title">${idx + 1}. ${ln.name}</div>
@@ -1178,22 +1420,13 @@
             </div>
             <div class="loan-foot">
               <span>${ln.note || ''}</span>
-              <span style="color:var(--tab-loans)">Tỷ trọng nợ gốc: ${ratio}% (${formatMoney(ln.principalAmount)}) · Nhắc trước 3 ngày: ${ln.reminderDate || '02/12/2026'}</span>
+              <span>Tỷ trọng nợ gốc: ${ratio}% (${formatMoney(ln.principalAmount)}) · Nhắc trước 3 ngày: ${ln.reminderDate || '02/12/2026'}</span>
             </div>
           </div>
         `;
       }).join('');
 
-      const schedBody = document.getElementById('loanScheduleBody');
-      const sched = Array.isArray(ld.schedule) && ld.schedule.length ? ld.schedule : DEFAULT_LOAN_DATA.schedule;
-      schedBody.innerHTML = sched.map(s => `
-        <tr>
-          <td>${s.date}</td>
-          <td>${s.reminderDate || '02/12/2026'}</td>
-          <td>${s.loanName}</td>
-          <td>${formatMoney(s.total)}</td>
-        </tr>
-      `).join('');
+      renderLoanScheduleTable();
     }
 
     function syncLoanReminderToCalendar() {
@@ -1348,7 +1581,6 @@
       detectInstallmentAuto();
     }
 
-    /* Tự động nhận diện kỳ góp khi nhập khoản chi trả góp */
     function detectInstallmentAuto() {
       const box = document.getElementById('loanAutoDetectBox');
       const txtEl = document.getElementById('loanDetectText');
@@ -1404,7 +1636,6 @@
       showToast(`Đã áp dụng ${s.loanId} · Kỳ ${s.kyNum} (${formatMoney(s.amount)})`);
     }
 
-    /* Nhập liệu cập nhật Thu/Chi bằng giọng nói (Tiếng Việt) */
     function parseVietnameseMoneyFromText(rawText) {
       const t = rawText.toLowerCase().replace(/\./g, '').replace(/,/g, '.');
       const numMatch = t.match(/(\d+(?:\.\d+)?)\s*(triệu|tr|củ|nghìn|ngàn|k)?/i);
