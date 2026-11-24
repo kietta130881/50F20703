@@ -145,10 +145,10 @@
     .content { max-width: 860px; margin: 0 auto; padding: 12px; }
 
     /* 4 khối dòng tiền */
-    .kpi-4 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 9px; margin-bottom: 12px; }
+    .kpi-4 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 8px; }
     @media (min-width: 640px) { .kpi-4 { grid-template-columns: repeat(4, 1fr); } }
     .kpi-box {
-      border-radius: 14px; padding: 12px; border: 1.5px solid transparent;
+      border-radius: 13px; padding: 10px 11px; border: 1.5px solid transparent;
       box-shadow: 0 2px 6px rgba(15, 23, 42, 0.05);
     }
     .kpi-box.box-dauk { background: var(--dauk-bg); border-color: var(--dauk-border); }
@@ -157,12 +157,12 @@
     .kpi-box.box-ton { background: var(--ton-bg); border-color: var(--ton-border); }
 
     .kpi-head { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
-    .kpi-title { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.3px; }
+    .kpi-title { font-size: 10.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.3px; }
     .box-dauk .kpi-title, .box-dauk .kpi-num, .box-dauk .kpi-ico { color: var(--dauk-txt); }
     .box-thu .kpi-title, .box-thu .kpi-num, .box-thu .kpi-ico { color: var(--thu); }
     .box-chi .kpi-title, .box-chi .kpi-num, .box-chi .kpi-ico { color: var(--chi); }
     .box-ton .kpi-title, .box-ton .kpi-num, .box-ton .kpi-ico { color: var(--ton); }
-    .kpi-num { font-size: 15px; font-weight: 900; margin-top: 6px; }
+    .kpi-num { font-size: 14px; font-weight: 900; margin-top: 4px; }
     .kpi-sub { font-size: 10px; font-weight: 700; color: var(--muted); margin-top: 2px; }
 
     /* Card & biểu đồ */
@@ -228,47 +228,35 @@
     .analysis-row.thu-note { border-left-color: var(--thu); }
     .analysis-row.net-note { border-left-color: var(--ton); }
 
-    /* Tab Theo dõi vay */
+    /* Tab Theo dõi vay: cụm đầu trang (4 KPI + bộ lọc lịch) ghim sticky + tách lớp rõ ràng */
+    .loan-top-sticky {
+      position: sticky;
+      top: 48px;
+      z-index: 38;
+      background: #f1f5f9;
+      padding: 4px 0 8px;
+      border-bottom: 1.5px solid #cbd5e1;
+      margin-bottom: 12px;
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+    }
+
     .reminder-bar {
-      background: #ecfeff; border: 1px solid #67e8f9; border-radius: 12px;
-      padding: 9px 11px; margin-bottom: 10px;
+      background: #ecfeff; border: 1px solid #67e8f9; border-radius: 11px;
+      padding: 8px 10px; margin-bottom: 8px;
       display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap;
       font-size: 11.5px; font-weight: 700; color: #155e75;
     }
     .btn-cal-sync {
       background: #0e7490; color: #fff; border: none; border-radius: 8px;
-      padding: 6px 10px; font-size: 11.5px; font-weight: 800; cursor: pointer;
+      padding: 5px 10px; font-size: 11px; font-weight: 800; cursor: pointer;
     }
 
-    /* Khối lịch thanh toán: màu xanh ngọc riêng biệt, bộ lọc ghim sticky khi cuộn danh sách kỳ */
-    .sched-box {
-      background: var(--sched-bg);
-      border: 2px solid var(--sched-border);
-      border-radius: 15px;
-      padding: 11px 12px 13px;
-      margin-bottom: 14px;
-      box-shadow: 0 3px 10px rgba(15, 118, 110, 0.08);
-    }
-    .sched-box .panel-title {
-      color: var(--sched-accent);
-    }
-    .sched-box .pill-badge {
-      background: #99f6e4;
-      color: #115e59;
-    }
-
-    .sched-filter-sticky {
-      position: sticky;
-      top: 48px;
-      z-index: 35;
+    .loan-filter-bar {
       background: #ccfbf1;
       border: 1.5px solid #2dd4bf;
-      border-radius: 10px;
-      padding: 7px;
-      margin-bottom: 10px;
-      box-shadow: 0 4px 10px rgba(15, 118, 110, 0.14);
+      border-radius: 11px;
+      padding: 7px 8px;
     }
-
     .compact-filter-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -288,7 +276,6 @@
       border-color: var(--vpb-border);
       background: var(--vpb-bg);
     }
-
     .compact-sel {
       width: 100%;
       padding: 6px 7px;
@@ -303,7 +290,18 @@
     .compact-select-wrap.wrap-ec .compact-sel { color: var(--ec-accent); }
     .compact-select-wrap.wrap-vpb .compact-sel { color: var(--vpb-accent); }
 
-    /* Danh sách các kỳ dạng thẻ cuộn dọc liên tục */
+    /* Lớp 2: Khối Lịch thanh toán (màu xanh ngọc riêng biệt) */
+    .sched-section {
+      background: var(--sched-bg);
+      border: 2px solid var(--sched-border);
+      border-radius: 15px;
+      padding: 12px;
+      margin-bottom: 14px;
+      box-shadow: 0 3px 10px rgba(15, 118, 110, 0.08);
+    }
+    .sched-section .panel-title { color: var(--sched-accent); }
+    .sched-section .pill-badge { background: #99f6e4; color: #115e59; }
+
     .installment-cards-list {
       display: flex;
       flex-direction: column;
@@ -364,7 +362,7 @@
     .sched-pill.st-next { background: #fef3c7; color: #b45309; }
     .sched-pill.st-up { background: #e2e8f0; color: #334155; }
 
-    /* 2 khối tổng quan khoản vay phía dưới: theo màu từng ngân hàng */
+    /* Lớp 3: Thẻ từng khoản vay (màu riêng từng ngân hàng) */
     .loan-card {
       border-radius: 15px; padding: 14px; margin-bottom: 13px;
       border: 2px solid #cbd5e1;
@@ -760,46 +758,40 @@
 
     <!-- TAB 2: THEO DÕI VAY -->
     <section id="sec-loans" class="hide">
-      <div class="reminder-bar">
-        <span>📅 Nhắc trước 3 ngày (Hạn 05/12/2026 → Nhắc 02/12/2026)</span>
-        <button type="button" class="btn-cal-sync" onclick="syncLoanReminderToCalendar()">Đồng bộ lịch nhắc 3 ngày</button>
-      </div>
-
-      <!-- 4 thẻ tổng quan vay -->
-      <div class="kpi-4">
-        <div class="kpi-box box-dauk">
-          <div class="kpi-head"><span class="kpi-title">Tổng gốc vay</span></div>
-          <div class="kpi-num" id="loanTotalOrigin">619.638.468 ₫</div>
-          <div class="kpi-sub">2 khoản vay (bỏ MB)</div>
+      <!-- Lớp 1: Cụm đầu trang ghim sticky (4 KPI + bộ lọc chỉ áp dụng cho lịch thanh toán) -->
+      <div class="loan-top-sticky">
+        <div class="reminder-bar">
+          <span>📅 Nhắc trước 3 ngày (Hạn 05/12/2026 → Nhắc 02/12/2026)</span>
+          <button type="button" class="btn-cal-sync" onclick="syncLoanReminderToCalendar()">Đồng bộ lịch nhắc 3 ngày</button>
         </div>
 
-        <div class="kpi-box box-thu">
-          <div class="kpi-head"><span class="kpi-title">Đã thanh toán</span></div>
-          <div class="kpi-num" id="loanTotalPaid">4.425.000 ₫</div>
-          <div class="kpi-sub">Kỳ 1 Easy Credit (05/11)</div>
+        <div class="kpi-4">
+          <div class="kpi-box box-dauk">
+            <div class="kpi-head"><span class="kpi-title">Tổng gốc vay</span></div>
+            <div class="kpi-num" id="loanTotalOrigin">619.638.468 ₫</div>
+            <div class="kpi-sub">2 khoản vay (bỏ MB)</div>
+          </div>
+
+          <div class="kpi-box box-thu">
+            <div class="kpi-head"><span class="kpi-title">Đã thanh toán</span></div>
+            <div class="kpi-num" id="loanTotalPaid">4.425.000 ₫</div>
+            <div class="kpi-sub">Kỳ 1 Easy Credit (05/11)</div>
+          </div>
+
+          <div class="kpi-box box-chi">
+            <div class="kpi-head"><span class="kpi-title">Dư nợ còn lại</span></div>
+            <div class="kpi-num" id="loanTotalRemaining">615.213.468 ₫</div>
+            <div class="kpi-sub">EC 75,21tr + VPB 540tr</div>
+          </div>
+
+          <div class="kpi-box box-ton">
+            <div class="kpi-head"><span class="kpi-title">Kỳ góp 05/12/2026</span></div>
+            <div class="kpi-num" id="loanUpcomingDec05">14.494.932 ₫</div>
+            <div class="kpi-sub">Nhắc trước ngày 02/12</div>
+          </div>
         </div>
 
-        <div class="kpi-box box-chi">
-          <div class="kpi-head"><span class="kpi-title">Dư nợ còn lại</span></div>
-          <div class="kpi-num" id="loanTotalRemaining">615.213.468 ₫</div>
-          <div class="kpi-sub">EC 75,21tr + VPB 540tr</div>
-        </div>
-
-        <div class="kpi-box box-ton">
-          <div class="kpi-head"><span class="kpi-title">Kỳ góp 05/12/2026</span></div>
-          <div class="kpi-num" id="loanUpcomingDec05">14.494.932 ₫</div>
-          <div class="kpi-sub">Nhắc trước ngày 02/12</div>
-        </div>
-      </div>
-
-      <!-- Khối lịch thanh toán: màu xanh ngọc riêng biệt + bộ lọc ghim sticky + danh sách thẻ cuộn dọc -->
-      <div id="loanScheduleBox" class="sched-box">
-        <div class="panel-hd">
-          <div class="panel-title"><span>Các kỳ thanh toán (18 kỳ &amp; 84 kỳ)</span></div>
-          <span class="pill-badge" id="loanSchedCountBadge">0 kỳ</span>
-        </div>
-
-        <div class="sched-filter-sticky">
+        <div class="loan-filter-bar">
           <div class="compact-filter-row">
             <div id="wrapLoanAcc" class="compact-select-wrap">
               <select id="selLoanFilterAccount" class="compact-sel" onchange="onLoanFilterChange()">
@@ -821,11 +813,18 @@
             </div>
           </div>
         </div>
+      </div>
 
+      <!-- Lớp 2: Khối Lịch thanh toán (màu xanh ngọc riêng biệt, thẻ kỳ cuộn dọc theo bộ lọc) -->
+      <div class="sched-section">
+        <div class="panel-hd">
+          <div class="panel-title"><span>Lịch thanh toán các kỳ (18 kỳ &amp; 84 kỳ)</span></div>
+          <span class="pill-badge" id="loanSchedCountBadge">0 kỳ</span>
+        </div>
         <div id="loanInstallmentCards" class="installment-cards-list"></div>
       </div>
 
-      <!-- 2 thẻ tổng quan từng khoản vay bên dưới: màu riêng từng ngân hàng -->
+      <!-- Lớp 3: Thẻ tổng quan từng khoản vay (màu riêng từng ngân hàng) -->
       <div id="loanCardsContainer"></div>
     </section>
 
