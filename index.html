@@ -173,7 +173,7 @@
     }
     .panel-hd {
       display: flex; align-items: center; justify-content: space-between; gap: 8px;
-      margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+      margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px solid rgba(15, 23, 42, 0.08);
       flex-wrap: wrap;
     }
     .panel-title { display: flex; align-items: center; gap: 7px; font-size: 14px; font-weight: 800; color: #0f172a; }
@@ -228,34 +228,34 @@
     .analysis-row.thu-note { border-left-color: var(--thu); }
     .analysis-row.net-note { border-left-color: var(--ton); }
 
-    /* Tab Theo dõi vay: cụm đầu trang (4 KPI + bộ lọc lịch) ghim sticky + tách lớp rõ ràng */
+    /* Tab Theo dõi vay: cụm đầu trang (4 KPI + bộ lọc lịch) ghim sticky */
     .loan-top-sticky {
       position: sticky;
       top: 48px;
       z-index: 38;
       background: #f1f5f9;
-      padding: 4px 0 8px;
+      padding: 4px 0 6px;
       border-bottom: 1.5px solid #cbd5e1;
-      margin-bottom: 12px;
-      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+      margin-bottom: 0;
+      box-shadow: 0 4px 10px rgba(15, 23, 42, 0.08);
     }
 
     .reminder-bar {
-      background: #ecfeff; border: 1px solid #67e8f9; border-radius: 11px;
-      padding: 8px 10px; margin-bottom: 8px;
+      background: #ecfeff; border: 1px solid #67e8f9; border-radius: 10px;
+      padding: 7px 10px; margin-bottom: 7px;
       display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap;
-      font-size: 11.5px; font-weight: 700; color: #155e75;
+      font-size: 11px; font-weight: 700; color: #155e75;
     }
     .btn-cal-sync {
-      background: #0e7490; color: #fff; border: none; border-radius: 8px;
-      padding: 5px 10px; font-size: 11px; font-weight: 800; cursor: pointer;
+      background: #0e7490; color: #fff; border: none; border-radius: 7px;
+      padding: 5px 9px; font-size: 11px; font-weight: 800; cursor: pointer;
     }
 
     .loan-filter-bar {
       background: #ccfbf1;
       border: 1.5px solid #2dd4bf;
-      border-radius: 11px;
-      padding: 7px 8px;
+      border-radius: 10px;
+      padding: 6px 7px;
     }
     .compact-filter-row {
       display: grid;
@@ -278,7 +278,7 @@
     }
     .compact-sel {
       width: 100%;
-      padding: 6px 7px;
+      padding: 5px 7px;
       border: none;
       border-radius: 6px;
       font-size: 11.5px;
@@ -290,29 +290,31 @@
     .compact-select-wrap.wrap-ec .compact-sel { color: var(--ec-accent); }
     .compact-select-wrap.wrap-vpb .compact-sel { color: var(--vpb-accent); }
 
-    /* Lớp 2: Khối Lịch thanh toán (màu xanh ngọc riêng biệt) */
+    /* Khối Lịch thanh toán gắn liền ngay dưới cụm ghim, màu xanh ngọc riêng biệt */
     .sched-section {
       background: var(--sched-bg);
       border: 2px solid var(--sched-border);
-      border-radius: 15px;
-      padding: 12px;
+      border-top: none;
+      border-radius: 0 0 15px 15px;
+      padding: 10px 10px 12px;
       margin-bottom: 14px;
       box-shadow: 0 3px 10px rgba(15, 118, 110, 0.08);
     }
     .sched-section .panel-title { color: var(--sched-accent); }
     .sched-section .pill-badge { background: #99f6e4; color: #115e59; }
 
+    /* Mỗi thẻ kỳ gọn 2 dòng, chữ trên to đậm, chữ dưới nhỏ */
     .installment-cards-list {
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 6px;
     }
     .inst-card {
-      border-radius: 11px;
-      padding: 10px 12px;
+      border-radius: 10px;
+      padding: 8px 11px;
       border: 1.5px solid #5eead4;
       background: #ffffff;
-      box-shadow: 0 1px 4px rgba(15, 23, 42, 0.04);
+      box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
     }
     .inst-card.inst-ec {
       background: #eff6ff;
@@ -322,47 +324,47 @@
       background: #f5f3ff;
       border-color: #c4b5fd;
     }
-    .inst-top {
+    .inst-line-1 {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 8px;
     }
-    .inst-title {
-      font-size: 13px;
+    .inst-main-info {
+      font-size: 14px;
       font-weight: 900;
       color: #0f172a;
+      letter-spacing: -0.2px;
     }
-    .inst-ec .inst-title { color: var(--ec-accent); }
-    .inst-vpb .inst-title { color: var(--vpb-accent); }
+    .inst-ec .inst-main-info { color: var(--ec-accent); }
+    .inst-vpb .inst-main-info { color: var(--vpb-accent); }
 
     .inst-amt {
-      font-size: 14px;
+      font-size: 14.5px;
       font-weight: 900;
       color: #0f172a;
       white-space: nowrap;
     }
-    .inst-mid {
-      margin-top: 6px;
+    .inst-line-2 {
+      margin-top: 3px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 8px;
-      flex-wrap: wrap;
-      font-size: 11.5px;
+      font-size: 10.5px;
       font-weight: 700;
-      color: #334155;
+      color: #475569;
     }
-    .sched-pill {
-      display: inline-block; font-size: 10.5px; font-weight: 800;
-      padding: 2px 8px; border-radius: 999px;
+    .inst-bank-sub {
+      color: #475569;
     }
-    .sched-pill.st-paid { background: #d1fae5; color: #047857; }
-    .sched-pill.st-cur { background: #fee2e2; color: #dc2626; }
-    .sched-pill.st-next { background: #fef3c7; color: #b45309; }
-    .sched-pill.st-up { background: #e2e8f0; color: #334155; }
+    .inst-status-sub {
+      font-weight: 800;
+    }
+    .inst-status-sub.st-paid { color: #047857; }
+    .inst-status-sub.st-unpaid { color: #b45309; }
 
-    /* Lớp 3: Thẻ từng khoản vay (màu riêng từng ngân hàng) */
+    /* Thẻ tổng quan từng khoản vay phía dưới (màu riêng từng ngân hàng) */
     .loan-card {
       border-radius: 15px; padding: 14px; margin-bottom: 13px;
       border: 2px solid #cbd5e1;
@@ -758,7 +760,7 @@
 
     <!-- TAB 2: THEO DÕI VAY -->
     <section id="sec-loans" class="hide">
-      <!-- Lớp 1: Cụm đầu trang ghim sticky (4 KPI + bộ lọc chỉ áp dụng cho lịch thanh toán) -->
+      <!-- Lớp 1: Cụm đầu trang ghim sticky (4 KPI + bộ lọc lịch) -->
       <div class="loan-top-sticky">
         <div class="reminder-bar">
           <span>📅 Nhắc trước 3 ngày (Hạn 05/12/2026 → Nhắc 02/12/2026)</span>
@@ -815,10 +817,10 @@
         </div>
       </div>
 
-      <!-- Lớp 2: Khối Lịch thanh toán (màu xanh ngọc riêng biệt, thẻ kỳ cuộn dọc theo bộ lọc) -->
+      <!-- Lớp 2: Khối Lịch thanh toán gắn liền ngay dưới, màu xanh ngọc riêng biệt -->
       <div class="sched-section">
         <div class="panel-hd">
-          <div class="panel-title"><span>Lịch thanh toán các kỳ (18 kỳ &amp; 84 kỳ)</span></div>
+          <div class="panel-title"><span>Kỳ thanh toán</span></div>
           <span class="pill-badge" id="loanSchedCountBadge">0 kỳ</span>
         </div>
         <div id="loanInstallmentCards" class="installment-cards-list"></div>
@@ -987,7 +989,8 @@
         const mo = ((totalMonths - 1) % 12) + 1;
         const mStr = String(mo).padStart(2, '0');
         const amt = i === 18 ? 4413468 : 4425000;
-        const st = i <= ecPaidInstallments
+        const isPaid = i <= ecPaidInstallments;
+        const st = isPaid
           ? 'Đã trả'
           : (i === ecPaidInstallments + 1 ? 'Kỳ hiện tại' : (i === ecPaidInstallments + 2 ? 'Kỳ tiếp theo' : 'Sắp tới'));
         list.push({
@@ -998,9 +1001,10 @@
           date: `05/${mStr}/${yr}`,
           reminderDate: `02/${mStr}/${yr}`,
           sortKey: yr * 10000 + mo * 100 + 5,
-          loanName: `Easy Credit · Kỳ ${i}/18`,
+          loanName: `Kỳ ${i}/18 · 05/${mStr}/${yr}`,
           total: amt,
-          status: st
+          status: st,
+          paidFlag: isPaid
         });
       }
 
@@ -1014,7 +1018,8 @@
         const intr = j === 1 ? 3640932 : Math.round((rem * 0.107) / 12);
         const amt = p + intr;
         rem = Math.max(0, rem - p);
-        const st = j <= vpbPaidInstallments
+        const isPaid = j <= vpbPaidInstallments;
+        const st = isPaid
           ? 'Đã trả'
           : (j === vpbPaidInstallments + 1 ? 'Kỳ hiện tại' : (j === vpbPaidInstallments + 2 ? 'Kỳ tiếp theo' : 'Sắp tới'));
         list.push({
@@ -1025,9 +1030,10 @@
           date: `05/${mStr}/${yr}`,
           reminderDate: `02/${mStr}/${yr}`,
           sortKey: yr * 10000 + mo * 100 + 5,
-          loanName: `VPBank · Kỳ ${j}/84`,
+          loanName: `Kỳ ${j}/84 · 05/${mStr}/${yr}`,
           total: amt,
-          status: st
+          status: st,
+          paidFlag: isPaid
         });
       }
       list.sort((a, b) => a.sortKey - b.sortKey || a.loanId.localeCompare(b.loanId));
@@ -1422,7 +1428,9 @@
         ? fullList.slice()
         : fullList.filter(item => item.loanId === accFilter);
 
-      const upcomingRows = rows.filter(r => r.status !== 'Đã trả');
+      const isPaidItem = (r) => r.paidFlag === true || r.status === 'Đã trả';
+      const upcomingRows = rows.filter(r => !isPaidItem(r));
+
       if (periodFilter === 'current_next') {
         rows = rows.filter(r => r.status === 'Kỳ hiện tại' || r.status === 'Kỳ tiếp theo');
       } else if (periodFilter === 'nearest_1') {
@@ -1432,7 +1440,7 @@
       } else if (periodFilter === 'nearest_10') {
         rows = upcomingRows.slice(0, accFilter === 'all' ? 20 : 10);
       } else if (periodFilter === 'paid_and_current') {
-        rows = rows.filter(r => r.status === 'Đã trả' || r.status === 'Kỳ hiện tại');
+        rows = rows.filter(r => isPaidItem(r) || r.status === 'Kỳ hiện tại');
       }
 
       document.getElementById('loanSchedCountBadge').textContent = rows.length + ' kỳ';
@@ -1444,19 +1452,22 @@
       }
 
       listEl.innerHTML = rows.map(s => {
+        const isPaid = isPaidItem(s);
+        const bankName = s.loanShort || (s.loanId === 'LTX4716547A' ? 'Easy Credit' : 'VPBank');
+        const mainText = `Kỳ ${s.ky}/${s.totalKy} · ${s.date}`;
+        const statusText = isPaid ? 'Đã thanh toán' : 'Chưa thanh toán';
+        const stCls = isPaid ? 'st-paid' : 'st-unpaid';
         const cardCls = s.loanId === 'LTX4716547A' ? 'inst-ec' : 'inst-vpb';
-        const stCls = s.status === 'Đã trả'
-          ? 'st-paid'
-          : (s.status === 'Kỳ hiện tại' ? 'st-cur' : (s.status === 'Kỳ tiếp theo' ? 'st-next' : 'st-up'));
+
         return `
           <div class="inst-card ${cardCls}">
-            <div class="inst-top">
-              <span class="inst-title">${s.loanName}</span>
+            <div class="inst-line-1">
+              <span class="inst-main-info">${mainText}</span>
               <span class="inst-amt">${formatMoney(s.total)}</span>
             </div>
-            <div class="inst-mid">
-              <span>Hạn trả: <strong>${s.date}</strong> · Nhắc trước 3 ngày: <strong>${s.reminderDate || '02/12/2026'}</strong></span>
-              <span class="sched-pill ${stCls}">${s.status}</span>
+            <div class="inst-line-2">
+              <span class="inst-bank-sub">${bankName}</span>
+              <span class="inst-status-sub ${stCls}">${statusText}</span>
             </div>
           </div>
         `;
