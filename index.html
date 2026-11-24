@@ -3,6 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0f766e" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="Thu Chi 50F20703V" />
+  <link rel="icon" type="image/png" href="./SOTHUCHI.png" />
+  <link rel="apple-touch-icon" href="./SOTHUCHI.png" />
   <title>Sổ Thu Chi · Xe 50F20703V</title>
   <style>
     :root {
@@ -52,17 +57,13 @@
       gap: 12px;
     }
 
-    .brand-badge {
-      width: 44px;
-      height: 44px;
+    .brand-logo {
+      width: 48px;
+      height: 48px;
       border-radius: 10px;
-      background: #fef3c7;
-      border: 1px solid #f59e0b;
-      display: grid;
-      place-items: center;
-      font-weight: 700;
-      color: #92400e;
-      font-size: 13px;
+      object-fit: cover;
+      border: 1px solid var(--line);
+      background: #ffffff;
     }
 
     .brand h1 { margin: 0; font-size: 20px; }
@@ -260,7 +261,7 @@
   <div class="container">
     <div class="header-card">
       <div class="brand">
-        <div class="brand-badge">50F</div>
+        <img src="./SOTHUCHI.png" alt="Logo Sổ Thu Chi" class="brand-logo" />
         <div>
           <h1>Sổ Thu Chi · Xe 50F20703V</h1>
           <p>Đồng bộ trực tiếp Google Sheet / Apps Script · Xe 50F20703V</p>
@@ -380,8 +381,8 @@
       </div>
 
       <div class="footer-note">
-        <span>Link mở trên điện thoại &amp; gửi người thân: <a href="https://kietta130881.github.io/KIETTA/" target="_blank" rel="noopener">https://kietta130881.github.io/KIETTA/</a></span>
-        <span id="syncStamp">Đã đồng bộ dữ liệu sổ lúc 24/11/2026 09:37:00 (131 dòng).</span>
+        <span>Link mở trên điện thoại &amp; gửi người thân: <a href="https://kietta130881.github.io/50F20703/" target="_blank" rel="noopener">https://kietta130881.github.io/50F20703/</a></span>
+        <span id="syncStamp">Đã đồng bộ dữ liệu sổ lúc 24/11/2026 09:56:00 (131 dòng).</span>
       </div>
     </div>
   </div>
@@ -562,253 +563,4 @@
       const fromVal = document.getElementById("filterFromDate").value;
       const toVal = document.getElementById("filterToDate").value;
       const monthVal = document.getElementById("filterMonth").value;
-      const yearVal = document.getElementById("filterYear").value;
-      const kw = document.getElementById("searchInput").value.trim();
-
-      const parts = [];
-      if (activeTab !== "ALL") parts.push(`Nhóm: ${activeTab}`);
-      if (fromVal || toVal) {
-        const f = fromVal ? fromVal.split("-").reverse().join("/") : "đầu kỳ";
-        const t = toVal ? toVal.split("-").reverse().join("/") : "cuối kỳ";
-        parts.push(`Từ ${f} đến ${t}`);
-      }
-      if (monthVal) parts.push(`Tháng ${monthVal}`);
-      if (yearVal) parts.push(`Năm ${yearVal}`);
-      if (kw) parts.push(`Từ khóa "${kw}"`);
-
-      return parts.length ? parts.join(" · ") : "Tất cả thời gian & danh mục";
-    }
-
-    function getFilteredRows() {
-      const fromDate = parseDateObj(document.getElementById("filterFromDate").value);
-      const toDate = parseDateObj(document.getElementById("filterToDate").value);
-      const monthVal = document.getElementById("filterMonth").value;
-      const yearVal = document.getElementById("filterYear").value;
-      const keyword = document.getElementById("searchInput").value.trim().toLowerCase();
-
-      return rowsData.filter((r) => {
-        if (!matchTab(r, activeTab)) return false;
-
-        const d = parseDateObj(r.date);
-        if (!d) return false;
-
-        if (fromDate && d < fromDate) return false;
-        if (toDate && d > toDate) return false;
-
-        if (monthVal) {
-          const mStr = String(d.getMonth() + 1).padStart(2, "0");
-          if (mStr !== monthVal) return false;
-        }
-
-        if (yearVal) {
-          const yStr = String(d.getFullYear());
-          if (yStr !== yearVal) return false;
-        }
-
-        if (keyword) {
-          const blob = `${r.stt} ${r.date} ${r.type} ${r.category} ${r.note} ${r.amount}`.toLowerCase();
-          if (!blob.includes(keyword)) return false;
-        }
-
-        return true;
-      });
-    }
-
-    function render() {
-      const filtered = getFilteredRows();
-      const tbody = document.getElementById("ledgerBody");
-
-      let sumThu = 0;
-      let sumChiAbs = 0;
-      let sumAbsAll = 0;
-
-      tbody.innerHTML = filtered.map((r) => {
-        const amt = Number(r.amount) || 0;
-        if (r.type === "Thu" || amt > 0) {
-          sumThu += Math.abs(amt);
-        } else {
-          sumChiAbs += Math.abs(amt);
-        }
-        sumAbsAll += Math.abs(amt);
-
-        const badgeClass = r.type === "Thu" ? "badge-thu" : "badge-chi";
-        const amountColor = r.type === "Thu" ? "val-thu" : "val-chi";
-
-        return `
-          <tr>
-            <td>${r.stt}</td>
-            <td>${r.date}</td>
-            <td><span class="badge ${badgeClass}">${r.type}</span></td>
-            <td>${r.category}</td>
-            <td>${r.note}</td>
-            <td class="num ${amountColor}">${fmtSignedMoney(amt)}</td>
-          </tr>
-        `;
-      }).join("");
-
-      const tonQuy = sumThu - sumChiAbs;
-      const scopeText = getFilterSummaryText();
-
-      document.getElementById("totalThu").textContent = fmtMoney(sumThu);
-      document.getElementById("totalChi").textContent = fmtMoney(sumChiAbs);
-      document.getElementById("totalTonQuy").textContent = fmtMoney(tonQuy);
-      document.getElementById("scopeThu").textContent = scopeText;
-      document.getElementById("scopeChi").textContent = scopeText;
-      document.getElementById("scopeTon").textContent = scopeText;
-      document.getElementById("statsMeta").textContent = `${filtered.length} khoản · Tổng: ${fmtMoney(sumAbsAll)}`;
-
-      latestState = { filtered, sumThu, sumChiAbs, tonQuy, sumAbsAll, scopeText };
-    }
-
-    function wrapText(ctx, text, maxWidth) {
-      const words = String(text || "").split(" ");
-      const lines = [];
-      let line = "";
-      for (const word of words) {
-        const test = line ? `${line} ${word}` : word;
-        if (ctx.measureText(test).width > maxWidth && line) {
-          lines.push(line);
-          line = word;
-        } else {
-          line = test;
-        }
-      }
-      if (line) lines.push(line);
-      return lines;
-    }
-
-    function exportReportImage() {
-      const { filtered, sumThu, sumChiAbs, tonQuy, scopeText } = latestState;
-      const maxRowsInImage = 35;
-      const rowsToDraw = filtered.slice(0, maxRowsInImage);
-
-      const width = 1080;
-      const rowHeight = 36;
-      const headerHeight = 255;
-      const footerHeight = 65;
-      const height = headerHeight + rowsToDraw.length * rowHeight + footerHeight;
-
-      const canvas = document.createElement("canvas");
-      canvas.width = width;
-      canvas.height = height;
-      const ctx = canvas.getContext("2d");
-
-      ctx.fillStyle = "#f4f6f9";
-      ctx.fillRect(0, 0, width, height);
-
-      ctx.fillStyle = "#ffffff";
-      ctx.fillRect(28, 24, width - 56, 110);
-      ctx.fillStyle = "#0f172a";
-      ctx.font = "bold 24px sans-serif";
-      ctx.fillText("BÁO CÁO THU CHI · XE 50F20703V", 48, 64);
-
-      ctx.fillStyle = "#475569";
-      ctx.font = "15px sans-serif";
-      ctx.fillText(`Bộ lọc: ${scopeText}  |  Số khoản: ${filtered.length}`, 48, 95);
-      ctx.fillText(`Số dư Ví VETC: ${document.getElementById("vetcBalance").textContent}`, 48, 118);
-
-      const cards = [
-        { label: "Tổng Thu", value: fmtMoney(sumThu), color: "#15803d" },
-        { label: "Tổng Chi", value: fmtMoney(sumChiAbs), color: "#b91c1c" },
-        { label: "Tồn Quỹ (Thu − Chi)", value: fmtMoney(tonQuy), color: "#0f172a" }
-      ];
-      const cardW = (width - 56 - 24) / 3;
-      cards.forEach((c, idx) => {
-        const x = 28 + idx * (cardW + 12);
-        const y = 144;
-        ctx.fillStyle = "#ffffff";
-        ctx.fillRect(x, y, cardW, 74);
-        ctx.fillStyle = "#64748b";
-        ctx.font = "13px sans-serif";
-        ctx.fillText(c.label, x + 16, y + 26);
-        ctx.fillStyle = c.color;
-        ctx.font = "bold 20px sans-serif";
-        ctx.fillText(c.value, x + 16, y + 56);
-      });
-
-      let y = 232;
-      ctx.fillStyle = "#0f766e";
-      ctx.fillRect(28, y, width - 56, 32);
-      ctx.fillStyle = "#ffffff";
-      ctx.font = "bold 13px sans-serif";
-      ctx.fillText("Ngày", 42, y + 21);
-      ctx.fillText("Loại", 145, y + 21);
-      ctx.fillText("Nội dung", 215, y + 21);
-      ctx.fillText("Số tiền", width - 175, y + 21);
-
-      y += 32;
-      rowsToDraw.forEach((r, i) => {
-        ctx.fillStyle = i % 2 === 0 ? "#ffffff" : "#f8fafc";
-        ctx.fillRect(28, y, width - 56, rowHeight);
-
-        ctx.fillStyle = "#0f172a";
-        ctx.font = "13px sans-serif";
-        ctx.fillText(r.date || "", 42, y + 22);
-        ctx.fillText(r.type || "", 145, y + 22);
-
-        const wrappedNote = wrapText(ctx, r.note || "", width - 420)[0] || "";
-        ctx.fillText(wrappedNote, 215, y + 22);
-
-        const amt = Number(r.amount) || 0;
-        ctx.fillStyle = amt >= 0 ? "#15803d" : "#b91c1c";
-        ctx.font = "bold 13px sans-serif";
-        ctx.fillText(fmtSignedMoney(amt), width - 175, y + 22);
-
-        y += rowHeight;
-      });
-
-      ctx.fillStyle = "#64748b";
-      ctx.font = "12px sans-serif";
-      const noteMore = filtered.length > maxRowsInImage ? ` (Hiển thị ${maxRowsInImage}/${filtered.length} dòng đầu trên ảnh)` : "";
-      ctx.fillText(`Nguồn: Sổ Thu Chi Xe 50F20703V${noteMore}`, 28, height - 22);
-
-      const link = document.createElement("a");
-      const stamp = new Date().toISOString().slice(0, 10);
-      link.download = `Bao-cao-50F20703V-${stamp}.png`;
-      link.href = canvas.toDataURL("image/png");
-      link.click();
-    }
-
-    async function syncFromAppsScript() {
-      if (!APPS_SCRIPT_URL) {
-        render();
-        return;
-      }
-      const res = await fetch(`${APPS_SCRIPT_URL}${APPS_SCRIPT_URL.includes("?") ? "&" : "?"}t=${Date.now()}`);
-      const data = await res.json();
-      if (Array.isArray(data) && data.length) {
-        rowsData = data;
-      }
-      render();
-    }
-
-    document.querySelectorAll("#categoryChips .btn").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        document.querySelectorAll("#categoryChips .btn").forEach((b) => b.classList.remove("active"));
-        btn.classList.add("active");
-        activeTab = btn.dataset.tab || "ALL";
-        render();
-      });
-    });
-
-    ["filterFromDate", "filterToDate", "filterMonth", "filterYear", "searchInput"].forEach((id) => {
-      const el = document.getElementById(id);
-      el.addEventListener("change", render);
-      el.addEventListener("input", render);
-    });
-
-    document.getElementById("resetTimeBtn").addEventListener("click", () => {
-      document.getElementById("filterFromDate").value = "";
-      document.getElementById("filterToDate").value = "";
-      document.getElementById("filterMonth").value = "";
-      document.getElementById("filterYear").value = "";
-      render();
-    });
-
-    document.getElementById("exportImageBtn").addEventListener("click", exportReportImage);
-    document.getElementById("refreshBtn").addEventListener("click", syncFromAppsScript);
-
-    render();
-  </script>
-</body>
-</html>
+      const yearVal = document.getElementBy
