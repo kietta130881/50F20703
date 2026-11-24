@@ -2,213 +2,352 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
   <title>Sổ Thu Chi · Xe 50F20703V</title>
   <style>
     :root {
-      --teal-dark: #066346;
-      --teal: #0b7d58;
-      --teal-light: #e6f4ef;
-      --bg: #f3f6f5;
+      --primary: #066346;
+      --primary-mid: #0b875b;
+      --primary-soft: #e6f5ef;
+      --bg: #f1f5f4;
       --card: #ffffff;
-      --text: #111827;
-      --muted: #6b7280;
-      --border: #e5e7eb;
-      --thu: #0f766e;
-      --thu-bg: #ccfbf1;
-      --chi: #dc2626;
-      --chi-bg: #fee2e2;
-      --ton: #1d4ed8;
-      --ton-bg: #dbeafe;
-      --vetc: #b45309;
-      --vetc-bg: #fef3c7;
+      --text: #0f172a;
+      --muted: #64748b;
+      --border: #e2e8f0;
+
+      --thu-color: #047857;
+      --thu-bg: #ecfdf5;
+      --thu-border: #a7f3d0;
+
+      --chi-color: #b91c1c;
+      --chi-bg: #fef2f2;
+      --chi-border: #fecaca;
+
+      --ton-color: #1d4ed8;
+      --vetc-color: #b45309;
     }
 
-    * { box-sizing: border-box; font-family: 'Segoe UI', Roboto, Arial, sans-serif; }
+    * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; -webkit-tap-highlight-color: transparent; }
     body { margin: 0; background: var(--bg); color: var(--text); padding-bottom: 76px; }
 
-    /* Header xanh ngọc */
+    /* Thanh trên cùng */
     .topbar {
-      background: linear-gradient(90deg, var(--teal-dark), var(--teal));
+      background: linear-gradient(135deg, var(--primary), var(--primary-mid));
       color: #fff;
-      padding: 12px 16px;
+      padding: 12px 14px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       position: sticky;
       top: 0;
-      z-index: 30;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+      z-index: 40;
+      box-shadow: 0 2px 8px rgba(6, 99, 70, 0.2);
     }
-    .brand { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 16px; }
-    .plate-badge {
-      background: #f59e0b;
-      color: #111827;
+    .brand { display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 15px; }
+    .plate-tag {
+      background: #fbbf24;
+      color: #0f172a;
+      font-size: 11px;
       font-weight: 800;
-      font-size: 12px;
-      padding: 2px 8px;
+      padding: 2px 7px;
       border-radius: 6px;
     }
-    .sync-btn {
-      background: rgba(255,255,255,0.16);
+    .btn-sync {
+      background: rgba(255,255,255,0.18);
       color: #fff;
       border: 1px solid rgba(255,255,255,0.35);
-      padding: 6px 12px;
       border-radius: 8px;
-      font-size: 13px;
-      font-weight: 600;
+      padding: 6px 11px;
+      font-size: 12px;
+      font-weight: 700;
       cursor: pointer;
     }
-    .sync-btn:hover { background: rgba(255,255,255,0.26); }
 
-    .container { max-width: 820px; margin: 0 auto; padding: 14px; }
-
-    /* Thanh tìm kiếm & bộ lọc */
-    .search-box {
-      width: 100%;
-      padding: 11px 14px;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      background: #fff;
-      font-size: 14px;
-      outline: none;
-      margin-bottom: 10px;
+    /* Bộ lọc đa chiều ghim cố định ngay dưới topbar */
+    .sticky-filter-bar {
+      position: sticky;
+      top: 52px;
+      z-index: 35;
+      background: #f8fafc;
+      border-bottom: 1px solid var(--border);
+      padding: 10px 12px;
+      box-shadow: 0 3px 10px rgba(15, 23, 42, 0.06);
     }
-    .search-box:focus { border-color: var(--teal); }
-
-    .filter-row {
+    .search-row {
       display: flex;
       gap: 8px;
+      margin-bottom: 8px;
+    }
+    .search-input {
+      flex: 1;
+      padding: 9px 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      font-size: 13px;
+      background: #fff;
+      outline: none;
+    }
+    .search-input:focus { border-color: var(--primary-mid); }
+    .btn-reset {
+      padding: 0 11px;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      background: #fff;
+      color: #334155;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .multi-select-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+    @media (min-width: 640px) {
+      .multi-select-grid { grid-template-columns: repeat(4, 1fr); }
+    }
+    .filter-select {
+      padding: 7px 8px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      background: #fff;
+      font-size: 12px;
+      font-weight: 600;
+      color: #1e293b;
+      outline: none;
+    }
+
+    .quick-chips {
+      display: flex;
+      gap: 6px;
       overflow-x: auto;
-      padding-bottom: 6px;
-      margin-bottom: 12px;
+      padding-bottom: 2px;
     }
     .chip {
-      border: 1px solid #d1d5db;
+      border: 1px solid #cbd5e1;
       background: #fff;
-      color: #374151;
-      padding: 6px 12px;
+      color: #334155;
       border-radius: 999px;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
+      padding: 5px 11px;
+      font-size: 12px;
+      font-weight: 700;
       white-space: nowrap;
+      cursor: pointer;
     }
     .chip.active {
-      background: var(--teal);
-      border-color: var(--teal);
+      background: var(--primary-mid);
+      border-color: var(--primary-mid);
       color: #fff;
     }
 
-    /* Thẻ tổng quan */
+    /* Nội dung chính */
+    .main-wrap {
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 12px;
+    }
+
     .kpi-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
-      margin-bottom: 14px;
+      gap: 8px;
+      margin-bottom: 12px;
     }
     @media (min-width: 640px) {
       .kpi-grid { grid-template-columns: repeat(4, 1fr); }
     }
     .kpi-card {
       background: var(--card);
-      border-radius: 12px;
-      padding: 12px;
       border: 1px solid var(--border);
-      box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+      border-radius: 12px;
+      padding: 11px 12px;
     }
     .kpi-label { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; }
-    .kpi-val { font-size: 16px; font-weight: 800; margin-top: 4px; }
-    .c-thu { color: var(--thu); }
-    .c-chi { color: var(--chi); }
-    .c-ton { color: var(--ton); }
-    .c-vetc { color: var(--vetc); }
+    .kpi-val { font-size: 15px; font-weight: 800; margin-top: 4px; }
+    .val-thu { color: var(--thu-color); }
+    .val-chi { color: var(--chi-color); }
+    .val-ton { color: var(--ton-color); }
+    .val-vetc { color: var(--vetc-color); }
 
     .card {
       background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 12px;
+      border-radius: 14px;
       padding: 14px;
       margin-bottom: 12px;
     }
-    .card-title { font-weight: 700; font-size: 14px; margin-bottom: 10px; color: var(--teal-dark); }
-
-    /* Danh sách giao dịch */
-    .tx-row {
+    .card-header-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 10px 0;
-      border-bottom: 1px solid #f1f5f9;
-      gap: 10px;
+      margin-bottom: 10px;
     }
-    .tx-row:last-child { border-bottom: none; }
-    .tx-cat { font-weight: 700; font-size: 14px; }
-    .tx-meta { font-size: 12px; color: var(--muted); margin-top: 2px; }
-    .tx-money { font-weight: 800; font-size: 14px; white-space: nowrap; }
+    .card-title { font-size: 14px; font-weight: 800; color: var(--primary); }
+    .badge-count {
+      background: var(--primary-soft);
+      color: var(--primary);
+      font-size: 11px;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 999px;
+    }
 
-    /* Form tab Cập nhật */
-    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    .span-2 { grid-column: span 2; }
-    label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 4px; color: #374151; }
-    input, select {
-      width: 100%;
-      padding: 10px;
+    /* Biểu đồ */
+    .chart-box { width: 100%; overflow-x: auto; }
+    .cat-bar-item { margin-bottom: 10px; }
+    .cat-bar-top { display: flex; justify-content: space-between; font-size: 12px; font-weight: 700; margin-bottom: 4px; }
+    .bar-track { height: 8px; background: #e2e8f0; border-radius: 999px; overflow: hidden; }
+    .bar-fill-thu { height: 100%; background: var(--primary-mid); border-radius: 999px; }
+    .bar-fill-chi { height: 100%; background: #ef4444; border-radius: 999px; }
+
+    /* Thẻ giao dịch ở tab Xem chi tiết */
+    .tx-card {
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 10px;
       border: 1px solid var(--border);
-      border-radius: 8px;
+      border-left-width: 5px;
+      background: #fff;
+    }
+    .tx-card.is-thu {
+      border-left-color: var(--thu-color);
+      background: linear-gradient(90deg, var(--thu-bg) 0%, #ffffff 28%);
+    }
+    .tx-card.is-chi {
+      border-left-color: var(--chi-color);
+      background: linear-gradient(90deg, var(--chi-bg) 0%, #ffffff 28%);
+    }
+    .tx-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .tx-type-pill {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      padding: 2px 7px;
+      border-radius: 999px;
+      margin-right: 6px;
+    }
+    .pill-thu { background: #d1fae5; color: var(--thu-color); border: 1px solid var(--thu-border); }
+    .pill-chi { background: #fee2e2; color: var(--chi-color); border: 1px solid var(--chi-border); }
+    .tx-cat-name { font-size: 14px; font-weight: 800; color: var(--text); }
+    .tx-amount { font-size: 15px; font-weight: 900; white-space: nowrap; }
+    .amt-thu { color: var(--thu-color); }
+    .amt-chi { color: var(--chi-color); }
+    .tx-note { font-size: 13px; color: #334155; margin-top: 6px; line-height: 1.4; }
+    .tx-footer {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 8px;
+      padding-top: 7px;
+      border-top: 1px dashed #e2e8f0;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--muted);
+    }
+
+    /* Form tab Thu-Chi */
+    .type-switch { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+    .type-opt {
+      padding: 11px;
+      border-radius: 10px;
+      border: 1px solid #cbd5e1;
+      background: #f8fafc;
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+      color: #475569;
+    }
+    .type-opt.active-chi {
+      background: var(--chi-bg);
+      border-color: #f87171;
+      color: var(--chi-color);
+    }
+    .type-opt.active-thu {
+      background: var(--thu-bg);
+      border-color: #34d399;
+      color: var(--thu-color);
+    }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .full-col { grid-column: span 2; }
+    .lbl { display: block; font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px; }
+    .inp {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
       font-size: 14px;
       background: #fff;
     }
-    .btn-primary {
+    .btn-submit {
       width: 100%;
-      padding: 12px;
+      padding: 13px;
       border: none;
-      border-radius: 10px;
-      background: var(--teal);
+      border-radius: 11px;
+      background: var(--primary-mid);
       color: #fff;
       font-size: 15px;
-      font-weight: 700;
+      font-weight: 800;
       cursor: pointer;
+      margin-top: 4px;
     }
-    .btn-primary:disabled { opacity: 0.6; }
+    .btn-submit:disabled { opacity: 0.6; }
 
-    /* Bottom nav */
-    .bottom-nav {
+    /* 3 tab cố định dưới cùng */
+    .bottom-tabs {
       position: fixed;
       bottom: 0;
       left: 0;
       right: 0;
-      background: #fff;
+      height: 60px;
+      background: #ffffff;
       border-top: 1px solid var(--border);
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      z-index: 30;
+      z-index: 45;
+      box-shadow: 0 -2px 10px rgba(15, 23, 42, 0.06);
     }
-    .nav-btn {
-      padding: 10px 6px;
+    .tab-btn {
       border: none;
       background: transparent;
       color: var(--muted);
       font-size: 12px;
-      font-weight: 700;
+      font-weight: 800;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
       cursor: pointer;
     }
-    .nav-btn.active { color: var(--teal); background: var(--teal-light); }
+    .tab-btn.active {
+      color: var(--primary);
+      background: var(--primary-soft);
+      border-top: 3px solid var(--primary-mid);
+    }
 
-    .hidden { display: none; }
-    .empty-state { text-align: center; color: var(--muted); padding: 24px 10px; font-size: 13px; }
+    .hidden { display: none !important; }
+    .empty { text-align: center; color: var(--muted); padding: 24px 10px; font-size: 13px; }
     .toast {
       position: fixed;
-      bottom: 74px;
+      bottom: 72px;
       left: 50%;
       transform: translateX(-50%);
-      background: #111827;
+      background: #0f172a;
       color: #fff;
       padding: 9px 16px;
-      border-radius: 8px;
-      font-size: 13px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 700;
       display: none;
-      z-index: 50;
+      z-index: 60;
     }
   </style>
 </head>
@@ -216,113 +355,183 @@
   <header class="topbar">
     <div class="brand">
       <span>Sổ Thu Chi</span>
-      <span class="plate-badge">50F20703V</span>
+      <span class="plate-tag">50F20703V</span>
     </div>
-    <button type="button" class="sync-btn" onclick="syncData(true)">Đồng bộ</button>
+    <button type="button" class="btn-sync" onclick="syncAll(true)">Đồng bộ</button>
   </header>
 
-  <main class="container">
-    <input
-      type="text"
-      id="searchInput"
-      class="search-box"
-      placeholder="Tìm nội dung, ngày (vd: 20/11), trạm thu phí..."
-      oninput="applyFilters()"
-    />
-
-    <div class="filter-row" id="filterRow">
-      <button type="button" class="chip active" data-filter="all" onclick="setFilter('all', this)">
-        Tất cả (<span id="countAll">0</span>)
-      </button>
-      <button type="button" class="chip" data-filter="thu" onclick="setFilter('thu', this)">Khoản Thu</button>
-      <button type="button" class="chip" data-filter="chi" onclick="setFilter('chi', this)">Khoản Chi</button>
-      <button type="button" class="chip" data-filter="vetc" onclick="setFilter('vetc', this)">VETC</button>
-      <button type="button" class="chip" data-filter="sac" onclick="setFilter('sac', this)">Sạc pin</button>
-      <button type="button" class="chip" data-filter="khac" onclick="setFilter('khac', this)">Khác</button>
+  <!-- Bộ lọc đa chiều cố định cho Trang chủ & Xem chi tiết -->
+  <div id="stickyFilterBar" class="sticky-filter-bar">
+    <div class="search-row">
+      <input
+        type="text"
+        id="qSearch"
+        class="search-input"
+        placeholder="Tìm nội dung, ngày (20/11), trạm VETC, sạc..."
+        oninput="onFilterChange()"
+      />
+      <button type="button" class="btn-reset" onclick="resetFilters()">Xóa lọc</button>
     </div>
 
-    <!-- TAB 1: TỔNG QUAN -->
-    <section id="tab-overview">
+    <div class="multi-select-grid">
+      <select id="fType" class="filter-select" onchange="onFilterChange()">
+        <option value="all">Loại: Tất cả</option>
+        <option value="thu">Chỉ Khoản Thu</option>
+        <option value="chi">Chỉ Khoản Chi</option>
+      </select>
+
+      <select id="fCategory" class="filter-select" onchange="onFilterChange()">
+        <option value="all">Danh mục: Tất cả</option>
+        <option value="Doanh thu dịch vụ/Lương">Doanh thu dịch vụ/Lương</option>
+        <option value="Thu nhập khác">Thu nhập khác</option>
+        <option value="Sạc điện/Nhiên liệu">Sạc điện/Nhiên liệu</option>
+        <option value="Ăn uống">Ăn uống</option>
+        <option value="Phí cầu đường/VETC">Phí cầu đường/VETC</option>
+        <option value="Bảo dưỡng/Sửa chữa">Bảo dưỡng/Sửa chữa</option>
+        <option value="Sinh hoạt gia đình">Sinh hoạt gia đình</option>
+        <option value="Khác">Khác</option>
+      </select>
+
+      <select id="fMethod" class="filter-select" onchange="onFilterChange()">
+        <option value="all">Hình thức: Tất cả</option>
+        <option value="chuyển khoản">Chuyển khoản</option>
+        <option value="tiền mặt">Tiền mặt</option>
+      </select>
+
+      <select id="fPeriod" class="filter-select" onchange="onFilterChange()">
+        <option value="all">Thời gian: Tất cả</option>
+        <option value="today">Hôm nay</option>
+        <option value="7d">7 ngày qua</option>
+        <option value="month">Tháng này</option>
+      </select>
+    </div>
+
+    <div class="quick-chips">
+      <button type="button" class="chip active" data-chip="all" onclick="setChip('all', this)">
+        Tất cả (<span id="chipCountAll">0</span>)
+      </button>
+      <button type="button" class="chip" data-chip="thu" onclick="setChip('thu', this)">Thu</button>
+      <button type="button" class="chip" data-chip="chi" onclick="setChip('chi', this)">Chi</button>
+      <button type="button" class="chip" data-chip="vetc" onclick="setChip('vetc', this)">VETC / Cầu đường</button>
+      <button type="button" class="chip" data-chip="sac" onclick="setChip('sac', this)">Sạc pin</button>
+      <button type="button" class="chip" data-chip="ck" onclick="setChip('ck', this)">Chuyển khoản</button>
+      <button type="button" class="chip" data-chip="tm" onclick="setChip('tm', this)">Tiền mặt</button>
+    </div>
+  </div>
+
+  <main class="main-wrap">
+    <!-- TAB 1: TRANG CHỦ -->
+    <section id="view-home">
       <div class="kpi-grid">
         <div class="kpi-card">
           <div class="kpi-label">Tổng Thu</div>
-          <div class="kpi-val c-thu" id="kpiThu">0 ₫</div>
+          <div class="kpi-val val-thu" id="kThu">0 ₫</div>
         </div>
         <div class="kpi-card">
           <div class="kpi-label">Tổng Chi</div>
-          <div class="kpi-val c-chi" id="kpiChi">0 ₫</div>
+          <div class="kpi-val val-chi" id="kChi">0 ₫</div>
         </div>
         <div class="kpi-card">
           <div class="kpi-label">Tồn Quỹ</div>
-          <div class="kpi-val c-ton" id="kpiTon">0 ₫</div>
+          <div class="kpi-val val-ton" id="kTon">0 ₫</div>
         </div>
         <div class="kpi-card">
           <div class="kpi-label">Ví VETC</div>
-          <div class="kpi-val c-vetc" id="kpiVetc">0 ₫</div>
+          <div class="kpi-val val-vetc" id="kVetc">0 ₫</div>
         </div>
       </div>
 
+      <!-- Biểu đồ so sánh Thu - Chi -->
       <div class="card">
-        <div class="card-title">Tổng hợp theo danh mục (THDM &amp; NKTC)</div>
-        <div id="categorySummary" class="empty-state">Đang tải dữ liệu...</div>
+        <div class="card-header-row">
+          <span class="card-title">Biểu đồ Thu vs Chi theo bộ lọc</span>
+          <span class="badge-count" id="filteredCountHome">0 GD</span>
+        </div>
+        <div id="barChartCompare" class="chart-box"></div>
+      </div>
+
+      <!-- Biểu đồ tỷ trọng theo danh mục -->
+      <div class="card">
+        <div class="card-header-row">
+          <span class="card-title">Cơ cấu theo danh mục</span>
+        </div>
+        <div id="categoryBars"></div>
       </div>
     </section>
 
-    <!-- TAB 2: CHI TIẾT -->
-    <section id="tab-detail" class="hidden">
+    <!-- TAB 2: XEM CHI TIẾT (DẠNG THẺ PHÂN BIỆT THU / CHI) -->
+    <section id="view-detail" class="hidden">
       <div class="card">
-        <div class="card-title">Nhật ký giao dịch (NKTC)</div>
-        <div id="detailList" class="empty-state">Đang tải dữ liệu...</div>
+        <div class="card-header-row">
+          <span class="card-title">Danh sách thẻ giao dịch (NKTC)</span>
+          <span class="badge-count" id="filteredCountDetail">0 thẻ</span>
+        </div>
+        <div id="cardsContainer"></div>
       </div>
     </section>
 
-    <!-- TAB 3: CẬP NHẬT -->
-    <section id="tab-update" class="hidden">
+    <!-- TAB 3: THU-CHI (CẬP NHẬT NHANH KHI RÃNH) -->
+    <section id="view-entry" class="hidden">
       <div class="card">
-        <div class="card-title">Thêm giao dịch mới vào NKTC</div>
-        <form id="txForm" class="form-grid">
+        <div class="card-header-row">
+          <span class="card-title">Cập nhật Thu / Chi vào NKTC</span>
+        </div>
+
+        <div class="type-switch">
+          <button type="button" id="optChi" class="type-opt active-chi" onclick="chooseType('Chi')">- KHOẢN CHI</button>
+          <button type="button" id="optThu" class="type-opt" onclick="chooseType('Thu')">+ KHOẢN THU</button>
+        </div>
+
+        <form id="entryForm" class="form-grid">
+          <input type="hidden" id="inLoai" value="Chi" />
+
           <div>
-            <label for="fLoai">Loại giao dịch</label>
-            <select id="fLoai" onchange="populateCategories()">
-              <option value="Chi">Khoản Chi</option>
-              <option value="Thu">Khoản Thu</option>
-            </select>
+            <label class="lbl" for="inNgay">Ngày giao dịch</label>
+            <input type="date" id="inNgay" class="inp" required />
           </div>
+
           <div>
-            <label for="fNgay">Ngày</label>
-            <input type="date" id="fNgay" required />
-          </div>
-          <div>
-            <label for="fDanhMuc">Danh mục</label>
-            <select id="fDanhMuc" required></select>
-          </div>
-          <div>
-            <label for="fHinhThuc">Hình thức</label>
-            <select id="fHinhThuc">
+            <label class="lbl" for="inHinhThuc">Hình thức</label>
+            <select id="inHinhThuc" class="inp">
               <option value="Chuyển khoản">Chuyển khoản</option>
               <option value="Tiền mặt">Tiền mặt</option>
             </select>
           </div>
-          <div class="span-2">
-            <label for="fSoTien">Số tiền (VNĐ)</label>
-            <input type="number" id="fSoTien" min="1" placeholder="VD: 150000" required />
+
+          <div>
+            <label class="lbl" for="inDanhMuc">Danh mục</label>
+            <select id="inDanhMuc" class="inp" required></select>
           </div>
-          <div class="span-2">
-            <label for="fGhiChu">Ghi chú / Nội dung</label>
-            <input type="text" id="fGhiChu" placeholder="VD: Sạc pin, trạm thu phí, ăn sáng..." />
+
+          <div>
+            <label class="lbl" for="inSoTien">Số tiền (VNĐ)</label>
+            <input type="number" id="inSoTien" class="inp" min="1" placeholder="VD: 150000" required />
           </div>
-          <div class="span-2">
-            <button type="submit" id="btnSave" class="btn-primary">Lưu vào NKTC</button>
+
+          <div class="full-col">
+            <label class="lbl" for="inGhiChu">Ghi chú / Nội dung</label>
+            <input type="text" id="inGhiChu" class="inp" placeholder="Ghi chú nhanh khi rảnh..." />
+          </div>
+
+          <div class="full-col">
+            <button type="submit" id="btnSubmitEntry" class="btn-submit">Lưu giao dịch vào NKTC</button>
           </div>
         </form>
       </div>
     </section>
   </main>
 
-  <nav class="bottom-nav">
-    <button type="button" class="nav-btn active" id="nav-overview" onclick="switchTab('overview', this)">Tổng quan</button>
-    <button type="button" class="nav-btn" id="nav-detail" onclick="switchTab('detail', this)">Chi tiết</button>
-    <button type="button" class="nav-btn" id="nav-update" onclick="switchTab('update', this)">Cập nhật</button>
+  <!-- 3 tab cố định dưới cùng -->
+  <nav class="bottom-tabs">
+    <button type="button" class="tab-btn active" id="tabBtn-home" onclick="openTab('home')">
+      <span>Trang chủ</span>
+    </button>
+    <button type="button" class="tab-btn" id="tabBtn-detail" onclick="openTab('detail')">
+      <span>Xem chi tiết</span>
+    </button>
+    <button type="button" class="tab-btn" id="tabBtn-entry" onclick="openTab('entry')">
+      <span>Thu-Chi</span>
+    </button>
   </nav>
 
   <div id="toast" class="toast"></div>
@@ -330,176 +539,262 @@
   <script>
     const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbymiRccSimgcBN5NU6OadwjRtgkB-yfCyuujX-xUMHWAftLaTKDBreuvd5dgJlhqHwY_Q/exec';
 
-    const CATEGORIES = {
+    const CATS_BY_TYPE = {
       Thu: ['Doanh thu dịch vụ/Lương', 'Thu nhập khác'],
       Chi: ['Sạc điện/Nhiên liệu', 'Ăn uống', 'Phí cầu đường/VETC', 'Bảo dưỡng/Sửa chữa', 'Sinh hoạt gia đình', 'Khác']
     };
 
-    const state = {
+    const appState = {
       tongThu: 0,
       tongChi: 0,
       tonQuy: 0,
       tongVetc: 0,
       transactions: [],
-      filter: 'all',
-      search: ''
+      chip: 'all'
     };
 
-    function formatVND(n) {
-      return Number(n || 0).toLocaleString('vi-VN') + ' ₫';
+    function vnd(num) {
+      return Number(num || 0).toLocaleString('vi-VN') + ' ₫';
     }
 
     function showToast(msg) {
-      const el = document.getElementById('toast');
-      el.textContent = msg;
-      el.style.display = 'block';
-      clearTimeout(window._toastTimer);
-      window._toastTimer = setTimeout(() => { el.style.display = 'none'; }, 2800);
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.style.display = 'block';
+      clearTimeout(window._tt);
+      window._tt = setTimeout(() => { t.style.display = 'none'; }, 2800);
     }
 
-    function switchTab(tabName, btnEl) {
-      ['overview', 'detail', 'update'].forEach(t => {
-        document.getElementById('tab-' + t).classList.toggle('hidden', t !== tabName);
+    function openTab(name) {
+      document.getElementById('view-home').classList.toggle('hidden', name !== 'home');
+      document.getElementById('view-detail').classList.toggle('hidden', name !== 'detail');
+      document.getElementById('view-entry').classList.toggle('hidden', name !== 'entry');
+
+      // Ẩn thanh lọc ở tab nhập liệu Thu-Chi để gọn màn hình điện thoại
+      document.getElementById('stickyFilterBar').classList.toggle('hidden', name === 'entry');
+
+      ['home', 'detail', 'entry'].forEach(k => {
+        document.getElementById('tabBtn-' + k).classList.toggle('active', k === name);
       });
-      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-      if (btnEl) btnEl.classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    function populateCategories() {
-      const loai = document.getElementById('fLoai').value;
-      const sel = document.getElementById('fDanhMuc');
+    function chooseType(type) {
+      document.getElementById('inLoai').value = type;
+      document.getElementById('optChi').className = 'type-opt' + (type === 'Chi' ? ' active-chi' : '');
+      document.getElementById('optThu').className = 'type-opt' + (type === 'Thu' ? ' active-thu' : '');
+
+      const sel = document.getElementById('inDanhMuc');
       sel.innerHTML = '';
-      (CATEGORIES[loai] || []).forEach(c => {
-        const opt = document.createElement('option');
-        opt.value = c;
-        opt.textContent = c;
-        sel.appendChild(opt);
+      (CATS_BY_TYPE[type] || []).forEach(c => {
+        const o = document.createElement('option');
+        o.value = c;
+        o.textContent = c;
+        sel.appendChild(o);
       });
     }
 
-    function setFilter(filterKey, btnEl) {
-      state.filter = filterKey;
+    function setChip(key, el) {
+      appState.chip = key;
       document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
-      if (btnEl) btnEl.classList.add('active');
-      applyFilters();
+      if (el) el.classList.add('active');
+      onFilterChange();
     }
 
-    function matchesFilter(tx) {
-      const loaiLower = String(tx.loai || '').toLowerCase();
-      const catLower = String(tx.danhMuc || '').toLowerCase();
-      const noteLower = String(tx.ghiChu || '').toLowerCase();
-      const dateLower = String(tx.ngay || '').toLowerCase();
-      const joined = `${loaiLower} ${catLower} ${noteLower} ${dateLower}`;
+    function resetFilters() {
+      document.getElementById('qSearch').value = '';
+      document.getElementById('fType').value = 'all';
+      document.getElementById('fCategory').value = 'all';
+      document.getElementById('fMethod').value = 'all';
+      document.getElementById('fPeriod').value = 'all';
+      appState.chip = 'all';
+      document.querySelectorAll('.chip').forEach(c => c.classList.toggle('active', c.dataset.chip === 'all'));
+      onFilterChange();
+    }
 
-      if (state.search) {
-        if (!joined.includes(state.search.toLowerCase())) return false;
+    function isThuTx(tx) {
+      const l = String(tx.loai || '').toLowerCase();
+      const d = String(tx.danhMuc || '').toLowerCase();
+      return l.includes('thu') || d.includes('doanh thu') || d.includes('thu nhập');
+    }
+
+    function matchPeriod(tx, period) {
+      if (period === 'all') return true;
+      if (!tx.ngayIso) return true;
+      const d = new Date(tx.ngayIso + 'T00:00:00');
+      const now = new Date();
+      const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      if (period === 'today') return d >= todayStart;
+      if (period === '7d') {
+        const diff = (todayStart - d) / (1000 * 60 * 60 * 24);
+        return diff >= 0 && diff <= 7;
       }
-
-      if (state.filter === 'thu') return loaiLower.includes('thu');
-      if (state.filter === 'chi') return loaiLower.includes('chi');
-      if (state.filter === 'vetc') return joined.includes('vetc') || joined.includes('cầu đường');
-      if (state.filter === 'sac') return joined.includes('sạc') || joined.includes('nhiên liệu') || joined.includes('pin');
-      if (state.filter === 'khac') {
-        return !loaiLower.includes('thu') &&
-               !joined.includes('vetc') &&
-               !joined.includes('cầu đường') &&
-               !joined.includes('sạc') &&
-               !joined.includes('nhiên liệu');
+      if (period === 'month') {
+        return d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth();
       }
       return true;
     }
 
-    function applyFilters() {
-      state.search = document.getElementById('searchInput').value.trim();
-      const filtered = state.transactions.filter(matchesFilter);
+    function getFilteredTransactions() {
+      const q = document.getElementById('qSearch').value.trim().toLowerCase();
+      const fType = document.getElementById('fType').value;
+      const fCat = document.getElementById('fCategory').value;
+      const fMethod = document.getElementById('fMethod').value;
+      const fPeriod = document.getElementById('fPeriod').value;
 
-      document.getElementById('countAll').textContent = filtered.length;
-      renderDetailList(filtered);
-      renderCategorySummary(filtered);
+      return appState.transactions.filter(tx => {
+        const isThu = isThuTx(tx);
+        const cat = String(tx.danhMuc || '');
+        const method = String(tx.hinhThuc || '').toLowerCase();
+        const combined = `${tx.ngay || ''} ${tx.loai || ''} ${cat} ${tx.hinhThuc || ''} ${tx.ghiChu || ''} ${tx.soTien || ''}`.toLowerCase();
+
+        if (q && !combined.includes(q)) return false;
+        if (fType === 'thu' && !isThu) return false;
+        if (fType === 'chi' && isThu) return false;
+        if (fCat !== 'all' && cat !== fCat) return false;
+        if (fMethod !== 'all' && !method.includes(fMethod)) return false;
+        if (!matchPeriod(tx, fPeriod)) return false;
+
+        if (appState.chip === 'thu' && !isThu) return false;
+        if (appState.chip === 'chi' && isThu) return false;
+        if (appState.chip === 'vetc' && !(combined.includes('vetc') || combined.includes('cầu đường'))) return false;
+        if (appState.chip === 'sac' && !(combined.includes('sạc') || combined.includes('nhiên liệu') || combined.includes('pin'))) return false;
+        if (appState.chip === 'ck' && !method.includes('chuyển khoản')) return false;
+        if (appState.chip === 'tm' && !method.includes('tiền mặt')) return false;
+
+        return true;
+      });
     }
 
-    function renderCategorySummary(list) {
-      const box = document.getElementById('categorySummary');
-      if (!list || list.length === 0) {
-        box.innerHTML = '<div class="empty-state">Chưa có dữ liệu giao dịch phù hợp.</div>';
-        return;
-      }
+    function renderCharts(filtered) {
+      let sumThu = 0;
+      let sumChi = 0;
+      const byCat = {};
 
-      const map = {};
-      list.forEach(tx => {
-        const key = tx.danhMuc || 'Khác';
-        if (!map[key]) map[key] = { count: 0, total: 0, isThu: String(tx.loai || '').toLowerCase().includes('thu') };
-        map[key].count += 1;
-        map[key].total += Number(tx.soTien) || 0;
+      filtered.forEach(tx => {
+        const amt = Number(tx.soTien) || 0;
+        const isThu = isThuTx(tx);
+        if (isThu) sumThu += amt;
+        else sumChi += amt;
+
+        const cName = tx.danhMuc || 'Khác';
+        if (!byCat[cName]) byCat[cName] = { total: 0, isThu: isThu };
+        byCat[cName].total += amt;
       });
 
-      const rows = Object.keys(map).map(k => {
-        const item = map[k];
-        return `
-          <div class="tx-row">
-            <div>
-              <div class="tx-cat">${k}</div>
-              <div class="tx-meta">${item.count} giao dịch</div>
-            </div>
-            <div class="tx-money ${item.isThu ? 'c-thu' : 'c-chi'}">${formatVND(item.total)}</div>
+      const maxVal = Math.max(sumThu, sumChi, 1);
+      const thuPct = Math.round((sumThu / maxVal) * 100);
+      const chiPct = Math.round((sumChi / maxVal) * 100);
+
+      document.getElementById('barChartCompare').innerHTML = `
+        <div class="cat-bar-item">
+          <div class="cat-bar-top">
+            <span class="val-thu">Tổng Thu (đã lọc)</span>
+            <span class="val-thu">${vnd(sumThu)}</span>
           </div>
-        `;
-      }).join('');
+          <div class="bar-track"><div class="bar-fill-thu" style="width:${thuPct}%"></div></div>
+        </div>
+        <div class="cat-bar-item">
+          <div class="cat-bar-top">
+            <span class="val-chi">Tổng Chi (đã lọc)</span>
+            <span class="val-chi">${vnd(sumChi)}</span>
+          </div>
+          <div class="bar-track"><div class="bar-fill-chi" style="width:${chiPct}%"></div></div>
+        </div>
+      `;
 
-      box.innerHTML = rows;
-    }
-
-    function renderDetailList(list) {
-      const box = document.getElementById('detailList');
-      if (!list || list.length === 0) {
-        box.innerHTML = '<div class="empty-state">Không tìm thấy giao dịch nào.</div>';
+      const sortedCats = Object.entries(byCat).sort((a, b) => b[1].total - a[1].total);
+      if (sortedCats.length === 0) {
+        document.getElementById('categoryBars').innerHTML = '<div class="empty">Không có dữ liệu theo bộ lọc hiện tại.</div>';
         return;
       }
 
-      box.innerHTML = list.map(tx => {
-        const isThu = String(tx.loai || '').toLowerCase().includes('thu');
+      const maxCat = Math.max(...sortedCats.map(x => x[1].total), 1);
+      document.getElementById('categoryBars').innerHTML = sortedCats.map(([name, info]) => {
+        const pct = Math.round((info.total / maxCat) * 100);
         return `
-          <div class="tx-row">
-            <div>
-              <div class="tx-cat">${tx.danhMuc || 'Giao dịch'}</div>
-              <div class="tx-meta">${tx.ngay} • ${tx.hinhThuc || ''}${tx.ghiChu ? ' • ' + tx.ghiChu : ''}</div>
+          <div class="cat-bar-item">
+            <div class="cat-bar-top">
+              <span>${name}</span>
+              <span class="${info.isThu ? 'val-thu' : 'val-chi'}">${vnd(info.total)}</span>
             </div>
-            <div class="tx-money ${isThu ? 'c-thu' : 'c-chi'}">
-              ${isThu ? '+' : '-'}${formatVND(tx.soTien)}
+            <div class="bar-track">
+              <div class="${info.isThu ? 'bar-fill-thu' : 'bar-fill-chi'}" style="width:${pct}%"></div>
             </div>
           </div>
         `;
       }).join('');
     }
 
-    function applyDashboardPayload(payload) {
-      const data = payload && payload.data ? payload.data : payload;
-      if (!data) return;
-      if (data.error) {
-        showToast('Lỗi: ' + data.error);
+    function renderDetailCards(filtered) {
+      const box = document.getElementById('cardsContainer');
+      if (!filtered || filtered.length === 0) {
+        box.innerHTML = '<div class="empty">Không có thẻ giao dịch nào khớp bộ lọc.</div>';
         return;
       }
 
-      state.tongThu = Number(data.tongThu) || 0;
-      state.tongChi = Number(data.tongChi) || 0;
-      state.tonQuy = Number(data.tonQuy) || 0;
-      state.tongVetc = Number(data.tongVetc) || 0;
-      state.transactions = Array.isArray(data.transactions) ? data.transactions : [];
-
-      document.getElementById('kpiThu').textContent = formatVND(state.tongThu);
-      document.getElementById('kpiChi').textContent = formatVND(state.tongChi);
-      document.getElementById('kpiTon').textContent = formatVND(state.tonQuy);
-      document.getElementById('kpiVetc').textContent = formatVND(state.tongVetc);
-
-      applyFilters();
+      box.innerHTML = filtered.map(tx => {
+        const isThu = isThuTx(tx);
+        return `
+          <div class="tx-card ${isThu ? 'is-thu' : 'is-chi'}">
+            <div class="tx-top">
+              <div>
+                <span class="tx-type-pill ${isThu ? 'pill-thu' : 'pill-chi'}">${isThu ? 'THU' : 'CHI'}</span>
+                <span class="tx-cat-name">${tx.danhMuc || 'Giao dịch'}</span>
+              </div>
+              <div class="tx-amount ${isThu ? 'amt-thu' : 'amt-chi'}">
+                ${isThu ? '+' : '-'}${vnd(tx.soTien)}
+              </div>
+            </div>
+            ${tx.ghiChu ? `<div class="tx-note">${tx.ghiChu}</div>` : ''}
+            <div class="tx-footer">
+              <span>Ngày: ${tx.ngay || '-'}</span>
+              <span>Hình thức: ${tx.hinhThuc || '-'}</span>
+              <span>Phân loại: ${tx.loai || (isThu ? 'Thu' : 'Chi')}</span>
+            </div>
+          </div>
+        `;
+      }).join('');
     }
 
-    function syncData(showMsg) {
+    function onFilterChange() {
+      const filtered = getFilteredTransactions();
+      document.getElementById('chipCountAll').textContent = filtered.length;
+      document.getElementById('filteredCountHome').textContent = filtered.length + ' GD';
+      document.getElementById('filteredCountDetail').textContent = filtered.length + ' thẻ';
+
+      renderCharts(filtered);
+      renderDetailCards(filtered);
+    }
+
+    function applyData(raw) {
+      const d = raw && raw.data ? raw.data : raw;
+      if (!d) return;
+      if (d.error) {
+        showToast('Lỗi: ' + d.error);
+        return;
+      }
+
+      appState.tongThu = Number(d.tongThu) || 0;
+      appState.tongChi = Number(d.tongChi) || 0;
+      appState.tonQuy = Number(d.tonQuy) || 0;
+      appState.tongVetc = Number(d.tongVetc) || 0;
+      appState.transactions = Array.isArray(d.transactions) ? d.transactions : [];
+
+      document.getElementById('kThu').textContent = vnd(appState.tongThu);
+      document.getElementById('kChi').textContent = vnd(appState.tongChi);
+      document.getElementById('kTon').textContent = vnd(appState.tonQuy);
+      document.getElementById('kVetc').textContent = vnd(appState.tongVetc);
+
+      onFilterChange();
+    }
+
+    function syncAll(notify) {
       if (typeof google !== 'undefined' && google.script && google.script.run) {
         google.script.run
           .withSuccessHandler(res => {
-            applyDashboardPayload(res);
-            if (showMsg) showToast('Đã đồng bộ từ NKTC & THDM');
+            applyData(res);
+            if (notify) showToast('Đã đồng bộ từ NKTC & THDM');
           })
           .withFailureHandler(err => showToast('Lỗi đồng bộ: ' + err.message))
           .getDashboardData();
@@ -509,41 +804,41 @@
       fetch(APPS_SCRIPT_URL + '?action=getDashboardData')
         .then(r => r.json())
         .then(res => {
-          applyDashboardPayload(res);
-          if (showMsg) showToast('Đã đồng bộ từ NKTC & THDM');
+          applyData(res);
+          if (notify) showToast('Đã đồng bộ từ NKTC & THDM');
         })
-        .catch(err => showToast('Lỗi kết nối Web App: ' + err.message));
+        .catch(err => showToast('Lỗi kết nối: ' + err.message));
     }
 
-    document.getElementById('txForm').addEventListener('submit', function(e) {
+    document.getElementById('entryForm').addEventListener('submit', function(e) {
       e.preventDefault();
-      const btn = document.getElementById('btnSave');
+      const btn = document.getElementById('btnSubmitEntry');
       btn.disabled = true;
       btn.textContent = 'Đang lưu...';
 
       const payload = {
         action: 'addTransaction',
-        loai: document.getElementById('fLoai').value,
-        ngay: document.getElementById('fNgay').value,
-        danhMuc: document.getElementById('fDanhMuc').value,
-        hinhThuc: document.getElementById('fHinhThuc').value,
-        soTien: document.getElementById('fSoTien').value,
-        ghiChu: document.getElementById('fGhiChu').value
+        loai: document.getElementById('inLoai').value,
+        ngay: document.getElementById('inNgay').value,
+        danhMuc: document.getElementById('inDanhMuc').value,
+        hinhThuc: document.getElementById('inHinhThuc').value,
+        soTien: document.getElementById('inSoTien').value,
+        ghiChu: document.getElementById('inGhiChu').value
       };
 
       if (typeof google !== 'undefined' && google.script && google.script.run) {
         google.script.run
           .withSuccessHandler(res => {
-            applyDashboardPayload(res);
-            document.getElementById('fSoTien').value = '';
-            document.getElementById('fGhiChu').value = '';
+            applyData(res);
+            document.getElementById('inSoTien').value = '';
+            document.getElementById('inGhiChu').value = '';
             btn.disabled = false;
-            btn.textContent = 'Lưu vào NKTC';
-            showToast('Đã lưu vào sheet NKTC!');
+            btn.textContent = 'Lưu giao dịch vào NKTC';
+            showToast('Đã lưu vào NKTC!');
           })
           .withFailureHandler(err => {
             btn.disabled = false;
-            btn.textContent = 'Lưu vào NKTC';
+            btn.textContent = 'Lưu giao dịch vào NKTC';
             showToast('Lỗi lưu: ' + err.message);
           })
           .addTransaction(payload);
@@ -558,25 +853,25 @@
       })
         .then(() => {
           setTimeout(() => {
-            syncData(false);
-            document.getElementById('fSoTien').value = '';
-            document.getElementById('fGhiChu').value = '';
+            syncAll(false);
+            document.getElementById('inSoTien').value = '';
+            document.getElementById('inGhiChu').value = '';
             btn.disabled = false;
-            btn.textContent = 'Lưu vào NKTC';
+            btn.textContent = 'Lưu giao dịch vào NKTC';
             showToast('Đã gửi giao dịch vào NKTC!');
           }, 900);
         })
         .catch(err => {
           btn.disabled = false;
-          btn.textContent = 'Lưu vào NKTC';
+          btn.textContent = 'Lưu giao dịch vào NKTC';
           showToast('Lỗi: ' + err.message);
         });
     });
 
-    // Khởi tạo
-    document.getElementById('fNgay').valueAsDate = new Date();
-    populateCategories();
-    syncData(false);
+    // Khởi tạo mặc định
+    document.getElementById('inNgay').valueAsDate = new Date();
+    chooseType('Chi');
+    syncAll(false);
   </script>
 </body>
 </html>
