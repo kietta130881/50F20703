@@ -168,7 +168,7 @@
     }
     .panel-hd {
       display: flex; align-items: center; justify-content: space-between; gap: 8px;
-      margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid #f1f5f9;
+      margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid #f1f5f9;
       flex-wrap: wrap;
     }
     .panel-title { display: flex; align-items: center; gap: 7px; font-size: 14px; font-weight: 800; color: #0f172a; }
@@ -197,33 +197,15 @@
     .legend-left { display: flex; align-items: center; gap: 7px; font-weight: 700; color: #1e293b; }
     .swatch { width: 11px; height: 11px; border-radius: 3px; flex-shrink: 0; }
 
-    /* Dòng tổng 100% cuối mỗi biểu đồ */
     .chart-total-row {
-      margin-top: 4px;
-      padding: 9px 11px;
-      border-radius: 9px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      font-size: 12.5px;
-      font-weight: 900;
-      border: 1.5px solid #94a3b8;
-      background: #f1f5f9;
-      color: #0f172a;
+      margin-top: 4px; padding: 9px 11px; border-radius: 9px;
+      display: flex; align-items: center; justify-content: space-between; gap: 8px;
+      font-size: 12.5px; font-weight: 900; border: 1.5px solid #94a3b8;
+      background: #f1f5f9; color: #0f172a;
     }
-    .chart-total-row.total-chi {
-      background: #fef2f2;
-      border-color: #f87171;
-      color: #991b1b;
-    }
-    .chart-total-row.total-thu {
-      background: #ecfdf5;
-      border-color: #34d399;
-      color: #065f46;
-    }
+    .chart-total-row.total-chi { background: #fef2f2; border-color: #f87171; color: #991b1b; }
+    .chart-total-row.total-thu { background: #ecfdf5; border-color: #34d399; color: #065f46; }
 
-    /* Biểu đồ cột ngang */
     .hbar-list { display: flex; flex-direction: column; gap: 10px; }
     .hbar-item { display: flex; flex-direction: column; gap: 4px; }
     .hbar-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; font-size: 12px; }
@@ -232,7 +214,6 @@
     .hbar-track { width: 100%; height: 12px; background: #e2e8f0; border-radius: 999px; overflow: hidden; }
     .hbar-fill { height: 100%; border-radius: 999px; transition: width 0.25s ease; }
 
-    /* Khung phân tích số tiền & tỷ lệ % */
     .analysis-box {
       background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 12px;
       padding: 12px; display: flex; flex-direction: column; gap: 8px; font-size: 12.5px; line-height: 1.45;
@@ -242,18 +223,129 @@
     .analysis-row.thu-note { border-left-color: var(--thu); }
     .analysis-row.net-note { border-left-color: var(--ton); }
 
-    /* Tab Theo dõi vay: 2 khối 2 màu khác nhau rõ rệt + 2 bộ lọc */
+    /* Tab Theo dõi vay */
     .reminder-bar {
       background: #f0fdfa; border: 1px solid #5eead4; border-radius: 12px;
-      padding: 10px 12px; margin-bottom: 12px;
+      padding: 9px 11px; margin-bottom: 10px;
       display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap;
-      font-size: 12px; font-weight: 700; color: #0f766e;
+      font-size: 11.5px; font-weight: 700; color: #0f766e;
     }
     .btn-cal-sync {
       background: #0f766e; color: #fff; border: none; border-radius: 8px;
-      padding: 7px 11px; font-size: 12px; font-weight: 800; cursor: pointer;
+      padding: 6px 10px; font-size: 11.5px; font-weight: 800; cursor: pointer;
     }
 
+    /* Khối lịch trả góp: 2 drop-list nhỏ gọn trên 1 dòng + danh sách thẻ cuộn dọc */
+    .sched-box {
+      background: #ffffff;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 14px;
+      padding: 11px 12px;
+      margin-bottom: 13px;
+      box-shadow: 0 2px 6px rgba(15, 23, 42, 0.05);
+    }
+    .sched-box.tone-ec {
+      background: #f8fbff;
+      border-color: var(--ec-border);
+    }
+    .sched-box.tone-vpb {
+      background: #faf8ff;
+      border-color: var(--vpb-border);
+    }
+
+    .compact-filter-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+    .compact-select-wrap {
+      border-radius: 8px;
+      padding: 2px;
+      border: 1.5px solid #94a3b8;
+      background: #ffffff;
+    }
+    .compact-select-wrap.wrap-all { border-color: #0f766e; background: #f0fdfa; }
+    .compact-select-wrap.wrap-ec { border-color: var(--ec-border); background: var(--ec-bg); }
+    .compact-select-wrap.wrap-vpb { border-color: var(--vpb-border); background: var(--vpb-bg); }
+
+    .compact-sel {
+      width: 100%;
+      padding: 6px 7px;
+      border: none;
+      border-radius: 6px;
+      font-size: 11.5px;
+      font-weight: 800;
+      background: transparent;
+      color: #0f172a;
+      outline: none;
+    }
+    .compact-select-wrap.wrap-ec .compact-sel { color: var(--ec-accent); }
+    .compact-select-wrap.wrap-vpb .compact-sel { color: var(--vpb-accent); }
+    .compact-select-wrap.wrap-all .compact-sel { color: #0f766e; }
+
+    /* Danh sách các kỳ dạng thẻ cuộn dọc liên tục */
+    .installment-cards-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .inst-card {
+      border-radius: 11px;
+      padding: 10px 12px;
+      border: 1.5px solid #cbd5e1;
+      background: #ffffff;
+      box-shadow: 0 1px 4px rgba(15, 23, 42, 0.04);
+    }
+    .inst-card.inst-ec {
+      background: #eff6ff;
+      border-color: #93c5fd;
+    }
+    .inst-card.inst-vpb {
+      background: #f5f3ff;
+      border-color: #c4b5fd;
+    }
+    .inst-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .inst-title {
+      font-size: 13px;
+      font-weight: 900;
+      color: #0f172a;
+    }
+    .inst-ec .inst-title { color: var(--ec-accent); }
+    .inst-vpb .inst-title { color: var(--vpb-accent); }
+
+    .inst-amt {
+      font-size: 14px;
+      font-weight: 900;
+      color: #0f172a;
+      white-space: nowrap;
+    }
+    .inst-mid {
+      margin-top: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #334155;
+    }
+    .sched-pill {
+      display: inline-block; font-size: 10.5px; font-weight: 800;
+      padding: 2px 8px; border-radius: 999px;
+    }
+    .sched-pill.st-paid { background: #d1fae5; color: #047857; }
+    .sched-pill.st-cur { background: #fee2e2; color: #dc2626; }
+    .sched-pill.st-next { background: #fef3c7; color: #b45309; }
+    .sched-pill.st-up { background: #e2e8f0; color: #334155; }
+
+    /* 2 khối tổng quan khoản vay phía dưới */
     .loan-card {
       border-radius: 15px; padding: 14px; margin-bottom: 13px;
       border: 2px solid #cbd5e1;
@@ -299,32 +391,6 @@
       margin-top: 10px; padding-top: 8px; border-top: 1px dashed #cbd5e1;
       font-size: 11.5px; font-weight: 700; color: #1e293b; display: flex; flex-direction: column; gap: 4px;
     }
-
-    .loan-filter-grid {
-      display: grid; grid-template-columns: 1fr; gap: 8px; margin-bottom: 10px;
-      background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 10px; padding: 9px;
-    }
-    @media (min-width: 560px) { .loan-filter-grid { grid-template-columns: 1fr 1fr; } }
-    .lf-group { display: flex; flex-direction: column; gap: 4px; }
-    .lf-lbl { font-size: 11px; font-weight: 800; color: #334155; }
-    .lf-sel {
-      width: 100%; padding: 8px 10px; border: 1px solid #94a3b8; border-radius: 8px;
-      font-size: 12.5px; font-weight: 700; background: #fff; color: #0f172a;
-    }
-
-    .sched-table-wrap { overflow-x: auto; max-height: 460px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 10px; }
-    .sched-tbl { width: 100%; border-collapse: collapse; font-size: 12px; }
-    .sched-tbl th { background: #0f766e; color: #fff; padding: 8px 8px; text-align: left; font-weight: 800; position: sticky; top: 0; z-index: 5; }
-    .sched-tbl td { padding: 8px 8px; border-bottom: 1px solid #e2e8f0; font-weight: 700; color: #0f172a; }
-    .sched-tbl tr.row-ec td { background: #f8fbff; }
-    .sched-tbl tr.row-vpb td { background: #faf8ff; }
-    .sched-pill {
-      display: inline-block; font-size: 10.5px; font-weight: 800; padding: 2px 7px; border-radius: 999px;
-    }
-    .sched-pill.st-paid { background: #d1fae5; color: #047857; }
-    .sched-pill.st-cur { background: #fee2e2; color: #dc2626; }
-    .sched-pill.st-next { background: #fef3c7; color: #b45309; }
-    .sched-pill.st-up { background: #e2e8f0; color: #334155; }
 
     /* Thẻ giao dịch ở tab Chi tiết */
     .cards-stack { display: flex; flex-direction: column; gap: 14px; }
@@ -608,7 +674,6 @@
         </div>
       </div>
 
-      <!-- Biểu đồ 1: Tròn CHI -->
       <div class="panel">
         <div class="panel-hd">
           <div class="panel-title">
@@ -622,7 +687,6 @@
         <div id="pieChiArea" class="pie-layout"></div>
       </div>
 
-      <!-- Biểu đồ 2: Cột ngang CHI -->
       <div class="panel">
         <div class="panel-hd">
           <div class="panel-title">
@@ -636,7 +700,6 @@
         <div id="barChiArea" class="hbar-list"></div>
       </div>
 
-      <!-- Biểu đồ 3: Tròn THU -->
       <div class="panel">
         <div class="panel-hd">
           <div class="panel-title">
@@ -650,7 +713,6 @@
         <div id="pieThuArea" class="pie-layout"></div>
       </div>
 
-      <!-- Biểu đồ 4: Cột ngang THU -->
       <div class="panel">
         <div class="panel-hd">
           <div class="panel-title">
@@ -680,10 +742,11 @@
     <!-- TAB 2: THEO DÕI VAY -->
     <section id="sec-loans" class="hide">
       <div class="reminder-bar">
-        <span>📅 Nhắc trước 3 ngày đến hạn thanh toán vay (Hạn 05/12/2026 → Nhắc 02/12/2026)</span>
+        <span>📅 Nhắc trước 3 ngày (Hạn 05/12/2026 → Nhắc 02/12/2026)</span>
         <button type="button" class="btn-cal-sync" onclick="syncLoanReminderToCalendar()">Đồng bộ lịch nhắc 3 ngày</button>
       </div>
 
+      <!-- 4 thẻ tổng quan vay -->
       <div class="kpi-4">
         <div class="kpi-box box-dauk">
           <div class="kpi-head"><span class="kpi-title">Tổng gốc vay</span></div>
@@ -710,52 +773,39 @@
         </div>
       </div>
 
-      <div id="loanCardsContainer"></div>
-
-      <div class="panel">
+      <!-- Dời lên phía trên dưới 4 thẻ tổng quan: 2 drop-list nhỏ gọn trên 1 hàng + danh sách kỳ dạng thẻ dọc -->
+      <div id="loanScheduleBox" class="sched-box">
         <div class="panel-hd">
-          <div class="panel-title"><span>Lịch sử vay &amp; Kỳ trả góp (18 kỳ &amp; 84 kỳ)</span></div>
+          <div class="panel-title"><span>Các kỳ thanh toán (18 kỳ &amp; 84 kỳ)</span></div>
           <span class="pill-badge" id="loanSchedCountBadge">0 kỳ</span>
         </div>
 
-        <div class="loan-filter-grid">
-          <div class="lf-group">
-            <label class="lf-lbl" for="selLoanFilterAccount">Bộ lọc 1 · Chọn khoản vay</label>
-            <select id="selLoanFilterAccount" class="lf-sel" onchange="renderLoanScheduleTable()">
-              <option value="all">Tất cả 2 khoản vay (EC 18 kỳ + VPB 84 kỳ)</option>
-              <option value="LTX4716547A">1. Easy Credit · LTX4716547A (18 kỳ)</option>
-              <option value="LD2631603041">2. VPBank · LD2631603041 (84 kỳ)</option>
+        <div class="compact-filter-row">
+          <div id="wrapLoanAcc" class="compact-select-wrap wrap-all">
+            <select id="selLoanFilterAccount" class="compact-sel" onchange="onLoanFilterChange()">
+              <option value="all">Tất cả (18 + 84 kỳ)</option>
+              <option value="LTX4716547A">Easy Credit (18 kỳ)</option>
+              <option value="LD2631603041">VPBank (84 kỳ)</option>
             </select>
           </div>
 
-          <div class="lf-group">
-            <label class="lf-lbl" for="selLoanFilterPeriod">Bộ lọc 2 · Chọn phạm vi kỳ hiển thị</label>
-            <select id="selLoanFilterPeriod" class="lf-sel" onchange="renderLoanScheduleTable()">
-              <option value="current_next">Kỳ hiện tại &amp; kỳ tiếp theo</option>
+          <div id="wrapLoanPeriod" class="compact-select-wrap wrap-all">
+            <select id="selLoanFilterPeriod" class="compact-sel" onchange="onLoanFilterChange()">
+              <option value="current_next">Kỳ hiện tại &amp; tiếp theo</option>
               <option value="nearest_1">Kỳ gần nhất (1 kỳ tới)</option>
               <option value="nearest_5">5 kỳ gần nhất</option>
               <option value="nearest_10">10 kỳ gần nhất</option>
               <option value="paid_and_current">Đã trả + Kỳ hiện tại</option>
-              <option value="all">Tất cả các kỳ (18 kỳ / 84 kỳ)</option>
+              <option value="all">Tất cả các kỳ</option>
             </select>
           </div>
         </div>
 
-        <div class="sched-table-wrap">
-          <table class="sched-tbl">
-            <thead>
-              <tr>
-                <th>Hạn trả</th>
-                <th>Nhắc 3 ngày</th>
-                <th>Khoản vay / Kỳ</th>
-                <th>Tổng góp</th>
-                <th>Trạng thái</th>
-              </tr>
-            </thead>
-            <tbody id="loanScheduleBody"></tbody>
-          </table>
-        </div>
+        <div id="loanInstallmentCards" class="installment-cards-list"></div>
       </div>
+
+      <!-- 2 thẻ tổng quan từng khoản vay bên dưới -->
+      <div id="loanCardsContainer"></div>
     </section>
 
     <!-- TAB 3: CHI TIẾT -->
@@ -1317,7 +1367,6 @@
       const chiItems = Object.entries(chiMap).sort((a, b) => b[1] - a[1]);
       const thuItems = Object.entries(thuMap).sort((a, b) => b[1] - a[1]);
 
-      // Đủ cả 4 biểu đồ đều có dòng Tổng 100% + tổng tiền tương ứng
       renderDonutAndLegend('pieChiArea', 'pieChiTotalBadge', 'Tổng chi', 'Tổng cộng CHI', 'chi', chiItems, CHI_COLORS);
       renderHorizontalBars('barChiArea', 'Tổng cộng CHI', 'chi', chiItems, CHI_COLORS);
       renderDonutAndLegend('pieThuArea', 'pieThuTotalBadge', 'Tổng thu', 'Tổng cộng THU', 'thu', thuItems, THU_COLORS);
@@ -1325,7 +1374,20 @@
       renderAnalysis(sumThu, sumChi, cuoiKy, chiItems, thuItems);
     }
 
-    function renderLoanScheduleTable() {
+    function onLoanFilterChange() {
+      const accFilter = document.getElementById('selLoanFilterAccount').value;
+      const wrapAcc = document.getElementById('wrapLoanAcc');
+      const wrapPeriod = document.getElementById('wrapLoanPeriod');
+      const box = document.getElementById('loanScheduleBox');
+
+      wrapAcc.className = 'compact-select-wrap ' + (accFilter === 'LTX4716547A' ? 'wrap-ec' : (accFilter === 'LD2631603041' ? 'wrap-vpb' : 'wrap-all'));
+      wrapPeriod.className = 'compact-select-wrap ' + (accFilter === 'LTX4716547A' ? 'wrap-ec' : (accFilter === 'LD2631603041' ? 'wrap-vpb' : 'wrap-all'));
+      box.className = 'sched-box ' + (accFilter === 'LTX4716547A' ? 'tone-ec' : (accFilter === 'LD2631603041' ? 'tone-vpb' : ''));
+
+      renderLoanInstallmentCards();
+    }
+
+    function renderLoanInstallmentCards() {
       const ld = state.loanData || DEFAULT_LOAN_DATA;
       const fullList = (Array.isArray(ld.schedule) && ld.schedule.length > 4)
         ? ld.schedule
@@ -1355,26 +1417,29 @@
       }
 
       document.getElementById('loanSchedCountBadge').textContent = rows.length + ' kỳ';
+      const listEl = document.getElementById('loanInstallmentCards');
 
-      const schedBody = document.getElementById('loanScheduleBody');
       if (!rows.length) {
-        schedBody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:16px;">Không có kỳ góp nào khớp bộ lọc.</td></tr>';
+        listEl.innerHTML = '<div class="empty-msg">Không có kỳ góp nào khớp bộ lọc.</div>';
         return;
       }
 
-      schedBody.innerHTML = rows.map(s => {
-        const rowCls = s.loanId === 'LTX4716547A' ? 'row-ec' : 'row-vpb';
+      listEl.innerHTML = rows.map(s => {
+        const cardCls = s.loanId === 'LTX4716547A' ? 'inst-ec' : 'inst-vpb';
         const stCls = s.status === 'Đã trả'
           ? 'st-paid'
           : (s.status === 'Kỳ hiện tại' ? 'st-cur' : (s.status === 'Kỳ tiếp theo' ? 'st-next' : 'st-up'));
         return `
-          <tr class="${rowCls}">
-            <td>${s.date}</td>
-            <td>${s.reminderDate || '02/12/2026'}</td>
-            <td>${s.loanName}</td>
-            <td>${formatMoney(s.total)}</td>
-            <td><span class="sched-pill ${stCls}">${s.status}</span></td>
-          </tr>
+          <div class="inst-card ${cardCls}">
+            <div class="inst-top">
+              <span class="inst-title">${s.loanName}</span>
+              <span class="inst-amt">${formatMoney(s.total)}</span>
+            </div>
+            <div class="inst-mid">
+              <span>Hạn trả: <strong>${s.date}</strong> · Nhắc trước 3 ngày: <strong>${s.reminderDate || '02/12/2026'}</strong></span>
+              <span class="sched-pill ${stCls}">${s.status}</span>
+            </div>
+          </div>
         `;
       }).join('');
     }
@@ -1385,6 +1450,8 @@
       document.getElementById('loanTotalPaid').textContent = formatMoney(ld.totalPaid);
       document.getElementById('loanTotalRemaining').textContent = formatMoney(ld.totalRemaining);
       document.getElementById('loanUpcomingDec05').textContent = formatMoney(ld.upcomingDec05);
+
+      onLoanFilterChange();
 
       const container = document.getElementById('loanCardsContainer');
       const loans = Array.isArray(ld.loans) && ld.loans.length ? ld.loans : DEFAULT_LOAN_DATA.loans;
@@ -1425,8 +1492,6 @@
           </div>
         `;
       }).join('');
-
-      renderLoanScheduleTable();
     }
 
     function syncLoanReminderToCalendar() {
