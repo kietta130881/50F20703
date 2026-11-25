@@ -3,7 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-  <title>Sổ thu chi · v2.1 · Xe 50F20703V</title>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <title>Sổ thu chi · v2.2 · Xe 50F20703V</title>
   <style>
     :root {
       --bg: #f1f5f9;
@@ -89,6 +92,7 @@
       font-weight: 800;
       padding: 1.5px 6px;
       border-radius: 999px;
+      cursor: pointer;
     }
 
     .plate-btn {
@@ -144,16 +148,20 @@
 
     /* Banner thông báo cập nhật phiên bản mới */
     .update-notice-bar {
+      position: sticky;
+      top: 46px;
+      z-index: 49;
       background: linear-gradient(90deg, #fef3c7, #fde68a);
-      border-bottom: 1.5px solid #f59e0b;
+      border-bottom: 2px solid #f59e0b;
       color: #78350f;
-      padding: 8px 12px;
+      padding: 9px 12px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 8px;
       font-size: 12px;
       font-weight: 800;
+      box-shadow: 0 4px 12px rgba(180, 83, 9, 0.18);
     }
     .update-notice-actions { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
     .btn-reload-ver {
@@ -162,17 +170,17 @@
       border: none;
       border-bottom: 2.5px solid #78350f;
       border-radius: 7px;
-      padding: 4px 10px;
-      font-size: 11px;
+      padding: 5px 11px;
+      font-size: 11.5px;
       font-weight: 900;
       cursor: pointer;
     }
     .btn-dismiss-ver {
-      background: rgba(255, 255, 255, 0.75);
+      background: rgba(255, 255, 255, 0.85);
       color: #78350f;
       border: 1px solid #d97706;
       border-radius: 7px;
-      padding: 4px 8px;
+      padding: 5px 8px;
       font-size: 11px;
       font-weight: 800;
       cursor: pointer;
@@ -347,7 +355,7 @@
       border-radius: 10px; padding: 8px 7px; border: 1px solid transparent; min-width: 0;
     }
     .kpi-sub-card.tone-dark { background: #1d4ed8; border-color: #1e40af; color: #ffffff; }
-    .kpi-sub-card.tone-mid { background: #60a5fa; border-color: #3b82f6; color: #0f172a; }
+    .kpi-sub-card.tone-mid { background: #60a5fa; border-color: #3b82f6; color: #0f172a; cursor: pointer; }
     .kpi-sub-card.tone-light { background: #dbeafe; border-color: #93c5fd; color: #1e3a8a; }
 
     .kpi-sub-card .sub-lbl {
@@ -606,10 +614,11 @@
     .vest-quick-actions { display: flex; gap: 6px; flex-wrap: wrap; }
     .btn-vest-act {
       border: 1px solid #0d9488; background: #ffffff; color: #0f766e;
-      border-radius: 7px; padding: 4px 9px; font-size: 11px; font-weight: 800; cursor: pointer;
+      border-radius: 7px; padding: 5px 9px; font-size: 11px; font-weight: 800; cursor: pointer;
       display: inline-flex; align-items: center; gap: 4px;
     }
     .btn-vest-act.primary { background: #0f766e; color: #ffffff; }
+    .btn-vest-act.carryover { background: #1d4ed8; border-color: #1e40af; color: #ffffff; }
 
     .voice-box { background: #fffbeb; border: 1px dashed #d97706; border-radius: 12px; padding: 10px 12px; margin-bottom: 12px; }
     .voice-top { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
@@ -805,7 +814,7 @@
         </svg>
       </span>
       <span id="headerTitle">Tổng quan</span>
-      <span id="headerVersionBadge" class="ver-badge">v2.1</span>
+      <span id="headerVersionBadge" class="ver-badge" title="Bấm để kiểm tra phiên bản mới nhất" onclick="checkRemoteAppVersion(true)">v2.2</span>
 
       <button
         type="button"
@@ -839,7 +848,7 @@
 
   <!-- Banner thông báo cập nhật phiên bản mới -->
   <div id="newVersionNotice" class="update-notice-bar hide" role="status" aria-live="polite">
-    <span id="newVersionText">✨ Có phiên bản mới! Bấm Cập nhật để tải giao diện &amp; bộ lọc mới nhất.</span>
+    <span id="newVersionText">✨ Có phiên bản mới! Bấm Cập nhật để tải giao diện &amp; tính năng mới nhất.</span>
     <div class="update-notice-actions">
       <button type="button" class="btn-reload-ver" onclick="applyNewAppVersion()">Cập nhật ngay</button>
       <button type="button" class="btn-dismiss-ver" onclick="dismissNewVersionNotice()">Để sau</button>
@@ -851,7 +860,7 @@
   <div id="loadingMask" class="loading-mask" aria-live="polite">
     <div class="loading-card">
       <div class="loading-spinner"></div>
-      <span id="loadingText">Đang đồng bộ dữ liệu v2.1 từ Google Sheet...</span>
+      <span id="loadingText">Đang đồng bộ dữ liệu v2.2 từ Google Sheet...</span>
     </div>
   </div>
 
@@ -981,6 +990,7 @@
         <div class="ms-menu" id="menuType">
           <label class="ms-item"><input type="checkbox" value="thu" onchange="onMultiChange('type')" /> Khoản Thu</label>
           <label class="ms-item"><input type="checkbox" value="chi" onchange="onMultiChange('type')" /> Khoản Chi</label>
+          <label class="ms-item"><input type="checkbox" value="xfr" onchange="onMultiChange('type')" /> Kết chuyển nội bộ</label>
         </div>
       </div>
 
@@ -1064,10 +1074,10 @@
             <div class="sub-note">Tổng dư cuối</div>
           </div>
 
-          <div class="kpi-sub-card tone-mid">
+          <div class="kpi-sub-card tone-mid" title="Bấm để mở tab Cập nhật kết chuyển / bù Ví Vest" onclick="switchMainTab('update')">
             <div class="sub-lbl">Ví Vest</div>
             <div class="sub-val" id="valKpiViVest">358.607 ₫</div>
-            <div class="sub-note" id="subKpiViVest">Chốt 23/11: 358.607 ₫</div>
+            <div class="sub-note" id="subKpiViVest">Mốc 23/11: 358.607 ₫</div>
           </div>
 
           <div class="kpi-sub-card tone-light">
@@ -1250,7 +1260,7 @@
           </div>
         </div>
 
-        <!-- Theo dõi biến động Ví vest (mốc chốt 358.607 ₫ cuối ngày 23/11/2026) -->
+        <!-- Theo dõi biến động Ví vest (tự trừ theo VETC/giật ví & tăng khi kết chuyển tồn cuối vào ví vest) -->
         <div class="vest-tracker-box">
           <div class="vest-top">
             <span class="vest-title">
@@ -1258,18 +1268,21 @@
                 <path d="M20 7h-3a2 2 0 0 1-2-2V2"/><path d="M9 18a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h7l4 4v10a2 2 0 0 1-2 2Z"/>
                 <path d="M3 7v12a2 2 0 0 0 2 2h10"/>
               </svg>
-              <span>Ví vest (chốt 23/11: 358.607 ₫)</span>
+              <span>Ví vest (tự trừ phí cầu đường/VETC sau 23/11)</span>
             </span>
             <span id="vestCurrentBalanceText" class="vest-balance">358.607 ₫</span>
           </div>
           <div class="vest-sub-row">
-            <span id="vestStatusHintText">Chốt 23/11: 358.607 ₫ · Biến động theo lần giật &amp; nạp bù sau 23/11</span>
+            <span id="vestStatusHintText">Mốc 23/11: 358.607 ₫ · Tự trừ giao dịch VETC mới &amp; cộng khi kết chuyển tồn cuối</span>
             <div class="vest-quick-actions">
               <button type="button" class="btn-vest-act" onclick="prepareQuickPullVest()">
-                <span>↓</span><span>Giật ví vest</span>
+                <span>↓</span><span>Chi từ ví vest</span>
+              </button>
+              <button type="button" class="btn-vest-act carryover" id="btnQuickCarryoverVest" onclick="prepareQuickCarryoverVest()">
+                <span>⇄</span><span>Kết chuyển tồn cuối → Ví vest</span>
               </button>
               <button type="button" class="btn-vest-act primary" id="btnQuickTopupVest" onclick="prepareQuickTopupVest()">
-                <span>⇄</span><span>Nạp bù ví vest</span>
+                <span>+</span><span>Nạp bù ví vest</span>
               </button>
             </div>
           </div>
@@ -1344,7 +1357,7 @@
         <div id="vestPullStrip" class="vest-toggle-strip">
           <label>
             <input type="checkbox" id="chkPullFromVest" onchange="onPullVestCheckChange()" />
-            <span>Giật tiền từ <strong>Ví vest</strong> để chi khoản này</span>
+            <span>Trừ tiền từ <strong>Ví vest</strong> cho khoản chi này</span>
           </label>
           <span id="vestPullPreview" style="font-size:11px;"></span>
         </div>
@@ -1368,7 +1381,7 @@
 
           <div>
             <label class="f-lbl" id="lblEntryCat" for="entryCat">Danh mục</label>
-            <select id="entryCat" class="f-inp" required onchange="detectInstallmentAuto()"></select>
+            <select id="entryCat" class="f-inp" required onchange="onEntryCatChange()"></select>
           </div>
 
           <div>
@@ -1391,7 +1404,7 @@
               type="text"
               id="entryNote"
               class="f-inp"
-              placeholder="VD: Sạc pin, VETC, bù ví vest hoặc trả góp..."
+              placeholder="VD: Sạc pin, VETC, kết chuyển tồn cuối vào ví vest..."
               oninput="detectInstallmentAuto()"
             />
           </div>
@@ -1438,11 +1451,12 @@
   <div id="toast" class="toast"></div>
 
   <script>
-    const APP_VERSION = 'v2.1';
+    const APP_VERSION = 'v2.2';
     const VERSION_STORAGE_KEY = 'STC_50F20703V_LAST_SEEN_VERSION';
     const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbymiRccSimgcBN5NU6OadwjRtgkB-yfCyuujX-xUMHWAftLaTKDBreuvd5dgJlhqHwY_Q/exec';
     const VEHICLE_PLATE = '50F20703V';
     const VEST_CHECKPOINT_DATE_ISO = '2026-11-23';
+    const VEST_CHECKPOINT_DATE_LABEL = '23/11';
     const VEST_CHECKPOINT_AMOUNT = 358607;
     const VEST_TARGET_AMOUNT = 500000;
 
@@ -1456,50 +1470,28 @@
     const CATEGORIES_BY_TYPE = {
       Thu: ['Doanh thu dịch vụ/Lương', 'Thu nhập khác'],
       Chi: ['Sạc điện/Nhiên liệu', 'Ăn uống', 'Phí cầu đường/VETC', 'Bảo dưỡng/Sửa chữa', 'Sinh hoạt gia đình', 'Khác'],
-      Transfer: ['Nạp bù ví vest', 'Chuyển quỹ nội bộ']
+      Transfer: ['Kết chuyển tồn cuối → Ví vest', 'Nạp bù ví vest', 'Chuyển quỹ nội bộ']
     };
 
     const DEFAULT_METHODS = ['Chuyển khoản', 'Tiền mặt'];
     const CHI_COLORS = ['#dc2626', '#2563eb', '#7c3aed', '#0284c7', '#d97706', '#475569'];
     const THU_COLORS = ['#059669', '#f59e0b', '#0891b2', '#2563eb'];
 
-    /* ===== THÔNG BÁO CẬP NHẬT PHIÊN BẢN MỚI ===== */
-    function initVersionUpdateNotifier() {
+    /* ===== THÔNG BÁO CẬP NHẬT PHIÊN BẢN MỚI TỰ ĐỘNG (KHÔNG CẦN F5 THỦ CÔNG NHIỀU LẦN) ===== */
+    let detectedRemoteVersion = '';
+
+    function showNewVersionBanner(messageText, targetVer) {
       const noticeBar = document.getElementById('newVersionNotice');
       const noticeText = document.getElementById('newVersionText');
       if (!noticeBar || !noticeText) return;
+      if (targetVer) detectedRemoteVersion = targetVer;
+      noticeText.textContent = messageText;
+      noticeBar.classList.remove('hide');
+    }
 
-      try {
-        const lastSeen = localStorage.getItem(VERSION_STORAGE_KEY);
-        if (!lastSeen) {
-          localStorage.setItem(VERSION_STORAGE_KEY, APP_VERSION);
-        } else if (lastSeen !== APP_VERSION) {
-          noticeText.textContent = `✨ Đã cập nhật lên phiên bản mới ${APP_VERSION} (trước đó: ${lastSeen})!`;
-          noticeBar.classList.remove('hide');
-        }
-      } catch (_) {}
-
-      // Nếu chạy trong môi trường Service Worker, tự bắt sự kiện có bản cập nhật mới
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.getRegistrations().then(regs => {
-          regs.forEach(reg => {
-            if (reg.waiting) {
-              noticeText.textContent = `✨ Có bản cập nhật mới (${APP_VERSION}). Bấm Cập nhật ngay để áp dụng!`;
-              noticeBar.classList.remove('hide');
-            }
-            reg.addEventListener('updatefound', () => {
-              const newWorker = reg.installing;
-              if (!newWorker) return;
-              newWorker.addEventListener('statechange', () => {
-                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                  noticeText.textContent = `✨ Phiên bản mới đã sẵn sàng tải về!`;
-                  noticeBar.classList.remove('hide');
-                }
-              });
-            });
-          });
-        }).catch(() => {});
-      }
+    function parseSimpleVersionNum(vStr) {
+      const m = String(vStr || '').match(/(\d+(?:\.\d+)?)/);
+      return m ? parseFloat(m[1]) : 0;
     }
 
     function checkServerVersionUpdate(serverPayload) {
@@ -1507,36 +1499,132 @@
       const remoteVer = String(serverPayload.appVersion || serverPayload.version || '').trim();
       if (!remoteVer || remoteVer === APP_VERSION) return;
 
-      const noticeBar = document.getElementById('newVersionNotice');
-      const noticeText = document.getElementById('newVersionText');
-      if (noticeBar && noticeText) {
-        noticeText.textContent = `✨ Có phiên bản mới ${remoteVer} (đang dùng ${APP_VERSION}). Bấm Cập nhật ngay!`;
-        noticeBar.classList.remove('hide');
+      const curNum = parseSimpleVersionNum(APP_VERSION);
+      const remNum = parseSimpleVersionNum(remoteVer);
+      if (remNum > curNum) {
+        showNewVersionBanner(
+          `✨ Đã có phiên bản mới ${remoteVer} (bạn đang mở ${APP_VERSION}). Bấm Cập nhật ngay để tải bản mới!`,
+          remoteVer
+        );
       }
     }
 
-    function applyNewAppVersion() {
+    async function checkRemoteAppVersion(manualClick) {
       try {
-        localStorage.setItem(VERSION_STORAGE_KEY, APP_VERSION);
+        // 1. Kiểm tra file Index.html hoặc version trực tiếp trên GitHub Pages (chống cache bằng tham số _t)
+        const pageUrl = new URL(window.location.href);
+        if (pageUrl.hostname.includes('github.io')) {
+          pageUrl.searchParams.set('_vercheck', Date.now().toString());
+          const htmlRes = await fetch(pageUrl.toString(), { cache: 'no-store' });
+          if (htmlRes.ok) {
+            const htmlTxt = await htmlRes.text();
+            const m = htmlTxt.match(/const\s+APP_VERSION\s*=\s*['"]([^'"]+)['"]/);
+            if (m && m[1] && m[1] !== APP_VERSION) {
+              showNewVersionBanner(
+                `✨ Đã có phiên bản mới ${m[1]} trên trang (đang dùng ${APP_VERSION}). Bấm Cập nhật ngay!`,
+                m[1]
+              );
+              return;
+            }
+          }
+        }
+
+        // 2. Kiểm tra phiên bản từ Apps Script backend
+        if (typeof google !== 'undefined' && google.script && google.script.run) {
+          google.script.run
+            .withSuccessHandler(res => {
+              checkServerVersionUpdate(res);
+              if (manualClick && (!res || res.appVersion === APP_VERSION)) {
+                showToast(`Bạn đang dùng phiên bản mới nhất (${APP_VERSION})`);
+              }
+            })
+            .getDashboardData();
+          return;
+        }
+
+        const apiRes = await fetch(APPS_SCRIPT_URL + '?action=getVersion&_t=' + Date.now(), { cache: 'no-store' });
+        if (apiRes.ok) {
+          const data = await apiRes.json();
+          checkServerVersionUpdate(data);
+          if (manualClick && (!data || data.appVersion === APP_VERSION)) {
+            showToast(`Bạn đang dùng phiên bản mới nhất (${APP_VERSION})`);
+          }
+        }
+      } catch (_) {
+        if (manualClick) showToast(`Phiên bản hiện tại: ${APP_VERSION}`);
+      }
+    }
+
+    function initVersionUpdateNotifier() {
+      try {
+        const lastSeen = localStorage.getItem(VERSION_STORAGE_KEY);
+        if (!lastSeen) {
+          localStorage.setItem(VERSION_STORAGE_KEY, APP_VERSION);
+        } else if (lastSeen !== APP_VERSION) {
+          showNewVersionBanner(
+            `✨ Đã cập nhật thành công lên ${APP_VERSION} (trước đó: ${lastSeen})!`,
+            APP_VERSION
+          );
+          localStorage.setItem(VERSION_STORAGE_KEY, APP_VERSION);
+        }
       } catch (_) {}
 
       if ('serviceWorker' in navigator) {
         navigator.serviceWorker.getRegistrations().then(regs => {
           regs.forEach(reg => {
-            if (reg.waiting) reg.waiting.postMessage({ type: 'SKIP_WAITING' });
-            reg.update().catch(() => {});
+            if (reg.waiting) {
+              showNewVersionBanner(`✨ Có bản cập nhật mới sẵn sàng. Bấm Cập nhật ngay để áp dụng!`, APP_VERSION);
+            }
+            reg.addEventListener('updatefound', () => {
+              const newWorker = reg.installing;
+              if (!newWorker) return;
+              newWorker.addEventListener('statechange', () => {
+                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                  showNewVersionBanner(`✨ Phiên bản mới đã tải xong! Bấm Cập nhật ngay để làm mới.`, APP_VERSION);
+                }
+              });
+            });
           });
         }).catch(() => {});
       }
 
+      // Kiểm tra bản mới ngay sau khi mở trang và mỗi khi người dùng quay lại tab trình duyệt
+      setTimeout(() => checkRemoteAppVersion(false), 1800);
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') {
+          checkRemoteAppVersion(false);
+        }
+      });
+    }
+
+    async function applyNewAppVersion() {
+      try {
+        localStorage.setItem(VERSION_STORAGE_KEY, detectedRemoteVersion || APP_VERSION);
+      } catch (_) {}
+
+      try {
+        if ('caches' in window) {
+          const keys = await caches.keys();
+          await Promise.all(keys.map(k => caches.delete(k)));
+        }
+        if ('serviceWorker' in navigator) {
+          const regs = await navigator.serviceWorker.getRegistrations();
+          for (const reg of regs) {
+            if (reg.waiting) reg.waiting.postMessage({ type: 'SKIP_WAITING' });
+            await reg.update().catch(() => {});
+          }
+        }
+      } catch (_) {}
+
       const url = new URL(window.location.href);
+      url.searchParams.delete('_vercheck');
       url.searchParams.set('v', Date.now().toString());
       window.location.replace(url.toString());
     }
 
     function dismissNewVersionNotice() {
       try {
-        localStorage.setItem(VERSION_STORAGE_KEY, APP_VERSION);
+        localStorage.setItem(VERSION_STORAGE_KEY, detectedRemoteVersion || APP_VERSION);
       } catch (_) {}
       const noticeBar = document.getElementById('newVersionNotice');
       if (noticeBar) noticeBar.classList.add('hide');
@@ -1579,9 +1667,10 @@
       detectInstallmentAuto();
     }
 
-    /* ===== NHẬN DIỆN KẾT CHUYỂN NỘI BỘ / VÍ VEST TỪ CÁC TRƯỜNG SẴN CÓ CỦA NKTC ===== */
+    /* ===== LOGIC VÍ VEST ĐỘNG: TỰ TRỪ THEO VETC/CHI VÍ VEST MỚI & TĂNG KHI KẾT CHUYỂN TỒN CUỐI ===== */
     function isInternalTransferTx(tx) {
       if (!tx) return false;
+      if (tx.isTransfer) return true;
       const l = String(tx.loai || '').trim().toLowerCase();
       const d = String(tx.danhMuc || '').trim().toLowerCase();
       const g = String(tx.ghiChu || '').trim().toLowerCase();
@@ -1589,6 +1678,7 @@
         l.includes('kết chuyển') ||
         l.includes('nội bộ') ||
         d.includes('bù ví vest') ||
+        d.includes('nạp ví vest') ||
         d.includes('kết chuyển') ||
         g.includes('[bù ví vest]') ||
         g.includes('[kết chuyển]')
@@ -1599,27 +1689,55 @@
       if (!tx) return false;
       const d = String(tx.danhMuc || '').trim().toLowerCase();
       const g = String(tx.ghiChu || '').trim().toLowerCase();
-      return d.includes('bù ví vest') || g.includes('[bù ví vest]') || (isInternalTransferTx(tx) && g.includes('ví vest'));
+      return (
+        d.includes('bù ví vest') ||
+        d.includes('nạp ví vest') ||
+        d.includes('→ ví vest') ||
+        g.includes('[bù ví vest]') ||
+        (isInternalTransferTx(tx) && g.includes('ví vest'))
+      );
     }
 
     function isVestPullTx(tx) {
-      if (!tx) return false;
+      if (!tx || isOpeningTx(tx) || isInternalTransferTx(tx)) return false;
+      if (checkThu(tx)) return false;
+      const d = String(tx.danhMuc || '').trim().toLowerCase();
       const g = String(tx.ghiChu || '').trim().toLowerCase();
-      return !isInternalTransferTx(tx) && g.includes('[ví vest]');
+      const combined = `${d} ${g}`;
+      return (
+        g.includes('[ví vest]') ||
+        g.includes('ví vest') ||
+        d.includes('cầu đường') ||
+        d.includes('vetc') ||
+        combined.includes('vetc') ||
+        combined.includes('cầu đường') ||
+        combined.includes('epass') ||
+        combined.includes('thu phí')
+      );
     }
 
     function computeVestMetrics(transactions) {
       let pulledAfterCheckpoint = 0;
       let toppedUpAfterCheckpoint = 0;
+      let latestTopupInfo = '';
+      let pullCountAfter = 0;
 
       (transactions || []).forEach(tx => {
         if (isOpeningTx(tx)) return;
         const iso = String(tx.ngayIso || '').trim();
+        // Chỉ tính biến động phát sinh SAU mốc chốt 23/11/2026 (VD: các giao dịch ngày 24/11/2026 trở đi)
         if (iso && iso <= VEST_CHECKPOINT_DATE_ISO) return;
 
         const amt = Number(tx.soTien) || 0;
-        if (isVestPullTx(tx)) pulledAfterCheckpoint += amt;
-        else if (isVestTopupTx(tx)) toppedUpAfterCheckpoint += amt;
+        if (isVestTopupTx(tx)) {
+          toppedUpAfterCheckpoint += amt;
+          if (!latestTopupInfo) {
+            latestTopupInfo = `${tx.ngay || ''} (+${formatMoney(amt)})`;
+          }
+        } else if (isVestPullTx(tx)) {
+          pulledAfterCheckpoint += amt;
+          pullCountAfter += 1;
+        }
       });
 
       const currentVestBalance = Math.max(
@@ -1631,30 +1749,66 @@
       return {
         currentVestBalance,
         pulledFromVest: pulledAfterCheckpoint,
+        pullCountAfter,
         toppedUpVest: toppedUpAfterCheckpoint,
-        deficitToTarget
+        deficitToTarget,
+        latestTopupInfo
+      };
+    }
+
+    function computeCashflowSnapshot() {
+      let allThu = 0;
+      let allChi = 0;
+      (state.allTransactions || []).forEach(tx => {
+        if (isOpeningTx(tx) || isInternalTransferTx(tx)) return;
+        const amt = Number(tx.soTien) || 0;
+        if (checkThu(tx)) allThu += amt;
+        else allChi += amt;
+      });
+      const totalEndingBalance = state.dauKy + allThu - allChi;
+      const vestM = computeVestMetrics(state.allTransactions);
+      const availableBalance = totalEndingBalance - vestM.currentVestBalance;
+      return {
+        totalEndingBalance,
+        vestMetrics: vestM,
+        availableBalance
       };
     }
 
     function renderVestTrackerUi() {
-      const m = computeVestMetrics(state.allTransactions);
+      const snap = computeCashflowSnapshot();
+      const m = snap.vestMetrics;
       const balEl = document.getElementById('vestCurrentBalanceText');
       const hintEl = document.getElementById('vestStatusHintText');
       const btnTopup = document.getElementById('btnQuickTopupVest');
+      const btnCarryover = document.getElementById('btnQuickCarryoverVest');
       if (!balEl || !hintEl) return;
 
       balEl.textContent = formatMoney(m.currentVestBalance);
-      if (m.deficitToTarget > 0) {
-        hintEl.textContent = `Chốt 23/11: 358.607 ₫ · Thiếu ${formatMoney(m.deficitToTarget)} so với chuẩn ${formatMoney(VEST_TARGET_AMOUNT)}`;
-        if (btnTopup) {
-          btnTopup.innerHTML = `<span>⇄</span><span>Bù ${formatDotThousands(m.deficitToTarget)} ₫</span>`;
-        }
-      } else {
-        hintEl.textContent = `Chốt 23/11: 358.607 ₫ · Đã giật ${formatMoney(m.pulledFromVest)} / Đã bù ${formatMoney(m.toppedUpVest)}`;
-        if (btnTopup) {
-          btnTopup.innerHTML = `<span>⇄</span><span>Nạp bù ví vest</span>`;
-        }
+
+      const parts = [`Mốc ${VEST_CHECKPOINT_DATE_LABEL}: ${formatMoney(VEST_CHECKPOINT_AMOUNT)}`];
+      if (m.pulledFromVest > 0) {
+        parts.push(`Đã trừ ${m.pullCountAfter} GD (-${formatMoney(m.pulledFromVest)})`);
       }
+      if (m.toppedUpVest > 0) {
+        parts.push(`Đã kết chuyển bù (+${formatMoney(m.toppedUpVest)})`);
+      }
+      parts.push(`Tồn cuối khả dụng: ${formatMoney(snap.availableBalance)}`);
+      hintEl.textContent = parts.join(' · ');
+
+      if (btnCarryover) {
+        const suggestCarry = m.deficitToTarget > 0 ? Math.min(m.deficitToTarget, Math.max(0, snap.availableBalance)) : 0;
+        btnCarryover.innerHTML = suggestCarry > 0
+          ? `<span>⇄</span><span>Kết chuyển tồn cuối (+${formatDotThousands(suggestCarry)} ₫)</span>`
+          : `<span>⇄</span><span>Kết chuyển tồn cuối → Ví vest</span>`;
+      }
+
+      if (btnTopup) {
+        btnTopup.innerHTML = m.deficitToTarget > 0
+          ? `<span>+</span><span>Bù đủ 500k (+${formatDotThousands(m.deficitToTarget)} ₫)</span>`
+          : `<span>+</span><span>Nạp thêm ví vest</span>`;
+      }
+
       onPullVestCheckChange();
     }
 
@@ -1669,17 +1823,55 @@
         return;
       }
       const afterPull = Math.max(0, m.currentVestBalance - amt);
-      prev.textContent = `Còn lại ~ ${formatMoney(afterPull)}`;
+      prev.textContent = `Ví vest còn lại ~ ${formatMoney(afterPull)}`;
+    }
+
+    function onEntryCatChange() {
+      const typeVal = document.getElementById('entryTypeVal').value;
+      const catVal = (document.getElementById('entryCat').value || '').toLowerCase();
+      const chk = document.getElementById('chkPullFromVest');
+      if (typeVal === 'Chi' && chk) {
+        if (catVal.includes('vetc') || catVal.includes('cầu đường')) {
+          chk.checked = true;
+        }
+        onPullVestCheckChange();
+      }
+      detectInstallmentAuto();
     }
 
     function prepareQuickPullVest() {
       selectEntryType('Chi');
+      document.getElementById('entryCat').value = 'Phí cầu đường/VETC';
       const chk = document.getElementById('chkPullFromVest');
       if (chk) chk.checked = true;
-      document.getElementById('entryMethod').value = 'Tiền mặt';
+      document.getElementById('entryMethod').value = 'Chuyển khoản';
       onPullVestCheckChange();
       document.getElementById('entryAmount').focus();
-      showToast('Đã chọn Chi & đánh dấu giật tiền từ Ví vest');
+      showToast('Đã chọn Chi Phí cầu đường/VETC & trừ trực tiếp Ví vest');
+    }
+
+    function prepareQuickCarryoverVest() {
+      const snap = computeCashflowSnapshot();
+      const m = snap.vestMetrics;
+      selectEntryType('Transfer');
+      document.getElementById('entryCat').value = 'Kết chuyển tồn cuối → Ví vest';
+      document.getElementById('entryMethod').value = 'Kết chuyển tồn cuối → Ví vest';
+
+      const suggestAmt = m.deficitToTarget > 0
+        ? Math.min(m.deficitToTarget, Math.max(0, snap.availableBalance))
+        : 0;
+      if (suggestAmt > 0) {
+        setAmountFieldValue(suggestAmt);
+      }
+
+      const todayStr = new Date().toLocaleDateString('vi-VN');
+      document.getElementById('entryNote').value =
+        `[Bù ví vest] Kết chuyển từ tồn cuối quỹ (${formatMoney(snap.totalEndingBalance)}) sang Ví vest ngày ${todayStr}`;
+
+      document.getElementById('entryAmount').focus();
+      showToast(suggestAmt > 0
+        ? `Đã điền kết chuyển ${formatMoney(suggestAmt)} từ tồn cuối vào Ví vest — bấm Lưu NKTC`
+        : 'Nhập số tiền muốn kết chuyển từ tồn cuối vào Ví vest rồi bấm Lưu NKTC');
     }
 
     function prepareQuickTopupVest() {
@@ -2043,11 +2235,11 @@
     }
 
     function rebuildDynamicFilterMenus() {
-      const catSet = new Set([...CATEGORIES_BY_TYPE.Thu, ...CATEGORIES_BY_TYPE.Chi]);
+      const catSet = new Set([...CATEGORIES_BY_TYPE.Thu, ...CATEGORIES_BY_TYPE.Chi, ...CATEGORIES_BY_TYPE.Transfer]);
       const methodSet = new Set(DEFAULT_METHODS);
 
       state.allTransactions.forEach(tx => {
-        if (isOpeningTx(tx) || isInternalTransferTx(tx)) return;
+        if (isOpeningTx(tx)) return;
         const c = String(tx.danhMuc || '').trim();
         if (c) catSet.add(c);
         const m = String(tx.hinhThuc || '').trim();
@@ -2118,8 +2310,9 @@
     function onMultiChange(group) {
       if (group === 'type') {
         state.selectedTypes = Array.from(document.querySelectorAll('#menuType input:checked')).map(i => i.value);
+        const typeNames = { thu: 'Thu', chi: 'Chi', xfr: 'Kết chuyển' };
         document.getElementById('lblMsType').textContent = state.selectedTypes.length
-          ? 'Loại: ' + state.selectedTypes.map(x => x === 'thu' ? 'Thu' : 'Chi').join(', ')
+          ? 'Loại: ' + state.selectedTypes.map(x => typeNames[x] || x).join(', ')
           : 'Loại: Tất cả';
       } else if (group === 'cat') {
         state.selectedCats = Array.from(document.querySelectorAll('#menuCat input:checked')).map(i => i.value);
@@ -2209,20 +2402,16 @@
 
         const isXfr = isInternalTransferTx(tx);
         const isThu = !isXfr && checkThu(tx);
-        const typeKey = isThu ? 'thu' : 'chi';
+        const typeKey = isXfr ? 'xfr' : (isThu ? 'thu' : 'chi');
         const cat = String(tx.danhMuc || '');
         const methodLower = String(tx.hinhThuc || '').toLowerCase();
         const hay = `${tx.ngay || ''} ${tx.loai || ''} ${cat} ${tx.hinhThuc || ''} ${tx.ghiChu || ''} ${tx.soTien || ''}`.toLowerCase();
 
         if (kw && !hay.includes(kw)) return false;
 
-        if (!isXfr) {
-          if (state.selectedTypes.length > 0 && !state.selectedTypes.includes(typeKey)) return false;
-          if (state.selectedCats.length > 0 && !state.selectedCats.includes(cat)) return false;
-          if (state.selectedMethods.length > 0 && !state.selectedMethods.some(m => methodLower.includes(m))) return false;
-        } else if (state.selectedTypes.length > 0 || state.selectedCats.length > 0 || state.selectedMethods.length > 0) {
-          return false;
-        }
+        if (state.selectedTypes.length > 0 && !state.selectedTypes.includes(typeKey)) return false;
+        if (state.selectedCats.length > 0 && !state.selectedCats.includes(cat)) return false;
+        if (state.selectedMethods.length > 0 && !state.selectedMethods.some(m => methodLower.includes(m))) return false;
 
         if (!matchDateFilter(tx)) return false;
         return true;
@@ -2322,7 +2511,7 @@
       area.innerHTML = barsHtml + buildTotalRowHtml(totalRowLabel, total, modeType);
     }
 
-    function renderAnalysis(sumThu, sumChi, sumVestTopup, cuoiKy, vestBalance, khaDung, chiItems, thuItems) {
+    function renderAnalysis(sumThu, sumChi, vestM, cuoiKy, vestBalance, khaDung, chiItems, thuItems) {
       const box = document.getElementById('analysisBox');
       const ratio = sumThu > 0 ? ((sumChi / sumThu) * 100).toFixed(1) : '0.0';
       const netFlow = sumThu - sumChi;
@@ -2338,7 +2527,7 @@
           <strong>Tổng cộng THU (100% = ${formatMoney(sumThu)}):</strong> ${topThu || 'Chưa có thu'}
         </div>
         <div class="analysis-row net-note">
-          <strong>Cân đối dòng tiền:</strong> Đầu kỳ <strong>${formatMoney(state.dauKy)}</strong> · Chênh lệch Thu - Chi: <strong>${formatMoney(netFlow)}</strong> · Bù ví vest: <strong>${formatMoney(sumVestTopup)}</strong> · Cuối kỳ: <strong>${formatMoney(cuoiKy)}</strong> · Ví Vest (chốt 23/11: 358.607 ₫): <strong>${formatMoney(vestBalance)}</strong> · Khả dụng: <strong>${formatMoney(khaDung)}</strong> · Tỷ lệ Chi/Thu: <strong>${ratio}%</strong>
+          <strong>Cân đối dòng tiền &amp; Ví Vest:</strong> Đầu kỳ <strong>${formatMoney(state.dauKy)}</strong> · Chênh lệch Thu - Chi: <strong>${formatMoney(netFlow)}</strong> · Cuối kỳ: <strong>${formatMoney(cuoiKy)}</strong> · Ví Vest: <strong>${formatMoney(vestBalance)}</strong> (mốc ${VEST_CHECKPOINT_DATE_LABEL}: ${formatMoney(VEST_CHECKPOINT_AMOUNT)}, trừ VETC/giật ví: -${formatMoney(vestM.pulledFromVest)}, kết chuyển bù: +${formatMoney(vestM.toppedUpVest)}) · Khả dụng: <strong>${formatMoney(khaDung)}</strong> · Tỷ lệ Chi/Thu: <strong>${ratio}%</strong>
         </div>
       `;
     }
@@ -2346,16 +2535,12 @@
     function renderOverview(list) {
       let sumThu = 0;
       let sumChi = 0;
-      let sumVestTopup = 0;
       const chiMap = {};
       const thuMap = {};
 
       list.forEach(tx => {
         const amt = Number(tx.soTien) || 0;
-        if (isInternalTransferTx(tx)) {
-          if (isVestTopupTx(tx)) sumVestTopup += amt;
-          return;
-        }
+        if (isInternalTransferTx(tx)) return;
         const cat = tx.danhMuc || 'Khác';
         if (checkThu(tx)) {
           sumThu += amt;
@@ -2366,7 +2551,8 @@
         }
       });
 
-      const cuoiKy = state.dauKy + sumThu - sumChi + sumVestTopup;
+      // Kết chuyển nội bộ giữa tồn cuối quỹ và Ví Vest không làm thay đổi tổng tài sản Cuối kỳ
+      const cuoiKy = state.dauKy + sumThu - sumChi;
       const vestM = computeVestMetrics(state.allTransactions);
       const vestBalance = vestM.currentVestBalance;
       const khaDung = cuoiKy - vestBalance;
@@ -2377,7 +2563,16 @@
 
       document.getElementById('valKpiCuoiKy').textContent = formatMoney(cuoiKy);
       document.getElementById('valKpiViVest').textContent = formatMoney(vestBalance);
-      document.getElementById('subKpiViVest').textContent = 'Chốt 23/11: 358.607 ₫';
+
+      const vestSubEl = document.getElementById('subKpiViVest');
+      if (vestM.toppedUpVest > 0 && vestM.latestTopupInfo) {
+        vestSubEl.textContent = `Đã bù ${vestM.latestTopupInfo}`;
+      } else if (vestM.pulledFromVest > 0) {
+        vestSubEl.textContent = `Mốc 23/11: -${formatDotThousands(vestM.pulledFromVest)} ₫`;
+      } else {
+        vestSubEl.textContent = `Mốc 23/11: ${formatMoney(VEST_CHECKPOINT_AMOUNT)}`;
+      }
+
       document.getElementById('valKpiKhaDung').textContent = formatMoney(khaDung);
 
       const chiItems = Object.entries(chiMap).sort((a, b) => b[1] - a[1]);
@@ -2387,7 +2582,7 @@
       renderHorizontalBars('barChiArea', 'Tổng cộng CHI', 'chi', chiItems, CHI_COLORS);
       renderDonutAndLegend('pieThuArea', 'pieThuTotalBadge', 'Tổng thu', 'Tổng cộng THU', 'thu', thuItems, THU_COLORS);
       renderHorizontalBars('barThuArea', 'Tổng cộng THU', 'thu', thuItems, THU_COLORS);
-      renderAnalysis(sumThu, sumChi, sumVestTopup, cuoiKy, vestBalance, khaDung, chiItems, thuItems);
+      renderAnalysis(sumThu, sumChi, vestM, cuoiKy, vestBalance, khaDung, chiItems, thuItems);
     }
 
     function onLoanFilterChange() {
@@ -2595,6 +2790,7 @@
       stack.innerHTML = items.map(tx => {
         const isXfr = isInternalTransferTx(tx);
         const isThu = !isXfr && checkThu(tx);
+        const isVestDeduction = !isXfr && !isThu && isVestPullTx(tx);
         const cardCls = isXfr ? 'card-xfr' : (isThu ? 'card-thu' : 'card-chi');
         const sign = isXfr ? '⇄ ' : (isThu ? '+' : '-');
         const typeLabel = isXfr ? 'KẾT CHUYỂN NỘI BỘ' : (isThu ? 'KHOẢN THU' : 'KHOẢN CHI');
@@ -2604,7 +2800,10 @@
           <article class="tx-card ${cardCls}">
             <div class="tx-row-1">
               <div>
-                <span class="tx-badge">${typeLabel}</span>
+                <div style="display:flex; align-items:center; gap:5px; flex-wrap:wrap;">
+                  <span class="tx-badge">${typeLabel}</span>
+                  ${isVestDeduction ? '<span class="pill-badge" style="background:#ccfbf1;color:#0f766e;font-size:9.5px;">Trừ Ví Vest</span>' : ''}
+                </div>
                 <div class="tx-cat">${tx.danhMuc || 'Giao dịch'}</div>
               </div>
               <div class="tx-right">
@@ -2687,7 +2886,7 @@
         return;
       }
 
-      fetch(APPS_SCRIPT_URL + '?action=getDashboardData')
+      fetch(APPS_SCRIPT_URL + '?action=getDashboardData&_t=' + Date.now(), { cache: 'no-store' })
         .then(r => r.json())
         .then(res => {
           applySheetPayload(res);
@@ -2718,6 +2917,7 @@
       const methodSel = document.getElementById('entryMethod');
       if (isXfr) {
         methodSel.innerHTML = `
+          <option value="Kết chuyển tồn cuối → Ví vest">Kết chuyển tồn cuối → Ví vest</option>
           <option value="Chuyển khoản → Ví vest">Chuyển khoản → Ví vest</option>
           <option value="Tiền mặt → Ví vest">Tiền mặt → Ví vest</option>
           <option value="Ví vest → Tiền mặt">Ví vest → Tiền mặt</option>
@@ -2857,14 +3057,10 @@
 
     function stripNonMoneyTokens(rawText) {
       return String(rawText || '')
-        // Xóa cụm Hotline / Tổng đài / CSKH / SĐT kèm số điện thoại (tránh lấy 19006010 làm số tiền)
         .replace(/\b(?:hotline|tổng\s*đài|cskh|tel|sdt|sđt)\s*[:\-]?\s*\d[\d\s.\-]{5,14}\b/gi, ' ')
-        // Xóa cụm Số dư / So du kèm số dư tài khoản
         .replace(/\b(?:s[oố]\s*d[uư]|balance|số\s*dư\s*cuối)\s*[:\-]?\s*[\d.,]+\s*(?:vnđ|vnd|đ|k|nghìn|ngàn|triệu|tr)?\b/gi, ' ')
-        // Xóa số tài khoản / mã giao dịch / biển số xe
         .replace(/\b(?:tk|tài\s*khoản|stk|mã\s*gd|hđ)\s*[:\-]?\s*[a-z0-9]{4,}\b/gi, ' ')
         .replace(/\b50f\d{5,6}[a-z]?\b/gi, ' ')
-        // Xóa ngày tháng & giờ phút giây
         .replace(/\bngày\s+\d{1,2}(\s+tháng\s+\d{1,2})?(\s+năm\s+\d{2,4})?/gi, ' ')
         .replace(/\b\d{1,2}[\/\-]\d{1,2}([\/\-]\d{2,4})?\b/g, ' ')
         .replace(/\b\d{1,2}:\d{2}(:\d{2})?\b/g, ' ');
@@ -2873,7 +3069,6 @@
     function extractAmountFromLine(rawLine) {
       const cleaned = stripNonMoneyTokens(rawLine);
 
-      // 1. Ưu tiên cao nhất: số tiền có dấu (+/-) đi kèm đơn vị VND / VNĐ / đ (VD: -45,393VND, -1,627VND, +350.000đ)
       const signedUnitMatch = cleaned.match(/[+\-–−]\s*(\d{1,3}(?:[.,]\d{3})+|\d+(?:[.,]\d+)?)\s*(?:vnđ|vnd|đ)\b/i);
       if (signedUnitMatch) {
         const digits = signedUnitMatch[1].replace(/[.,]/g, '');
@@ -2881,7 +3076,6 @@
         if (Number.isFinite(n) && n >= 1000) return n;
       }
 
-      // 2. Số tiền không dấu nhưng đi liền đơn vị VND / VNĐ / đ
       const plainUnitMatch = cleaned.match(/\b(\d{1,3}(?:[.,]\d{3})+|\d+)\s*(?:vnđ|vnd|đ)\b/i);
       if (plainUnitMatch) {
         const digits = plainUnitMatch[1].replace(/[.,]/g, '');
@@ -2889,7 +3083,6 @@
         if (Number.isFinite(n) && n >= 1000) return n;
       }
 
-      // 3. Số tiền có đơn vị triệu / tr / củ / nghìn / ngàn / k
       const kOrMUnitMatch = cleaned.match(/[+\-–−]?\s*(\d+(?:[.,]\d+)?)\s*(triệu|tr|củ|nghìn|ngàn|k)\b/i);
       if (kOrMUnitMatch) {
         const base = parseFloat(kOrMUnitMatch[1].replace(',', '.'));
@@ -2898,7 +3091,6 @@
         if (unit === 'nghìn' || unit === 'ngàn' || unit === 'k') return Math.round(base * 1000);
       }
 
-      // 4. Số có dấu phân tách hàng nghìn (VD: 45,393 hoặc 14.000) sau khi đã lọc bỏ số dư & hotline
       const dotMatches = cleaned.match(/\b\d{1,3}(?:[.,]\d{3})+\b/g);
       if (dotMatches && dotMatches.length) {
         const first = dotMatches[0].replace(/[.,]/g, '');
@@ -2906,7 +3098,6 @@
         if (Number.isFinite(n) && n >= 1000) return n;
       }
 
-      // 5. Số nguyên 4-8 chữ số chỉ chấp nhận khi đứng sau từ khóa giao dịch (không bao giờ lấy số trôi nổi cuối dòng)
       const taggedPlainMatch = cleaned.match(/(?:trừ|chi|thu|thanh\s*toán|phí|nạp|số\s*tiền)\s*[:\-]?\s*[+\-–−]?\s*(\d{4,8})\b/i);
       if (taggedPlainMatch) {
         const n = Number(taggedPlainMatch[1]);
@@ -2937,7 +3128,6 @@
       const normalized = String(rawText || '').replace(/\r\n/g, '\n').trim();
       if (!normalized) return [];
 
-      // Tách theo từng khối tin nhắn / giao dịch (cách nhau bởi dòng trống hoặc đầu tin nhắn TK VETC / biến động số dư)
       let blocks = normalized
         .split(/\n\s*\n+/)
         .map(b => b.replace(/\s+/g, ' ').trim())
@@ -2973,7 +3163,6 @@
         }
       }
 
-      // Dự phòng nếu là bảng kê từng dòng
       if (!items.length) {
         const lines = normalized.split('\n').map(l => l.replace(/\s+/g, ' ').trim()).filter(l => l.length >= 3);
         let pendingNoteLines = [];
@@ -3068,6 +3257,7 @@
       if (Array.from(catSel.options).some(o => o.value === it.danhMuc)) {
         catSel.value = it.danhMuc;
       }
+      onEntryCatChange();
       setAmountFieldValue(it.soTien);
       document.getElementById('entryNote').value = it.ghiChu;
       detectInstallmentAuto();
@@ -3172,7 +3362,7 @@
 
       const catSel = document.getElementById('entryCat');
       if (targetType === 'Transfer') {
-        catSel.value = 'Nạp bù ví vest';
+        catSel.value = lower.includes('tồn cuối') ? 'Kết chuyển tồn cuối → Ví vest' : 'Nạp bù ví vest';
       } else if (targetType === 'Thu') {
         catSel.value = lower.includes('khác') ? 'Thu nhập khác' : 'Doanh thu dịch vụ/Lương';
       } else {
@@ -3183,6 +3373,7 @@
         else if (lower.includes('gia đình') || lower.includes('nhà')) catSel.value = 'Sinh hoạt gia đình';
         else catSel.value = 'Khác';
       }
+      onEntryCatChange();
 
       const parsedMoney = parseVietnameseMoneyFromText(cleanText);
       if (parsedMoney > 0) {
@@ -3407,7 +3598,12 @@
         extra.textContent = found.danhMuc;
         catSel.appendChild(extra);
       }
-      catSel.value = found.danhMuc || (typeName === 'Transfer' ? 'Nạp bù ví vest' : 'Khác');
+      catSel.value = found.danhMuc || (typeName === 'Transfer' ? 'Kết chuyển tồn cuối → Ví vest' : 'Khác');
+
+      if (typeName === 'Chi') {
+        const chk = document.getElementById('chkPullFromVest');
+        if (chk) chk.checked = isVestPullTx(found);
+      }
 
       setAmountFieldValue(Number(found.soTien) || 0);
       document.getElementById('entryNote').value = found.ghiChu || '';
