@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-  <title>Sổ thu chi · v2.0 · Xe 50F20703V</title>
+  <title>Sổ thu chi · v2.1 · Xe 50F20703V</title>
   <style>
     :root {
       --bg: #f1f5f9;
@@ -141,6 +141,42 @@
     .sync-btn:disabled { cursor: wait; background: linear-gradient(180deg, #fde047 0%, #eab308 100%); }
     @keyframes spin { to { transform: rotate(360deg); } }
     .sync-btn.is-syncing svg { animation: spin 0.7s linear infinite; }
+
+    /* Banner thông báo cập nhật phiên bản mới */
+    .update-notice-bar {
+      background: linear-gradient(90deg, #fef3c7, #fde68a);
+      border-bottom: 1.5px solid #f59e0b;
+      color: #78350f;
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .update-notice-actions { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+    .btn-reload-ver {
+      background: #b45309;
+      color: #ffffff;
+      border: none;
+      border-bottom: 2.5px solid #78350f;
+      border-radius: 7px;
+      padding: 4px 10px;
+      font-size: 11px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+    .btn-dismiss-ver {
+      background: rgba(255, 255, 255, 0.75);
+      color: #78350f;
+      border: 1px solid #d97706;
+      border-radius: 7px;
+      padding: 4px 8px;
+      font-size: 11px;
+      font-weight: 800;
+      cursor: pointer;
+    }
 
     .sync-progress { height: 3px; width: 100%; background: rgba(15, 23, 42, 0.08); overflow: hidden; display: none; }
     .sync-progress.active { display: block; }
@@ -769,7 +805,7 @@
         </svg>
       </span>
       <span id="headerTitle">Tổng quan</span>
-      <span id="headerVersionBadge" class="ver-badge">v2.0</span>
+      <span id="headerVersionBadge" class="ver-badge">v2.1</span>
 
       <button
         type="button"
@@ -801,12 +837,21 @@
     </button>
   </header>
 
+  <!-- Banner thông báo cập nhật phiên bản mới -->
+  <div id="newVersionNotice" class="update-notice-bar hide" role="status" aria-live="polite">
+    <span id="newVersionText">✨ Có phiên bản mới! Bấm Cập nhật để tải giao diện &amp; bộ lọc mới nhất.</span>
+    <div class="update-notice-actions">
+      <button type="button" class="btn-reload-ver" onclick="applyNewAppVersion()">Cập nhật ngay</button>
+      <button type="button" class="btn-dismiss-ver" onclick="dismissNewVersionNotice()">Để sau</button>
+    </div>
+  </div>
+
   <div id="syncProgressBar" class="sync-progress"></div>
 
   <div id="loadingMask" class="loading-mask" aria-live="polite">
     <div class="loading-card">
       <div class="loading-spinner"></div>
-      <span id="loadingText">Đang đồng bộ dữ liệu v2.0 từ Google Sheet...</span>
+      <span id="loadingText">Đang đồng bộ dữ liệu v2.1 từ Google Sheet...</span>
     </div>
   </div>
 
@@ -1393,7 +1438,8 @@
   <div id="toast" class="toast"></div>
 
   <script>
-    const APP_VERSION = 'v2.0';
+    const APP_VERSION = 'v2.1';
+    const VERSION_STORAGE_KEY = 'STC_50F20703V_LAST_SEEN_VERSION';
     const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbymiRccSimgcBN5NU6OadwjRtgkB-yfCyuujX-xUMHWAftLaTKDBreuvd5dgJlhqHwY_Q/exec';
     const VEHICLE_PLATE = '50F20703V';
     const VEST_CHECKPOINT_DATE_ISO = '2026-11-23';
@@ -1416,6 +1462,85 @@
     const DEFAULT_METHODS = ['Chuyển khoản', 'Tiền mặt'];
     const CHI_COLORS = ['#dc2626', '#2563eb', '#7c3aed', '#0284c7', '#d97706', '#475569'];
     const THU_COLORS = ['#059669', '#f59e0b', '#0891b2', '#2563eb'];
+
+    /* ===== THÔNG BÁO CẬP NHẬT PHIÊN BẢN MỚI ===== */
+    function initVersionUpdateNotifier() {
+      const noticeBar = document.getElementById('newVersionNotice');
+      const noticeText = document.getElementById('newVersionText');
+      if (!noticeBar || !noticeText) return;
+
+      try {
+        const lastSeen = localStorage.getItem(VERSION_STORAGE_KEY);
+        if (!lastSeen) {
+          localStorage.setItem(VERSION_STORAGE_KEY, APP_VERSION);
+        } else if (lastSeen !== APP_VERSION) {
+          noticeText.textContent = `✨ Đã cập nhật lên phiên bản mới ${APP_VERSION} (trước đó: ${lastSeen})!`;
+          noticeBar.classList.remove('hide');
+        }
+      } catch (_) {}
+
+      // Nếu chạy trong môi trường Service Worker, tự bắt sự kiện có bản cập nhật mới
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations().then(regs => {
+          regs.forEach(reg => {
+            if (reg.waiting) {
+              noticeText.textContent = `✨ Có bản cập nhật mới (${APP_VERSION}). Bấm Cập nhật ngay để áp dụng!`;
+              noticeBar.classList.remove('hide');
+            }
+            reg.addEventListener('updatefound', () => {
+              const newWorker = reg.installing;
+              if (!newWorker) return;
+              newWorker.addEventListener('statechange', () => {
+                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                  noticeText.textContent = `✨ Phiên bản mới đã sẵn sàng tải về!`;
+                  noticeBar.classList.remove('hide');
+                }
+              });
+            });
+          });
+        }).catch(() => {});
+      }
+    }
+
+    function checkServerVersionUpdate(serverPayload) {
+      if (!serverPayload || typeof serverPayload !== 'object') return;
+      const remoteVer = String(serverPayload.appVersion || serverPayload.version || '').trim();
+      if (!remoteVer || remoteVer === APP_VERSION) return;
+
+      const noticeBar = document.getElementById('newVersionNotice');
+      const noticeText = document.getElementById('newVersionText');
+      if (noticeBar && noticeText) {
+        noticeText.textContent = `✨ Có phiên bản mới ${remoteVer} (đang dùng ${APP_VERSION}). Bấm Cập nhật ngay!`;
+        noticeBar.classList.remove('hide');
+      }
+    }
+
+    function applyNewAppVersion() {
+      try {
+        localStorage.setItem(VERSION_STORAGE_KEY, APP_VERSION);
+      } catch (_) {}
+
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations().then(regs => {
+          regs.forEach(reg => {
+            if (reg.waiting) reg.waiting.postMessage({ type: 'SKIP_WAITING' });
+            reg.update().catch(() => {});
+          });
+        }).catch(() => {});
+      }
+
+      const url = new URL(window.location.href);
+      url.searchParams.set('v', Date.now().toString());
+      window.location.replace(url.toString());
+    }
+
+    function dismissNewVersionNotice() {
+      try {
+        localStorage.setItem(VERSION_STORAGE_KEY, APP_VERSION);
+      } catch (_) {}
+      const noticeBar = document.getElementById('newVersionNotice');
+      if (noticeBar) noticeBar.classList.add('hide');
+    }
 
     /* ===== ĐỊNH DẠNG SỐ TIỀN CÓ DẤU CHẤM ===== */
     function parseRawDigitsAmount(val) {
@@ -2520,6 +2645,7 @@
     function applySheetPayload(raw) {
       const d = raw && raw.data ? raw.data : raw;
       if (!d) return;
+      checkServerVersionUpdate(d);
       if (d.error) {
         showToast('Lỗi: ' + d.error);
         return;
@@ -2677,7 +2803,7 @@
       showToast(`Đã áp dụng ${s.loanId} · Kỳ ${s.kyNum} (${formatMoney(s.amount)})`);
     }
 
-    /* ===== ĐỌC ẢNH TÁCH NHIỀU LƯỢT (TESSERACT.JS) ===== */
+    /* ===== ĐỌC ẢNH TÁCH NHIỀU LƯỢT (TESSERACT.JS) — LỌC SẠCH HOTLINE & SỐ DƯ ===== */
     let tesseractScriptPromise = null;
 
     function loadTesseractJs() {
@@ -2700,7 +2826,14 @@
 
     function inferTypeAndCategoryFromLine(lineText) {
       const lower = String(lineText || '').toLowerCase();
-      const isThu = lower.startsWith('thu ') || lower.includes('khoản thu') || lower.includes('doanh thu') || lower.includes('nhận tiền') || lower.includes('hoàn tiền');
+      const isThu = (
+        lower.startsWith('thu ') ||
+        lower.includes('khoản thu') ||
+        lower.includes('doanh thu') ||
+        lower.includes('nhận tiền') ||
+        lower.includes('hoàn tiền') ||
+        /\+\s*\d{1,3}(?:[.,]\d{3})+\s*(?:vnđ|vnd|đ)\b/i.test(lineText)
+      );
       const loai = isThu ? 'Thu' : 'Chi';
       let danhMuc = 'Khác';
 
@@ -2722,89 +2855,151 @@
       return { loai, danhMuc };
     }
 
-    function extractAmountFromLine(rawLine) {
-      const stripped = String(rawLine || '')
+    function stripNonMoneyTokens(rawText) {
+      return String(rawText || '')
+        // Xóa cụm Hotline / Tổng đài / CSKH / SĐT kèm số điện thoại (tránh lấy 19006010 làm số tiền)
+        .replace(/\b(?:hotline|tổng\s*đài|cskh|tel|sdt|sđt)\s*[:\-]?\s*\d[\d\s.\-]{5,14}\b/gi, ' ')
+        // Xóa cụm Số dư / So du kèm số dư tài khoản
+        .replace(/\b(?:s[oố]\s*d[uư]|balance|số\s*dư\s*cuối)\s*[:\-]?\s*[\d.,]+\s*(?:vnđ|vnd|đ|k|nghìn|ngàn|triệu|tr)?\b/gi, ' ')
+        // Xóa số tài khoản / mã giao dịch / biển số xe
+        .replace(/\b(?:tk|tài\s*khoản|stk|mã\s*gd|hđ)\s*[:\-]?\s*[a-z0-9]{4,}\b/gi, ' ')
+        .replace(/\b50f\d{5,6}[a-z]?\b/gi, ' ')
+        // Xóa ngày tháng & giờ phút giây
         .replace(/\bngày\s+\d{1,2}(\s+tháng\s+\d{1,2})?(\s+năm\s+\d{2,4})?/gi, ' ')
         .replace(/\b\d{1,2}[\/\-]\d{1,2}([\/\-]\d{2,4})?\b/g, ' ')
         .replace(/\b\d{1,2}:\d{2}(:\d{2})?\b/g, ' ');
+    }
 
-      const unitMatch = stripped.match(/(\d+(?:[.,]\d+)?)\s*(triệu|tr|củ|nghìn|ngàn|k|đ|vnđ)\b/i);
-      if (unitMatch) {
-        const base = parseFloat(unitMatch[1].replace(',', '.'));
-        const unit = unitMatch[2].toLowerCase();
-        if (unit === 'triệu' || unit === 'tr' || unit === 'củ') return Math.round(base * 1000000);
-        if (unit === 'nghìn' || unit === 'ngàn' || unit === 'k') return Math.round(base * 1000);
-        if (unit === 'đ' || unit === 'vnđ') {
-          const digits = unitMatch[1].replace(/[.,]/g, '');
-          const n = Number(digits);
-          return Number.isFinite(n) ? n : 0;
-        }
-      }
+    function extractAmountFromLine(rawLine) {
+      const cleaned = stripNonMoneyTokens(rawLine);
 
-      const dotMatches = stripped.match(/\b\d{1,3}(?:[.,]\d{3})+\b/g);
-      if (dotMatches && dotMatches.length) {
-        const last = dotMatches[dotMatches.length - 1].replace(/[.,]/g, '');
-        const n = Number(last);
+      // 1. Ưu tiên cao nhất: số tiền có dấu (+/-) đi kèm đơn vị VND / VNĐ / đ (VD: -45,393VND, -1,627VND, +350.000đ)
+      const signedUnitMatch = cleaned.match(/[+\-–−]\s*(\d{1,3}(?:[.,]\d{3})+|\d+(?:[.,]\d+)?)\s*(?:vnđ|vnd|đ)\b/i);
+      if (signedUnitMatch) {
+        const digits = signedUnitMatch[1].replace(/[.,]/g, '');
+        const n = Number(digits);
         if (Number.isFinite(n) && n >= 1000) return n;
       }
 
-      const plainMatches = stripped.match(/\b\d{4,9}\b/g);
-      if (plainMatches && plainMatches.length) {
-        const n = Number(plainMatches[plainMatches.length - 1]);
+      // 2. Số tiền không dấu nhưng đi liền đơn vị VND / VNĐ / đ
+      const plainUnitMatch = cleaned.match(/\b(\d{1,3}(?:[.,]\d{3})+|\d+)\s*(?:vnđ|vnd|đ)\b/i);
+      if (plainUnitMatch) {
+        const digits = plainUnitMatch[1].replace(/[.,]/g, '');
+        const n = Number(digits);
+        if (Number.isFinite(n) && n >= 1000) return n;
+      }
+
+      // 3. Số tiền có đơn vị triệu / tr / củ / nghìn / ngàn / k
+      const kOrMUnitMatch = cleaned.match(/[+\-–−]?\s*(\d+(?:[.,]\d+)?)\s*(triệu|tr|củ|nghìn|ngàn|k)\b/i);
+      if (kOrMUnitMatch) {
+        const base = parseFloat(kOrMUnitMatch[1].replace(',', '.'));
+        const unit = kOrMUnitMatch[2].toLowerCase();
+        if (unit === 'triệu' || unit === 'tr' || unit === 'củ') return Math.round(base * 1000000);
+        if (unit === 'nghìn' || unit === 'ngàn' || unit === 'k') return Math.round(base * 1000);
+      }
+
+      // 4. Số có dấu phân tách hàng nghìn (VD: 45,393 hoặc 14.000) sau khi đã lọc bỏ số dư & hotline
+      const dotMatches = cleaned.match(/\b\d{1,3}(?:[.,]\d{3})+\b/g);
+      if (dotMatches && dotMatches.length) {
+        const first = dotMatches[0].replace(/[.,]/g, '');
+        const n = Number(first);
+        if (Number.isFinite(n) && n >= 1000) return n;
+      }
+
+      // 5. Số nguyên 4-8 chữ số chỉ chấp nhận khi đứng sau từ khóa giao dịch (không bao giờ lấy số trôi nổi cuối dòng)
+      const taggedPlainMatch = cleaned.match(/(?:trừ|chi|thu|thanh\s*toán|phí|nạp|số\s*tiền)\s*[:\-]?\s*[+\-–−]?\s*(\d{4,8})\b/i);
+      if (taggedPlainMatch) {
+        const n = Number(taggedPlainMatch[1]);
         if (Number.isFinite(n) && n >= 1000) return n;
       }
 
       return 0;
     }
 
+    function extractDateIsoFromBlock(blockText) {
+      const m = String(blockText || '').match(/\b(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})\b/);
+      if (!m) return '';
+      const dd = m[1].padStart(2, '0');
+      const mm = m[2].padStart(2, '0');
+      const yyyy = m[3];
+      return `${yyyy}-${mm}-${dd}`;
+    }
+
+    function cleanNoteFromBlock(blockText) {
+      return String(blockText || '')
+        .replace(/\b(?:hotline|tổng\s*đài|cskh)\s*[:\-]?\s*\d[\d\s.\-]{5,14}\b/gi, '')
+        .replace(/\s+/g, ' ')
+        .trim()
+        .slice(0, 160);
+    }
+
     function parseMultiItemsFromOcrText(rawText) {
-      const lines = String(rawText || '')
-        .split(/\r?\n/)
-        .map(l => l.replace(/\s+/g, ' ').trim())
-        .filter(l => l.length >= 3);
+      const normalized = String(rawText || '').replace(/\r\n/g, '\n').trim();
+      if (!normalized) return [];
+
+      // Tách theo từng khối tin nhắn / giao dịch (cách nhau bởi dòng trống hoặc đầu tin nhắn TK VETC / biến động số dư)
+      let blocks = normalized
+        .split(/\n\s*\n+/)
+        .map(b => b.replace(/\s+/g, ' ').trim())
+        .filter(Boolean);
+
+      if (blocks.length <= 1) {
+        const splitByTxStart = normalized
+          .split(/(?=(?:^|\n)\s*(?:TK\s+VETC|GD\s+|Giao\s*dịch\s+|Biến\s*động\s*số\s*dư))/gi)
+          .map(b => b.replace(/\s+/g, ' ').trim())
+          .filter(Boolean);
+        if (splitByTxStart.length > 1) {
+          blocks = splitByTxStart;
+        }
+      }
 
       const items = [];
-      let pendingNoteLines = [];
-
-      for (const line of lines) {
-        const amt = extractAmountFromLine(line);
+      for (const blk of blocks) {
+        const amt = extractAmountFromLine(blk);
         if (amt >= 1000) {
-          const contextNote = [...pendingNoteLines, line].join(' · ').slice(0, 140);
-          const inferred = inferTypeAndCategoryFromLine(contextNote);
+          const cleanNote = cleanNoteFromBlock(blk);
+          const inferred = inferTypeAndCategoryFromLine(cleanNote);
           items.push({
             id: 'ocr_' + items.length + '_' + Date.now(),
             index: items.length + 1,
             loai: inferred.loai,
             danhMuc: inferred.danhMuc,
             soTien: amt,
-            ghiChu: contextNote,
-            rawLine: line,
+            ngayIso: extractDateIsoFromBlock(blk),
+            ghiChu: cleanNote,
+            rawLine: blk,
             saved: false
           });
-          pendingNoteLines = [];
-        } else {
-          if (!/^(tổng|tổng cộng|số dư|ngày in|trang \d+)/i.test(line)) {
-            pendingNoteLines.push(line);
-            if (pendingNoteLines.length > 2) pendingNoteLines.shift();
-          }
         }
       }
 
-      if (!items.length && rawText.trim()) {
-        const fallbackAmt = extractAmountFromLine(rawText);
-        if (fallbackAmt >= 1000) {
-          const cleanNote = rawText.replace(/\s+/g, ' ').trim().slice(0, 140);
-          const inferred = inferTypeAndCategoryFromLine(cleanNote);
-          items.push({
-            id: 'ocr_1_' + Date.now(),
-            index: 1,
-            loai: inferred.loai,
-            danhMuc: inferred.danhMuc,
-            soTien: fallbackAmt,
-            ghiChu: cleanNote,
-            rawLine: cleanNote,
-            saved: false
-          });
+      // Dự phòng nếu là bảng kê từng dòng
+      if (!items.length) {
+        const lines = normalized.split('\n').map(l => l.replace(/\s+/g, ' ').trim()).filter(l => l.length >= 3);
+        let pendingNoteLines = [];
+
+        for (const line of lines) {
+          if (/^(?:hotline|tổng\s*đài|cskh|số\s*dư|so\s*du)\b/i.test(line)) continue;
+          const amt = extractAmountFromLine(line);
+          if (amt >= 1000) {
+            const contextNote = cleanNoteFromBlock([...pendingNoteLines, line].join(' · '));
+            const inferred = inferTypeAndCategoryFromLine(contextNote);
+            items.push({
+              id: 'ocr_' + items.length + '_' + Date.now(),
+              index: items.length + 1,
+              loai: inferred.loai,
+              danhMuc: inferred.danhMuc,
+              soTien: amt,
+              ngayIso: extractDateIsoFromBlock(contextNote),
+              ghiChu: contextNote,
+              rawLine: line,
+              saved: false
+            });
+            pendingNoteLines = [];
+          } else if (!/^(tổng|tổng cộng|ngày in|trang \d+)/i.test(line)) {
+            pendingNoteLines.push(line);
+            if (pendingNoteLines.length > 2) pendingNoteLines.shift();
+          }
         }
       }
 
@@ -2830,6 +3025,7 @@
         const cardCls = `ocr-item-card${it.saved ? ' is-saved' : ''}${isActive ? ' is-active' : ''}`;
         const amtCls = `ocr-item-amt${it.loai === 'Thu' ? ' is-thu' : ''}`;
         const sign = it.loai === 'Thu' ? '+' : '-';
+        const dateBadge = it.ngayIso ? `<span class="pill-badge">${it.ngayIso.split('-').reverse().join('/')}</span>` : '';
 
         return `
           <div class="${cardCls}">
@@ -2838,6 +3034,7 @@
                 <span>Lượt ${it.index}:</span>
                 <span class="${amtCls}">${sign}${formatMoney(it.soTien)}</span>
                 <span class="pill-badge">${it.danhMuc}</span>
+                ${dateBadge}
                 ${it.saved ? '<span class="pill-badge" style="background:#d1fae5;color:#065f46;">✓ Đã lưu</span>' : ''}
               </div>
               <div class="ocr-item-sub">${it.ghiChu}</div>
@@ -2863,6 +3060,9 @@
       document.getElementById('formHeading').textContent = `+ Nạp Lượt ${it.index}/${state.ocrItems.length} vào NKTC`;
       document.getElementById('btnSubmitForm').textContent = 'Lưu NKTC';
 
+      if (it.ngayIso) {
+        document.getElementById('entryDate').value = it.ngayIso;
+      }
       selectEntryType(it.loai);
       const catSel = document.getElementById('entryCat');
       if (Array.from(catSel.options).some(o => o.value === it.danhMuc)) {
@@ -2872,7 +3072,7 @@
       document.getElementById('entryNote').value = it.ghiChu;
       detectInstallmentAuto();
       renderOcrBatchList();
-      showToast(`Đã đưa Lượt ${it.index} lên form — kiểm tra rồi bấm Lưu NKTC`);
+      showToast(`Đã đưa Lượt ${it.index} (${formatMoney(it.soTien)}) lên form`);
     }
 
     function clearOcrBatch() {
@@ -3168,6 +3368,9 @@
         const nextIdx = state.ocrItems.findIndex((item, idx) => idx > state.activeOcrIndex && !item.saved);
         state.activeOcrIndex = nextIdx !== -1 ? nextIdx : -1;
         renderOcrBatchList();
+        if (nextIdx !== -1) {
+          pickOcrItemToForm(nextIdx);
+        }
       }
     }
 
@@ -3273,6 +3476,7 @@
       const uiType = document.getElementById('entryTypeVal').value;
       const catVal = document.getElementById('entryCat').value;
       let noteVal = document.getElementById('entryNote').value.trim();
+      const hadNextOcr = state.activeOcrIndex >= 0 && state.ocrItems.some((item, idx) => idx > state.activeOcrIndex && !item.saved);
 
       let sheetLoai = uiType;
       if (uiType === 'Transfer') {
@@ -3312,10 +3516,10 @@
         const runner = google.script.run
           .withSuccessHandler(res => {
             applySheetPayload(res);
-            markActiveOcrSavedIfAny();
             resetEntryFormCompletely(uiType);
+            markActiveOcrSavedIfAny();
             setLoadingOverlay(false);
-            showToast(successMsg);
+            if (!hadNextOcr) showToast(successMsg);
           })
           .withFailureHandler(err => {
             btn.disabled = false;
@@ -3337,10 +3541,10 @@
         .then(() => {
           setTimeout(() => {
             fetchSheetData(false);
-            markActiveOcrSavedIfAny();
             resetEntryFormCompletely(uiType);
+            markActiveOcrSavedIfAny();
             setLoadingOverlay(false);
-            showToast(successMsg);
+            if (!hadNextOcr) showToast(successMsg);
           }, 900);
         })
         .catch(err => {
@@ -3354,6 +3558,7 @@
     // Khởi tạo
     document.getElementById('headerVersionBadge').textContent = APP_VERSION;
     document.getElementById('entryDate').valueAsDate = new Date();
+    initVersionUpdateNotifier();
     rebuildDynamicFilterMenus();
     selectEntryType('Chi');
     renderVestTrackerUi();
