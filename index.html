@@ -21,7 +21,7 @@
       --tab-update: #b45309;
       --tab-update-soft: #fef3c7;
 
-      --dauk-bg: #ffffff;
+      --dauk-bg: #f8fafc;
       --dauk-border: #64748b;
       --dauk-txt: #1e293b;
 
@@ -141,30 +141,6 @@
     .sync-btn:disabled { cursor: wait; background: linear-gradient(180deg, #fde047 0%, #eab308 100%); }
     @keyframes spin { to { transform: rotate(360deg); } }
     .sync-btn.is-syncing svg { animation: spin 0.7s linear infinite; }
-
-    .update-status-strip {
-      background: #ecfdf5;
-      border-bottom: 1px solid #a7f3d0;
-      color: #065f46;
-      padding: 5px 12px;
-      font-size: 11px;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-    .update-status-strip.is-loading {
-      background: #fef9c3;
-      border-bottom-color: #fde047;
-      color: #854d0e;
-    }
-    .status-dot {
-      display: inline-block; width: 7px; height: 7px; border-radius: 50%;
-      background: #059669; margin-right: 5px;
-    }
-    .update-status-strip.is-loading .status-dot { background: #ca8a04; animation: pulse 0.9s infinite; }
 
     .sync-progress { height: 3px; width: 100%; background: rgba(15, 23, 42, 0.08); overflow: hidden; display: none; }
     .sync-progress.active { display: block; }
@@ -304,15 +280,77 @@
 
     .content { max-width: 860px; margin: 0 auto; padding: 12px; }
 
-    .cashflow-rows { display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px; }
+    /* Cụm KPI dòng tiền */
+    .cashflow-rows { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
     .cashflow-pair { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+
+    /* Hàng 1: 3 khối chung 1 dòng, 3 màu khác nhau (Đầu kỳ - Thu - Chi) */
+    .kpi-row-3-diff { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; }
+    .kpi-box-sm {
+      border-radius: 12px; padding: 9px 8px; border: 1.5px solid transparent;
+      box-shadow: 0 3px 0 rgba(15, 23, 42, 0.07); min-width: 0;
+    }
+    .kpi-box-sm.box-dauk { background: var(--dauk-bg); border-color: var(--dauk-border); }
+    .kpi-box-sm.box-thu { background: var(--thu-bg); border-color: var(--thu-border); }
+    .kpi-box-sm.box-chi { background: var(--chi-bg); border-color: var(--chi-border); }
+
+    .kpi-box-sm .kpi-title { font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.2px; }
+    .kpi-box-sm.box-dauk .kpi-title, .kpi-box-sm.box-dauk .kpi-num { color: var(--dauk-txt); }
+    .kpi-box-sm.box-thu .kpi-title, .kpi-box-sm.box-thu .kpi-num { color: var(--thu); }
+    .kpi-box-sm.box-chi .kpi-title, .kpi-box-sm.box-chi .kpi-num { color: var(--chi); }
+    .kpi-box-sm .kpi-num { font-size: 12px; font-weight: 900; margin-top: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .kpi-box-sm .kpi-sub { font-size: 9.5px; font-weight: 700; color: var(--muted); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    /* Hàng 2: 3 khối chung 1 dòng, 1 khối nền chung, 3 màu từ đậm đến nhạt (Cuối kỳ - Ví Vest - Khả dụng) */
+    .kpi-row-3-group {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px;
+      background: #eff6ff; border: 1.5px solid #93c5fd; border-radius: 14px;
+      padding: 7px; box-shadow: 0 3px 0 rgba(37, 99, 235, 0.12);
+    }
+    .kpi-sub-card {
+      border-radius: 10px; padding: 8px 7px; border: 1px solid transparent; min-width: 0;
+    }
+    .kpi-sub-card.tone-dark {
+      background: #1d4ed8; border-color: #1e40af; color: #ffffff;
+    }
+    .kpi-sub-card.tone-mid {
+      background: #60a5fa; border-color: #3b82f6; color: #0f172a;
+    }
+    .kpi-sub-card.tone-light {
+      background: #dbeafe; border-color: #93c5fd; color: #1e3a8a;
+    }
+    .kpi-sub-card .sub-lbl {
+      font-size: 9.5px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.2px;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .kpi-sub-card.tone-dark .sub-lbl { color: #eff6ff; }
+    .kpi-sub-card.tone-mid .sub-lbl { color: #0f172a; }
+    .kpi-sub-card.tone-light .sub-lbl { color: #1e40af; }
+
+    .kpi-sub-card .sub-val {
+      font-size: 11.5px; font-weight: 900; margin-top: 4px;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .kpi-sub-card.tone-dark .sub-val { color: #ffffff; }
+    .kpi-sub-card.tone-mid .sub-val { color: #0f172a; }
+    .kpi-sub-card.tone-light .sub-val { color: #1e3a8a; }
+
+    .kpi-sub-card .sub-note {
+      font-size: 9px; font-weight: 700; margin-top: 2px;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .kpi-sub-card.tone-dark .sub-note { color: #bfdbfe; }
+    .kpi-sub-card.tone-mid .sub-note { color: #1e293b; }
+    .kpi-sub-card.tone-light .sub-note { color: #2563eb; }
+
+    /* Các thẻ KPI dùng ở tab Theo dõi vay */
     .kpi-box { border-radius: 13px; padding: 10px 12px; border: 1.5px solid transparent; box-shadow: 0 3px 0 rgba(15, 23, 42, 0.07); }
     .kpi-box.box-dauk { background: var(--dauk-bg); border-color: var(--dauk-border); }
     .kpi-box.box-thu { background: var(--thu-bg); border-color: var(--thu-border); }
     .kpi-box.box-chi { background: var(--chi-bg); border-color: var(--chi-border); }
     .kpi-box.box-ton { background: var(--ton-bg); border-color: var(--ton-border); }
 
-    .kpi-head { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
+    .kpi-head { display: flex; align-items: center; justify-content: space-between; gap: 4px; }
     .kpi-title { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.3px; }
     .box-dauk .kpi-title, .box-dauk .kpi-num, .box-dauk .kpi-ico { color: var(--dauk-txt); }
     .box-thu .kpi-title, .box-thu .kpi-num, .box-thu .kpi-ico { color: var(--thu); }
@@ -725,10 +763,6 @@
     </button>
   </header>
 
-  <div id="updateStatusStrip" class="update-status-strip">
-    <span><span class="status-dot"></span><span id="statusText">Bản cập nhật v2.0 · Đang kiểm tra dữ liệu...</span></span>
-    <span id="statusTimeText"></span>
-  </div>
   <div id="syncProgressBar" class="sync-progress"></div>
 
   <div id="loadingMask" class="loading-mask" aria-live="polite">
@@ -918,51 +952,45 @@
     <!-- TAB 1: TỔNG QUAN -->
     <section id="sec-overview">
       <div class="cashflow-rows">
-        <div class="cashflow-pair">
-          <div class="kpi-box box-dauk">
-            <div class="kpi-head">
-              <span class="kpi-title">Đầu kỳ</span>
-              <svg class="kpi-ico" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-                <circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/>
-              </svg>
-            </div>
+        <!-- Hàng 1: 3 khối chung 1 dòng, 3 màu khác nhau: Đầu kỳ · Thu · Chi -->
+        <div class="kpi-row-3-diff">
+          <div class="kpi-box-sm box-dauk">
+            <div class="kpi-head"><span class="kpi-title">Đầu kỳ</span></div>
             <div class="kpi-num" id="valKpiDauKy">0 ₫</div>
-            <div class="kpi-sub">Tồn đầu kỳ sổ</div>
+            <div class="kpi-sub">Tồn đầu kỳ</div>
           </div>
 
-          <div class="kpi-box box-ton">
-            <div class="kpi-head">
-              <span class="kpi-title">Cuối kỳ</span>
-              <svg class="kpi-ico" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
-                <rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/>
-              </svg>
-            </div>
-            <div class="kpi-num" id="valKpiCuoiKy">0 ₫</div>
-            <div class="kpi-sub">Đầu kỳ + Thu - Chi + Bù ví</div>
+          <div class="kpi-box-sm box-thu">
+            <div class="kpi-head"><span class="kpi-title">Thu</span></div>
+            <div class="kpi-num" id="valKpiThu">0 ₫</div>
+            <div class="kpi-sub">Tổng thu</div>
+          </div>
+
+          <div class="kpi-box-sm box-chi">
+            <div class="kpi-head"><span class="kpi-title">Chi</span></div>
+            <div class="kpi-num" id="valKpiChi">0 ₫</div>
+            <div class="kpi-sub">Tổng chi</div>
           </div>
         </div>
 
-        <div class="cashflow-pair">
-          <div class="kpi-box box-thu">
-            <div class="kpi-head">
-              <span class="kpi-title">Thu</span>
-              <svg class="kpi-ico" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
-                <path d="M12 19V5"/><path d="m5 12 7-7 7 7"/>
-              </svg>
-            </div>
-            <div class="kpi-num" id="valKpiThu">0 ₫</div>
-            <div class="kpi-sub">Tổng thu theo bộ lọc</div>
+        <!-- Hàng 2: 3 khối chung 1 dòng, 1 khối nền chung, 3 màu từ đậm đến nhạt: Cuối kỳ · Ví Vest · Khả dụng -->
+        <div class="kpi-row-3-group">
+          <div class="kpi-sub-card tone-dark">
+            <div class="sub-lbl">Cuối kỳ</div>
+            <div class="sub-val" id="valKpiCuoiKy">0 ₫</div>
+            <div class="sub-note">Tổng dư cuối</div>
           </div>
 
-          <div class="kpi-box box-chi">
-            <div class="kpi-head">
-              <span class="kpi-title">Chi</span>
-              <svg class="kpi-ico" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
-                <path d="M12 5v14"/><path d="m19 12-7 7-7-7"/>
-              </svg>
-            </div>
-            <div class="kpi-num" id="valKpiChi">0 ₫</div>
-            <div class="kpi-sub">Tổng chi theo bộ lọc</div>
+          <div class="kpi-sub-card tone-mid">
+            <div class="sub-lbl">Ví Vest</div>
+            <div class="sub-val" id="valKpiViVest">500.000 ₫</div>
+            <div class="sub-note" id="subKpiViVest">Chuẩn 500k</div>
+          </div>
+
+          <div class="kpi-sub-card tone-light">
+            <div class="sub-lbl">Khả dụng</div>
+            <div class="sub-val" id="valKpiKhaDung">0 ₫</div>
+            <div class="sub-note">Trừ ví vest</div>
           </div>
         </div>
       </div>
@@ -1322,7 +1350,6 @@
 
   <script>
     const APP_VERSION = 'v2.0';
-    const APP_BUILD_LABEL = 'Bản v2.0 · Kết chuyển nội bộ & Ví vest · Icon tab con · Đọc ảnh tách lượt · Xe 50F20703V';
     const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbymiRccSimgcBN5NU6OadwjRtgkB-yfCyuujX-xUMHWAftLaTKDBreuvd5dgJlhqHwY_Q/exec';
     const VEHICLE_PLATE = '50F20703V';
     const VEST_TARGET_AMOUNT = 500000;
@@ -1790,20 +1817,6 @@
       return Number(v || 0).toLocaleString('vi-VN') + ' ₫';
     }
 
-    function nowClockStr() {
-      const d = new Date();
-      return String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ':' + String(d.getSeconds()).padStart(2, '0');
-    }
-
-    function setUpdateStatusBanner(text, loading) {
-      const strip = document.getElementById('updateStatusStrip');
-      const statusEl = document.getElementById('statusText');
-      const timeEl = document.getElementById('statusTimeText');
-      if (strip) strip.classList.toggle('is-loading', Boolean(loading));
-      if (statusEl && text) statusEl.textContent = text;
-      if (timeEl) timeEl.textContent = loading ? 'Đang xử lý...' : ('Cập nhật ' + nowClockStr());
-    }
-
     function showToast(msg) {
       const el = document.getElementById('toast');
       el.textContent = msg;
@@ -1830,7 +1843,6 @@
       }
       if (lbl) lbl.textContent = loading ? 'Đang đồng bộ...' : 'Đồng bộ';
       if (bar) bar.classList.toggle('active', Boolean(loading));
-      if (loading) setUpdateStatusBanner(`${APP_BUILD_LABEL} · Đang tải dữ liệu mới...`, true);
       if (withOverlay) setLoadingOverlay(loading, `Đang đồng bộ ${APP_VERSION} từ Google Sheet...`);
       else if (!loading) setLoadingOverlay(false);
     }
@@ -2121,11 +2133,10 @@
       area.innerHTML = barsHtml + buildTotalRowHtml(totalRowLabel, total, modeType);
     }
 
-    function renderAnalysis(sumThu, sumChi, sumVestTopup, cuoiKy, chiItems, thuItems) {
+    function renderAnalysis(sumThu, sumChi, sumVestTopup, cuoiKy, vestBalance, khaDung, chiItems, thuItems) {
       const box = document.getElementById('analysisBox');
       const ratio = sumThu > 0 ? ((sumChi / sumThu) * 100).toFixed(1) : '0.0';
       const netFlow = sumThu - sumChi;
-      const vestM = computeVestMetrics(state.allTransactions);
 
       const topChi = chiItems.slice(0, 2).map(([k, v]) => `${k}: ${formatMoney(v)} (${sumChi > 0 ? ((v / sumChi) * 100).toFixed(1) : '0.0'}%)`).join(' · ');
       const topThu = thuItems.map(([k, v]) => `${k}: ${formatMoney(v)} (${sumThu > 0 ? ((v / sumThu) * 100).toFixed(1) : '0.0'}%)`).join(' · ');
@@ -2138,7 +2149,7 @@
           <strong>Tổng cộng THU (100% = ${formatMoney(sumThu)}):</strong> ${topThu || 'Chưa có thu'}
         </div>
         <div class="analysis-row net-note">
-          <strong>Cân đối dòng tiền:</strong> Đầu kỳ <strong>${formatMoney(state.dauKy)}</strong> · Chênh lệch Thu - Chi: <strong>${formatMoney(netFlow)}</strong> · Bù ví vest: <strong>${formatMoney(sumVestTopup)}</strong> · Cuối kỳ: <strong>${formatMoney(cuoiKy)}</strong> · Tỷ lệ Chi/Thu: <strong>${ratio}%</strong> · Ví vest hiện có: <strong>${formatMoney(vestM.currentVestBalance)}</strong>
+          <strong>Cân đối dòng tiền:</strong> Đầu kỳ <strong>${formatMoney(state.dauKy)}</strong> · Chênh lệch Thu - Chi: <strong>${formatMoney(netFlow)}</strong> · Bù ví vest: <strong>${formatMoney(sumVestTopup)}</strong> · Cuối kỳ: <strong>${formatMoney(cuoiKy)}</strong> · Ví Vest: <strong>${formatMoney(vestBalance)}</strong> · Khả dụng: <strong>${formatMoney(khaDung)}</strong> · Tỷ lệ Chi/Thu: <strong>${ratio}%</strong>
         </div>
       `;
     }
@@ -2167,11 +2178,20 @@
       });
 
       const cuoiKy = state.dauKy + sumThu - sumChi + sumVestTopup;
+      const vestM = computeVestMetrics(state.allTransactions);
+      const vestBalance = vestM.currentVestBalance;
+      const khaDung = cuoiKy - vestBalance;
 
       document.getElementById('valKpiDauKy').textContent = formatMoney(state.dauKy);
-      document.getElementById('valKpiCuoiKy').textContent = formatMoney(cuoiKy);
       document.getElementById('valKpiThu').textContent = formatMoney(sumThu);
       document.getElementById('valKpiChi').textContent = formatMoney(sumChi);
+
+      document.getElementById('valKpiCuoiKy').textContent = formatMoney(cuoiKy);
+      document.getElementById('valKpiViVest').textContent = formatMoney(vestBalance);
+      document.getElementById('subKpiViVest').textContent = vestM.deficitToTarget > 0
+        ? `Thiếu ${formatDotThousands(vestM.deficitToTarget)} ₫`
+        : 'Đủ chuẩn 500k';
+      document.getElementById('valKpiKhaDung').textContent = formatMoney(khaDung);
 
       const chiItems = Object.entries(chiMap).sort((a, b) => b[1] - a[1]);
       const thuItems = Object.entries(thuMap).sort((a, b) => b[1] - a[1]);
@@ -2180,7 +2200,7 @@
       renderHorizontalBars('barChiArea', 'Tổng cộng CHI', 'chi', chiItems, CHI_COLORS);
       renderDonutAndLegend('pieThuArea', 'pieThuTotalBadge', 'Tổng thu', 'Tổng cộng THU', 'thu', thuItems, THU_COLORS);
       renderHorizontalBars('barThuArea', 'Tổng cộng THU', 'thu', thuItems, THU_COLORS);
-      renderAnalysis(sumThu, sumChi, sumVestTopup, cuoiKy, chiItems, thuItems);
+      renderAnalysis(sumThu, sumChi, sumVestTopup, cuoiKy, vestBalance, khaDung, chiItems, thuItems);
     }
 
     function onLoanFilterChange() {
@@ -2409,7 +2429,6 @@
       if (!d) return;
       if (d.error) {
         showToast('Lỗi: ' + d.error);
-        setUpdateStatusBanner(`${APP_BUILD_LABEL} · Lỗi dữ liệu: ${d.error}`, false);
         return;
       }
 
@@ -2429,7 +2448,6 @@
       rebuildDynamicFilterMenus();
       runFilters();
       detectInstallmentAuto();
-      setUpdateStatusBanner(`${APP_BUILD_LABEL} · Đã cập nhật (${state.allTransactions.length} GD)`, false);
     }
 
     function fetchSheetData(notify) {
@@ -2444,7 +2462,6 @@
           })
           .withFailureHandler(err => {
             setSyncState(false);
-            setUpdateStatusBanner(`${APP_BUILD_LABEL} · Lỗi đồng bộ`, false);
             showToast('Lỗi đồng bộ: ' + err.message);
           })
           .getDashboardData();
@@ -2460,7 +2477,6 @@
         })
         .catch(err => {
           setSyncState(false);
-          setUpdateStatusBanner(`${APP_BUILD_LABEL} · Lỗi kết nối`, false);
           showToast('Lỗi kết nối: ' + err.message);
         });
     }
@@ -3165,7 +3181,6 @@
       const catVal = document.getElementById('entryCat').value;
       let noteVal = document.getElementById('entryNote').value.trim();
 
-      // Tận dụng nguyên vẹn các trường của NKTC khi lưu Kết chuyển nội bộ hoặc Giật ví vest
       let sheetLoai = uiType;
       if (uiType === 'Transfer') {
         sheetLoai = 'Kết chuyển nội bộ';
