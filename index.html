@@ -310,15 +310,10 @@
     .kpi-sub-card {
       border-radius: 10px; padding: 8px 7px; border: 1px solid transparent; min-width: 0;
     }
-    .kpi-sub-card.tone-dark {
-      background: #1d4ed8; border-color: #1e40af; color: #ffffff;
-    }
-    .kpi-sub-card.tone-mid {
-      background: #60a5fa; border-color: #3b82f6; color: #0f172a;
-    }
-    .kpi-sub-card.tone-light {
-      background: #dbeafe; border-color: #93c5fd; color: #1e3a8a;
-    }
+    .kpi-sub-card.tone-dark { background: #1d4ed8; border-color: #1e40af; color: #ffffff; }
+    .kpi-sub-card.tone-mid { background: #60a5fa; border-color: #3b82f6; color: #0f172a; }
+    .kpi-sub-card.tone-light { background: #dbeafe; border-color: #93c5fd; color: #1e3a8a; }
+
     .kpi-sub-card .sub-lbl {
       font-size: 9.5px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.2px;
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
@@ -486,6 +481,49 @@
     .loan-foot { margin-top: 10px; padding-top: 8px; border-top: 1px dashed #cbd5e1; font-size: 11.5px; font-weight: 700; color: #1e293b; display: flex; flex-direction: column; gap: 4px; }
 
     /* Chi tiết */
+    .detail-summary-bar {
+      margin-bottom: 12px;
+      padding: 9px 11px;
+      border-radius: 11px;
+      background: #f8fafc;
+      border: 1.5px solid #cbd5e1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 800;
+      color: #0f172a;
+    }
+    .detail-sum-group {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .detail-sum-pill {
+      padding: 3px 9px;
+      border-radius: 999px;
+      font-size: 11.5px;
+      font-weight: 900;
+    }
+    .detail-sum-pill.sum-chi {
+      background: #fef2f2;
+      color: #dc2626;
+      border: 1px solid #fca5a5;
+    }
+    .detail-sum-pill.sum-thu {
+      background: #ecfdf5;
+      color: #059669;
+      border: 1px solid #6ee7b7;
+    }
+    .detail-sum-pill.sum-xfr {
+      background: #f0f9ff;
+      color: #0369a1;
+      border: 1px solid #7dd3fc;
+    }
+
     .cards-stack { display: flex; flex-direction: column; gap: 14px; }
     .tx-card { border-radius: 14px; padding: 13px 14px; border: 1.5px solid var(--border); box-shadow: 0 2px 6px rgba(15, 23, 42, 0.05); }
     .tx-card.card-thu { background-color: var(--thu-bg); border-color: var(--thu-border); }
@@ -983,8 +1021,8 @@
 
           <div class="kpi-sub-card tone-mid">
             <div class="sub-lbl">Ví Vest</div>
-            <div class="sub-val" id="valKpiViVest">500.000 ₫</div>
-            <div class="sub-note" id="subKpiViVest">Chuẩn 500k</div>
+            <div class="sub-val" id="valKpiViVest">358.607 ₫</div>
+            <div class="sub-note" id="subKpiViVest">Chốt 23/11: 358.607 ₫</div>
           </div>
 
           <div class="kpi-sub-card tone-light">
@@ -1145,6 +1183,12 @@
           </div>
           <span class="pill-badge" id="detailCardCount">0 thẻ</span>
         </div>
+
+        <div id="detailSummaryBar" class="detail-summary-bar">
+          <span>Tổng theo bộ lọc:</span>
+          <div class="detail-sum-group" id="detailSummaryValues">0 ₫</div>
+        </div>
+
         <div id="detailCardsStack" class="cards-stack"></div>
       </div>
     </section>
@@ -1161,7 +1205,7 @@
           </div>
         </div>
 
-        <!-- Theo dõi biến động Ví vest (mức chuẩn 500.000 ₫) -->
+        <!-- Theo dõi biến động Ví vest (mốc chốt 358.607 ₫ cuối ngày 23/11/2026) -->
         <div class="vest-tracker-box">
           <div class="vest-top">
             <span class="vest-title">
@@ -1169,12 +1213,12 @@
                 <path d="M20 7h-3a2 2 0 0 1-2-2V2"/><path d="M9 18a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h7l4 4v10a2 2 0 0 1-2 2Z"/>
                 <path d="M3 7v12a2 2 0 0 0 2 2h10"/>
               </svg>
-              <span>Ví vest (chuẩn 500.000 ₫)</span>
+              <span>Ví vest (chốt 23/11: 358.607 ₫)</span>
             </span>
-            <span id="vestCurrentBalanceText" class="vest-balance">500.000 ₫</span>
+            <span id="vestCurrentBalanceText" class="vest-balance">358.607 ₫</span>
           </div>
           <div class="vest-sub-row">
-            <span id="vestStatusHintText">Đủ mức chuẩn 500.000 ₫ · Biến động theo lần giật &amp; nạp bù</span>
+            <span id="vestStatusHintText">Chốt 23/11: 358.607 ₫ · Biến động theo lần giật &amp; nạp bù sau 23/11</span>
             <div class="vest-quick-actions">
               <button type="button" class="btn-vest-act" onclick="prepareQuickPullVest()">
                 <span>↓</span><span>Giật ví vest</span>
@@ -1352,6 +1396,8 @@
     const APP_VERSION = 'v2.0';
     const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbymiRccSimgcBN5NU6OadwjRtgkB-yfCyuujX-xUMHWAftLaTKDBreuvd5dgJlhqHwY_Q/exec';
     const VEHICLE_PLATE = '50F20703V';
+    const VEST_CHECKPOINT_DATE_ISO = '2026-11-23';
+    const VEST_CHECKPOINT_AMOUNT = 358607;
     const VEST_TARGET_AMOUNT = 500000;
 
     const TAB_TITLES = {
@@ -1438,17 +1484,31 @@
     }
 
     function computeVestMetrics(transactions) {
-      let pulledFromVest = 0;
-      let toppedUpVest = 0;
+      let pulledAfterCheckpoint = 0;
+      let toppedUpAfterCheckpoint = 0;
+
       (transactions || []).forEach(tx => {
         if (isOpeningTx(tx)) return;
+        const iso = String(tx.ngayIso || '').trim();
+        if (iso && iso <= VEST_CHECKPOINT_DATE_ISO) return;
+
         const amt = Number(tx.soTien) || 0;
-        if (isVestPullTx(tx)) pulledFromVest += amt;
-        else if (isVestTopupTx(tx)) toppedUpVest += amt;
+        if (isVestPullTx(tx)) pulledAfterCheckpoint += amt;
+        else if (isVestTopupTx(tx)) toppedUpAfterCheckpoint += amt;
       });
-      const currentVestBalance = Math.max(0, VEST_TARGET_AMOUNT - pulledFromVest + toppedUpVest);
+
+      const currentVestBalance = Math.max(
+        0,
+        VEST_CHECKPOINT_AMOUNT - pulledAfterCheckpoint + toppedUpAfterCheckpoint
+      );
       const deficitToTarget = Math.max(0, VEST_TARGET_AMOUNT - currentVestBalance);
-      return { currentVestBalance, pulledFromVest, toppedUpVest, deficitToTarget };
+
+      return {
+        currentVestBalance,
+        pulledFromVest: pulledAfterCheckpoint,
+        toppedUpVest: toppedUpAfterCheckpoint,
+        deficitToTarget
+      };
     }
 
     function renderVestTrackerUi() {
@@ -1460,11 +1520,15 @@
 
       balEl.textContent = formatMoney(m.currentVestBalance);
       if (m.deficitToTarget > 0) {
-        hintEl.textContent = `Đang thiếu ${formatMoney(m.deficitToTarget)} để đủ chuẩn ${formatMoney(VEST_TARGET_AMOUNT)}`;
-        if (btnTopup) btnTopup.innerHTML = `<span>⇄</span><span>Bù ${formatDotThousands(m.deficitToTarget)} ₫</span>`;
+        hintEl.textContent = `Chốt 23/11: 358.607 ₫ · Thiếu ${formatMoney(m.deficitToTarget)} so với chuẩn ${formatMoney(VEST_TARGET_AMOUNT)}`;
+        if (btnTopup) {
+          btnTopup.innerHTML = `<span>⇄</span><span>Bù ${formatDotThousands(m.deficitToTarget)} ₫</span>`;
+        }
       } else {
-        hintEl.textContent = `Đủ chuẩn ${formatMoney(VEST_TARGET_AMOUNT)} · Đã giật ${formatMoney(m.pulledFromVest)} / Đã bù ${formatMoney(m.toppedUpVest)}`;
-        if (btnTopup) btnTopup.innerHTML = `<span>⇄</span><span>Nạp bù ví vest</span>`;
+        hintEl.textContent = `Chốt 23/11: 358.607 ₫ · Đã giật ${formatMoney(m.pulledFromVest)} / Đã bù ${formatMoney(m.toppedUpVest)}`;
+        if (btnTopup) {
+          btnTopup.innerHTML = `<span>⇄</span><span>Nạp bù ví vest</span>`;
+        }
       }
       onPullVestCheckChange();
     }
@@ -2149,7 +2213,7 @@
           <strong>Tổng cộng THU (100% = ${formatMoney(sumThu)}):</strong> ${topThu || 'Chưa có thu'}
         </div>
         <div class="analysis-row net-note">
-          <strong>Cân đối dòng tiền:</strong> Đầu kỳ <strong>${formatMoney(state.dauKy)}</strong> · Chênh lệch Thu - Chi: <strong>${formatMoney(netFlow)}</strong> · Bù ví vest: <strong>${formatMoney(sumVestTopup)}</strong> · Cuối kỳ: <strong>${formatMoney(cuoiKy)}</strong> · Ví Vest: <strong>${formatMoney(vestBalance)}</strong> · Khả dụng: <strong>${formatMoney(khaDung)}</strong> · Tỷ lệ Chi/Thu: <strong>${ratio}%</strong>
+          <strong>Cân đối dòng tiền:</strong> Đầu kỳ <strong>${formatMoney(state.dauKy)}</strong> · Chênh lệch Thu - Chi: <strong>${formatMoney(netFlow)}</strong> · Bù ví vest: <strong>${formatMoney(sumVestTopup)}</strong> · Cuối kỳ: <strong>${formatMoney(cuoiKy)}</strong> · Ví Vest (chốt 23/11: 358.607 ₫): <strong>${formatMoney(vestBalance)}</strong> · Khả dụng: <strong>${formatMoney(khaDung)}</strong> · Tỷ lệ Chi/Thu: <strong>${ratio}%</strong>
         </div>
       `;
     }
@@ -2188,9 +2252,7 @@
 
       document.getElementById('valKpiCuoiKy').textContent = formatMoney(cuoiKy);
       document.getElementById('valKpiViVest').textContent = formatMoney(vestBalance);
-      document.getElementById('subKpiViVest').textContent = vestM.deficitToTarget > 0
-        ? `Thiếu ${formatDotThousands(vestM.deficitToTarget)} ₫`
-        : 'Đủ chuẩn 500k';
+      document.getElementById('subKpiViVest').textContent = 'Chốt 23/11: 358.607 ₫';
       document.getElementById('valKpiKhaDung').textContent = formatMoney(khaDung);
 
       const chiItems = Object.entries(chiMap).sort((a, b) => b[1] - a[1]);
@@ -2367,14 +2429,45 @@
 
     function renderDetailCards(list) {
       const stack = document.getElementById('detailCardsStack');
-      document.getElementById('detailCardCount').textContent = list.length + ' thẻ';
+      const sumValuesEl = document.getElementById('detailSummaryValues');
+      const items = Array.isArray(list) ? list : [];
 
-      if (!list || list.length === 0) {
+      document.getElementById('detailCardCount').textContent = items.length + ' thẻ';
+
+      let sumThu = 0;
+      let sumChi = 0;
+      let sumXfr = 0;
+
+      items.forEach(tx => {
+        const amt = Number(tx.soTien) || 0;
+        if (isInternalTransferTx(tx)) sumXfr += amt;
+        else if (checkThu(tx)) sumThu += amt;
+        else sumChi += amt;
+      });
+
+      const pills = [];
+      if (sumChi > 0 || (sumThu === 0 && sumXfr === 0)) {
+        pills.push(`<span class="detail-sum-pill sum-chi">Tổng chi: -${formatMoney(sumChi)}</span>`);
+      }
+      if (sumThu > 0) {
+        pills.push(`<span class="detail-sum-pill sum-thu">Tổng thu: +${formatMoney(sumThu)}</span>`);
+      }
+      if (sumXfr > 0) {
+        pills.push(`<span class="detail-sum-pill sum-xfr">Kết chuyển: ${formatMoney(sumXfr)}</span>`);
+      }
+      if (sumThu > 0 && sumChi > 0) {
+        const net = sumThu - sumChi;
+        const sign = net >= 0 ? '+' : '-';
+        pills.push(`<span class="pill-badge">Chênh lệch: ${sign}${formatMoney(Math.abs(net))}</span>`);
+      }
+      sumValuesEl.innerHTML = pills.join('');
+
+      if (!items.length) {
         stack.innerHTML = '<div class="empty-msg">Không có thẻ giao dịch phù hợp bộ lọc.</div>';
         return;
       }
 
-      stack.innerHTML = list.map(tx => {
+      stack.innerHTML = items.map(tx => {
         const isXfr = isInternalTransferTx(tx);
         const isThu = !isXfr && checkThu(tx);
         const cardCls = isXfr ? 'card-xfr' : (isThu ? 'card-thu' : 'card-chi');
