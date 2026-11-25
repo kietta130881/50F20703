@@ -6,7 +6,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
-  <title>Sổ thu chi · v2.2 · Xe 50F20703V</title>
+  <title>Sổ thu chi · v2.3 · Xe 50F20703V</title>
   <style>
     :root {
       --bg: #f1f5f9;
@@ -211,7 +211,7 @@
       border-radius: 50%; animation: spin 0.75s linear infinite;
     }
 
-    /* Modal Hồ sơ xe & Giấy tờ */
+    /* Modal Hồ sơ xe & Giấy tờ + Modal Chốt số dư Ví VETC */
     .modal-backdrop {
       position: fixed; inset: 0; background: rgba(15, 23, 42, 0.52);
       backdrop-filter: blur(3px); z-index: 90; display: none;
@@ -345,7 +345,7 @@
     .kpi-box-sm .kpi-num { font-size: 12px; font-weight: 900; margin-top: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .kpi-box-sm .kpi-sub { font-size: 9.5px; font-weight: 700; color: var(--muted); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-    /* Hàng 2: 3 khối chung 1 dòng, 1 khối nền chung, 3 màu từ đậm đến nhạt (Cuối kỳ - Ví Vest - Khả dụng) */
+    /* Hàng 2: 3 khối chung 1 dòng, 1 khối nền chung, 3 màu từ đậm đến nhạt (Cuối kỳ - Ví VETC - Khả dụng) */
     .kpi-row-3-group {
       display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px;
       background: #eff6ff; border: 1.5px solid #93c5fd; border-radius: 14px;
@@ -356,6 +356,7 @@
     }
     .kpi-sub-card.tone-dark { background: #1d4ed8; border-color: #1e40af; color: #ffffff; }
     .kpi-sub-card.tone-mid { background: #60a5fa; border-color: #3b82f6; color: #0f172a; cursor: pointer; }
+    .kpi-sub-card.tone-mid.is-low { background: #fecaca; border-color: #ef4444; color: #7f1d1d; }
     .kpi-sub-card.tone-light { background: #dbeafe; border-color: #93c5fd; color: #1e3a8a; }
 
     .kpi-sub-card .sub-lbl {
@@ -364,6 +365,7 @@
     }
     .kpi-sub-card.tone-dark .sub-lbl { color: #eff6ff; }
     .kpi-sub-card.tone-mid .sub-lbl { color: #0f172a; }
+    .kpi-sub-card.tone-mid.is-low .sub-lbl { color: #991b1b; }
     .kpi-sub-card.tone-light .sub-lbl { color: #1e40af; }
 
     .kpi-sub-card .sub-val {
@@ -372,6 +374,7 @@
     }
     .kpi-sub-card.tone-dark .sub-val { color: #ffffff; }
     .kpi-sub-card.tone-mid .sub-val { color: #0f172a; }
+    .kpi-sub-card.tone-mid.is-low .sub-val { color: #7f1d1d; }
     .kpi-sub-card.tone-light .sub-val { color: #1e3a8a; }
 
     .kpi-sub-card .sub-note {
@@ -380,6 +383,7 @@
     }
     .kpi-sub-card.tone-dark .sub-note { color: #bfdbfe; }
     .kpi-sub-card.tone-mid .sub-note { color: #1e293b; }
+    .kpi-sub-card.tone-mid.is-low .sub-note { color: #991b1b; }
     .kpi-sub-card.tone-light .sub-note { color: #2563eb; }
 
     /* Các thẻ KPI dùng ở tab Theo dõi vay */
@@ -596,7 +600,7 @@
     .tx-desc { margin-top: 8px; padding: 8px 10px; border-radius: 9px; background: rgba(255, 255, 255, 0.75); font-size: 13px; color: #1e293b; line-height: 1.4; word-break: break-word; }
     .tx-meta-grid { margin-top: 9px; padding-top: 8px; border-top: 1px dashed rgba(15, 23, 42, 0.14); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; font-size: 11px; font-weight: 700; color: #475569; }
 
-    /* Cập nhật + Ví vest + Tab con có icon */
+    /* Cập nhật + Ví VETC + Tab con có icon */
     .vest-tracker-box {
       background: linear-gradient(135deg, #f0fdfa, #ecfeff);
       border: 1.5px solid #2dd4bf;
@@ -607,9 +611,15 @@
       flex-direction: column;
       gap: 7px;
     }
+    .vest-tracker-box.is-low {
+      background: linear-gradient(135deg, #fef2f2, #fff1f2);
+      border-color: #f87171;
+    }
     .vest-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
     .vest-title { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 900; color: #0f766e; }
-    .vest-balance { font-size: 14px; font-weight: 900; color: #0f172a; }
+    .vest-tracker-box.is-low .vest-title { color: #b91c1c; }
+    .vest-balance { font-size: 14.5px; font-weight: 900; color: #0f172a; }
+    .vest-tracker-box.is-low .vest-balance { color: #dc2626; }
     .vest-sub-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; font-size: 11px; font-weight: 700; color: #475569; }
     .vest-quick-actions { display: flex; gap: 6px; flex-wrap: wrap; }
     .btn-vest-act {
@@ -619,6 +629,36 @@
     }
     .btn-vest-act.primary { background: #0f766e; color: #ffffff; }
     .btn-vest-act.carryover { background: #1d4ed8; border-color: #1e40af; color: #ffffff; }
+    .btn-vest-act.checkpoint { background: #b45309; border-color: #92400e; color: #ffffff; }
+
+    /* Lịch sử VETC thu gọn trong Tab Cập nhật */
+    .vest-hist-box {
+      margin-top: 4px;
+      padding-top: 7px;
+      border-top: 1px dashed #99f6e4;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .vest-hist-hd {
+      display: flex; align-items: center; justify-content: space-between;
+      font-size: 11px; font-weight: 800; color: #0f766e; cursor: pointer;
+    }
+    .vest-hist-list {
+      display: flex; flex-direction: column; gap: 4px;
+      max-height: 155px; overflow-y: auto;
+    }
+    .vest-hist-item {
+      background: rgba(255, 255, 255, 0.85);
+      border: 1px solid #ccfbf1;
+      border-radius: 7px;
+      padding: 5px 8px;
+      font-size: 11px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
 
     .voice-box { background: #fffbeb; border: 1px dashed #d97706; border-radius: 12px; padding: 10px 12px; margin-bottom: 12px; }
     .voice-top { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
@@ -814,7 +854,7 @@
         </svg>
       </span>
       <span id="headerTitle">Tổng quan</span>
-      <span id="headerVersionBadge" class="ver-badge" title="Bấm để kiểm tra phiên bản mới nhất" onclick="checkRemoteAppVersion(true)">v2.2</span>
+      <span id="headerVersionBadge" class="ver-badge" title="Bấm để kiểm tra phiên bản mới nhất" onclick="checkRemoteAppVersion(true)">v2.3</span>
 
       <button
         type="button"
@@ -860,7 +900,53 @@
   <div id="loadingMask" class="loading-mask" aria-live="polite">
     <div class="loading-card">
       <div class="loading-spinner"></div>
-      <span id="loadingText">Đang đồng bộ dữ liệu v2.2 từ Google Sheet...</span>
+      <span id="loadingText">Đang đồng bộ dữ liệu v2.3 từ Google Sheet...</span>
+    </div>
+  </div>
+
+  <!-- Modal Chốt số dư Ví VETC trực tiếp (v2.3) -->
+  <div id="vestCheckpointModal" class="modal-backdrop" onclick="if(event.target===this)closeVestCheckpointModal()">
+    <div class="modal-sheet" style="max-width:440px;">
+      <div class="modal-hd">
+        <div class="modal-title">
+          <span>🛣️ Chốt số dư Ví VETC thực tế (v2.3)</span>
+        </div>
+        <button type="button" class="btn-close-modal" onclick="closeVestCheckpointModal()">Đóng ✕</button>
+      </div>
+      <div class="modal-body">
+        <div style="font-size:12px; color:#334155; font-weight:700; line-height:1.45;">
+          Nhập số dư hiện tại hiển thị trên app VETC hoặc tin nhắn SMS mới nhất để đồng bộ làm mốc chuẩn.
+        </div>
+        <div>
+          <label class="f-lbl" for="vestCheckpointAmtInput">Số dư Ví VETC hiện tại (VNĐ)</label>
+          <input
+            type="text"
+            inputmode="numeric"
+            id="vestCheckpointAmtInput"
+            class="f-inp amount-inp"
+            placeholder="VD: 358.607"
+            oninput="onVestCheckpointInput()"
+          />
+          <div id="vestCheckpointPreview" class="amount-preview"></div>
+        </div>
+        <div>
+          <label class="f-lbl" for="vestCheckpointNoteInput">Ghi chú chốt mốc</label>
+          <input
+            type="text"
+            id="vestCheckpointNoteInput"
+            class="f-inp"
+            value="Chốt số dư Ví VETC thực tế từ V2.3"
+          />
+        </div>
+        <label style="display:flex; align-items:center; gap:7px; font-size:12px; font-weight:700; color:#0f172a; cursor:pointer;">
+          <input type="checkbox" id="chkVestRecordDeltaTx" checked style="width:auto; accent-color:#0f766e;" />
+          <span>Ghi dòng chênh lệch vào sổ NKTC để đối soát lịch sử</span>
+        </label>
+        <div style="display:flex; gap:8px; justify-content:flex-end; margin-top:4px;">
+          <button type="button" class="btn-clear" style="padding:8px 14px;" onclick="closeVestCheckpointModal()">Hủy</button>
+          <button type="button" class="btn-cal-sync" style="padding:8px 16px; font-size:12.5px;" onclick="submitVestCheckpoint()">Lưu mốc Ví VETC</button>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -1066,7 +1152,7 @@
           </div>
         </div>
 
-        <!-- Hàng 2: 3 khối chung 1 dòng, 1 khối nền chung, 3 màu từ đậm đến nhạt: Cuối kỳ · Ví Vest · Khả dụng -->
+        <!-- Hàng 2: 3 khối chung 1 dòng, 1 khối nền chung, 3 màu từ đậm đến nhạt: Cuối kỳ · Ví VETC · Khả dụng -->
         <div class="kpi-row-3-group">
           <div class="kpi-sub-card tone-dark">
             <div class="sub-lbl">Cuối kỳ</div>
@@ -1074,16 +1160,16 @@
             <div class="sub-note">Tổng dư cuối</div>
           </div>
 
-          <div class="kpi-sub-card tone-mid" title="Bấm để mở tab Cập nhật kết chuyển / bù Ví Vest" onclick="switchMainTab('update')">
-            <div class="sub-lbl">Ví Vest</div>
+          <div id="kpiViVestCard" class="kpi-sub-card tone-mid" title="Bấm để quản lý / chốt số dư Ví VETC" onclick="switchMainTab('update')">
+            <div class="sub-lbl" id="lblKpiViVest">Ví VETC</div>
             <div class="sub-val" id="valKpiViVest">358.607 ₫</div>
-            <div class="sub-note" id="subKpiViVest">Mốc 23/11: 358.607 ₫</div>
+            <div class="sub-note" id="subKpiViVest">Mốc 23/11/2026</div>
           </div>
 
           <div class="kpi-sub-card tone-light">
             <div class="sub-lbl">Khả dụng</div>
             <div class="sub-val" id="valKpiKhaDung">0 ₫</div>
-            <div class="sub-note">Trừ ví vest</div>
+            <div class="sub-note">Trừ ví VETC</div>
           </div>
         </div>
       </div>
@@ -1260,31 +1346,42 @@
           </div>
         </div>
 
-        <!-- Theo dõi biến động Ví vest (tự trừ theo VETC/giật ví & tăng khi kết chuyển tồn cuối vào ví vest) -->
-        <div class="vest-tracker-box">
+        <!-- Theo dõi biến động Ví VETC (v2.3: đồng bộ SMS "So du:", chốt số dư, cảnh báo dưới 100k, lịch sử VETC) -->
+        <div id="vestTrackerBox" class="vest-tracker-box">
           <div class="vest-top">
             <span class="vest-title">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
                 <path d="M20 7h-3a2 2 0 0 1-2-2V2"/><path d="M9 18a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h7l4 4v10a2 2 0 0 1-2 2Z"/>
                 <path d="M3 7v12a2 2 0 0 0 2 2h10"/>
               </svg>
-              <span>Ví vest (tự trừ phí cầu đường/VETC sau 23/11)</span>
+              <span id="vestTrackerTitleText">Ví VETC (đồng bộ SMS &amp; phí cầu đường)</span>
             </span>
             <span id="vestCurrentBalanceText" class="vest-balance">358.607 ₫</span>
           </div>
           <div class="vest-sub-row">
-            <span id="vestStatusHintText">Mốc 23/11: 358.607 ₫ · Tự trừ giao dịch VETC mới &amp; cộng khi kết chuyển tồn cuối</span>
+            <span id="vestStatusHintText">Mốc 23/11/2026: 358.607 ₫ · Tự cập nhật theo SMS "So du:" hoặc giao dịch VETC</span>
             <div class="vest-quick-actions">
+              <button type="button" class="btn-vest-act checkpoint" onclick="openVestCheckpointModal()">
+                <span>📌</span><span>Chốt số dư VETC</span>
+              </button>
               <button type="button" class="btn-vest-act" onclick="prepareQuickPullVest()">
-                <span>↓</span><span>Chi từ ví vest</span>
+                <span>↓</span><span>Chi phí VETC</span>
               </button>
               <button type="button" class="btn-vest-act carryover" id="btnQuickCarryoverVest" onclick="prepareQuickCarryoverVest()">
-                <span>⇄</span><span>Kết chuyển tồn cuối → Ví vest</span>
+                <span>⇄</span><span>Kết chuyển tồn cuối → Ví VETC</span>
               </button>
               <button type="button" class="btn-vest-act primary" id="btnQuickTopupVest" onclick="prepareQuickTopupVest()">
-                <span>+</span><span>Nạp bù ví vest</span>
+                <span>+</span><span>Nạp bù Ví VETC</span>
               </button>
             </div>
+          </div>
+
+          <div id="vestHistBox" class="vest-hist-box hide">
+            <div class="vest-hist-hd" onclick="toggleVestHistList()">
+              <span id="vestHistCountTitle">Lịch sử giao dịch Ví VETC (0)</span>
+              <span id="vestHistToggleArrow">▾</span>
+            </div>
+            <div id="vestHistList" class="vest-hist-list"></div>
           </div>
         </div>
 
@@ -1357,7 +1454,7 @@
         <div id="vestPullStrip" class="vest-toggle-strip">
           <label>
             <input type="checkbox" id="chkPullFromVest" onchange="onPullVestCheckChange()" />
-            <span>Trừ tiền từ <strong>Ví vest</strong> cho khoản chi này</span>
+            <span>Trừ tiền từ <strong>Ví VETC</strong> cho khoản chi này</span>
           </label>
           <span id="vestPullPreview" style="font-size:11px;"></span>
         </div>
@@ -1404,7 +1501,7 @@
               type="text"
               id="entryNote"
               class="f-inp"
-              placeholder="VD: Sạc pin, VETC, kết chuyển tồn cuối vào ví vest..."
+              placeholder="VD: Sạc pin, VETC, kết chuyển tồn cuối vào Ví VETC..."
               oninput="detectInstallmentAuto()"
             />
           </div>
@@ -1451,14 +1548,15 @@
   <div id="toast" class="toast"></div>
 
   <script>
-    const APP_VERSION = 'v2.2';
+    const APP_VERSION = 'v2.3';
     const VERSION_STORAGE_KEY = 'STC_50F20703V_LAST_SEEN_VERSION';
     const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbymiRccSimgcBN5NU6OadwjRtgkB-yfCyuujX-xUMHWAftLaTKDBreuvd5dgJlhqHwY_Q/exec';
     const VEHICLE_PLATE = '50F20703V';
     const VEST_CHECKPOINT_DATE_ISO = '2026-11-23';
-    const VEST_CHECKPOINT_DATE_LABEL = '23/11';
+    const VEST_CHECKPOINT_DATE_LABEL = '23/11/2026';
     const VEST_CHECKPOINT_AMOUNT = 358607;
     const VEST_TARGET_AMOUNT = 500000;
+    const VEST_LOW_THRESHOLD = 100000;
 
     const TAB_TITLES = {
       overview: 'Tổng quan',
@@ -1470,14 +1568,14 @@
     const CATEGORIES_BY_TYPE = {
       Thu: ['Doanh thu dịch vụ/Lương', 'Thu nhập khác'],
       Chi: ['Sạc điện/Nhiên liệu', 'Ăn uống', 'Phí cầu đường/VETC', 'Bảo dưỡng/Sửa chữa', 'Sinh hoạt gia đình', 'Khác'],
-      Transfer: ['Kết chuyển tồn cuối → Ví vest', 'Nạp bù ví vest', 'Chuyển quỹ nội bộ']
+      Transfer: ['Kết chuyển tồn cuối → Ví VETC', 'Nạp Ví VETC', 'Nạp bù ví vest', 'Chuyển quỹ nội bộ']
     };
 
-    const DEFAULT_METHODS = ['Chuyển khoản', 'Tiền mặt'];
+    const DEFAULT_METHODS = ['Chuyển khoản', 'Tiền mặt', 'VETC'];
     const CHI_COLORS = ['#dc2626', '#2563eb', '#7c3aed', '#0284c7', '#d97706', '#475569'];
     const THU_COLORS = ['#059669', '#f59e0b', '#0891b2', '#2563eb'];
 
-    /* ===== THÔNG BÁO CẬP NHẬT PHIÊN BẢN MỚI TỰ ĐỘNG (KHÔNG CẦN F5 THỦ CÔNG NHIỀU LẦN) ===== */
+    /* ===== THÔNG BÁO CẬP NHẬT PHIÊN BẢN MỚI TỰ ĐỘNG ===== */
     let detectedRemoteVersion = '';
 
     function showNewVersionBanner(messageText, targetVer) {
@@ -1511,7 +1609,6 @@
 
     async function checkRemoteAppVersion(manualClick) {
       try {
-        // 1. Kiểm tra file Index.html hoặc version trực tiếp trên GitHub Pages (chống cache bằng tham số _t)
         const pageUrl = new URL(window.location.href);
         if (pageUrl.hostname.includes('github.io')) {
           pageUrl.searchParams.set('_vercheck', Date.now().toString());
@@ -1529,7 +1626,6 @@
           }
         }
 
-        // 2. Kiểm tra phiên bản từ Apps Script backend
         if (typeof google !== 'undefined' && google.script && google.script.run) {
           google.script.run
             .withSuccessHandler(res => {
@@ -1588,7 +1684,6 @@
         }).catch(() => {});
       }
 
-      // Kiểm tra bản mới ngay sau khi mở trang và mỗi khi người dùng quay lại tab trình duyệt
       setTimeout(() => checkRemoteAppVersion(false), 1800);
       document.addEventListener('visibilitychange', () => {
         if (document.visibilityState === 'visible') {
@@ -1667,7 +1762,7 @@
       detectInstallmentAuto();
     }
 
-    /* ===== LOGIC VÍ VEST ĐỘNG: TỰ TRỪ THEO VETC/CHI VÍ VEST MỚI & TĂNG KHI KẾT CHUYỂN TỒN CUỐI ===== */
+    /* ===== LOGIC VÍ VETC ĐỒNG BỘ V2.3 (KHỚP CODE.GS: SMS "So du:" + CHỐT TAY + KẾT CHUYỂN) ===== */
     function isInternalTransferTx(tx) {
       if (!tx) return false;
       if (tx.isTransfer) return true;
@@ -1679,6 +1774,8 @@
         l.includes('nội bộ') ||
         d.includes('bù ví vest') ||
         d.includes('nạp ví vest') ||
+        d.includes('nạp vetc') ||
+        d.includes('bù vetc') ||
         d.includes('kết chuyển') ||
         g.includes('[bù ví vest]') ||
         g.includes('[kết chuyển]')
@@ -1689,12 +1786,20 @@
       if (!tx) return false;
       const d = String(tx.danhMuc || '').trim().toLowerCase();
       const g = String(tx.ghiChu || '').trim().toLowerCase();
+      const combined = `${d} ${g}`;
       return (
-        d.includes('bù ví vest') ||
-        d.includes('nạp ví vest') ||
-        d.includes('→ ví vest') ||
-        g.includes('[bù ví vest]') ||
-        (isInternalTransferTx(tx) && g.includes('ví vest'))
+        combined.includes('bù ví vest') ||
+        combined.includes('nạp ví vest') ||
+        combined.includes('nạp vetc') ||
+        combined.includes('bù vetc') ||
+        combined.includes('→ ví vest') ||
+        combined.includes('-> ví vest') ||
+        combined.includes('→ ví vetc') ||
+        combined.includes('-> ví vetc') ||
+        combined.includes('→ vetc') ||
+        combined.includes('-> vetc') ||
+        combined.includes('[bù ví vest]') ||
+        (isInternalTransferTx(tx) && (combined.includes('ví vest') || combined.includes('vetc')))
       );
     }
 
@@ -1707,6 +1812,8 @@
       return (
         g.includes('[ví vest]') ||
         g.includes('ví vest') ||
+        g.includes('[ví vetc]') ||
+        g.includes('ví vetc') ||
         d.includes('cầu đường') ||
         d.includes('vetc') ||
         combined.includes('vetc') ||
@@ -1716,43 +1823,152 @@
       );
     }
 
-    function computeVestMetrics(transactions) {
-      let pulledAfterCheckpoint = 0;
-      let toppedUpAfterCheckpoint = 0;
-      let latestTopupInfo = '';
-      let pullCountAfter = 0;
-
-      (transactions || []).forEach(tx => {
-        if (isOpeningTx(tx)) return;
-        const iso = String(tx.ngayIso || '').trim();
-        // Chỉ tính biến động phát sinh SAU mốc chốt 23/11/2026 (VD: các giao dịch ngày 24/11/2026 trở đi)
-        if (iso && iso <= VEST_CHECKPOINT_DATE_ISO) return;
-
-        const amt = Number(tx.soTien) || 0;
-        if (isVestTopupTx(tx)) {
-          toppedUpAfterCheckpoint += amt;
-          if (!latestTopupInfo) {
-            latestTopupInfo = `${tx.ngay || ''} (+${formatMoney(amt)})`;
-          }
-        } else if (isVestPullTx(tx)) {
-          pulledAfterCheckpoint += amt;
-          pullCountAfter += 1;
+    function parseClientSmsVestMeta(ghiChu, fallbackNgayIso, rowIndex) {
+      const text = String(ghiChu || '');
+      let smsTimestampMs = 0;
+      let smsTimeLabel = '';
+      const timeMatch = text.match(/(?:vao|vào)\s+(\d{1,2}):(\d{2})(?::(\d{2}))?\s+(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})/i);
+      if (timeMatch) {
+        const hh = Number(timeMatch[1]);
+        const mm = Number(timeMatch[2]);
+        const ss = Number(timeMatch[3] || 0);
+        const dd = Number(timeMatch[4]);
+        const mo = Number(timeMatch[5]);
+        const yrRaw = Number(timeMatch[6]);
+        const yyyy = yrRaw < 100 ? 2000 + yrRaw : yrRaw;
+        smsTimestampMs = Date.UTC(yyyy, mo - 1, dd, hh, mm, ss);
+        smsTimeLabel = `${String(hh).padStart(2, '0')}:${String(mm).padStart(2, '0')}:${String(ss).padStart(2, '0')} ${String(dd).padStart(2, '0')}/${String(mo).padStart(2, '0')}/${yyyy}`;
+      } else if (fallbackNgayIso) {
+        const parts = String(fallbackNgayIso).split('-');
+        if (parts.length === 3) {
+          smsTimestampMs = Date.UTC(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]), 0, 0, 0);
         }
-      });
+      }
 
-      const currentVestBalance = Math.max(
-        0,
-        VEST_CHECKPOINT_AMOUNT - pulledAfterCheckpoint + toppedUpAfterCheckpoint
-      );
-      const deficitToTarget = Math.max(0, VEST_TARGET_AMOUNT - currentVestBalance);
+      let smsBalance = null;
+      const balMatch = text.match(/s[oố]\s*d[uư]\s*[:\-]?\s*([+\-]?\d[\d.,]*)\s*(?:vnđ|vnd|đ)?/i);
+      if (balMatch) {
+        let s = String(balMatch[1]).trim();
+        if (s.includes(',') && s.includes('.')) {
+          s = s.lastIndexOf(',') > s.lastIndexOf('.')
+            ? s.replace(/\./g, '').split(',')[0]
+            : s.replace(/,/g, '').split('.')[0];
+        } else {
+          s = s.replace(/[.,]/g, '');
+        }
+        const n = Number(s.replace(/[^\d-]/g, ''));
+        if (Number.isFinite(n) && n >= 0) smsBalance = Math.round(n);
+      }
 
       return {
+        smsTimestampMs,
+        smsTimeLabel,
+        smsBalance,
+        hasSmsBalance: smsBalance !== null,
+        rowIndex: Number(rowIndex) || 0
+      };
+    }
+
+    function computeVestMetrics(transactions) {
+      // Nếu backend v2.3 đã trả về viVest đầy đủ và không có thay đổi cục bộ chưa đồng bộ, ưu tiên dùng dữ liệu server
+      if (state.serverViVest && typeof state.serverViVest.currentBalance === 'number' && !state.localVestDirty) {
+        const sv = state.serverViVest;
+        const curBal = Math.max(0, Number(sv.currentBalance) || 0);
+        return {
+          currentVestBalance: curBal,
+          baseSmsBalance: Number(sv.baseSmsBalance) || VEST_CHECKPOINT_AMOUNT,
+          anchorSmsTime: sv.anchorSmsTime || VEST_CHECKPOINT_DATE_LABEL,
+          pulledFromVest: Number(sv.pulledAfterCheckpoint) || 0,
+          pullCountAfter: (sv.transactions || []).filter(x => x.type === 'PULL').length,
+          toppedUpVest: Number(sv.toppedUpAfterCheckpoint) || 0,
+          deficitToTarget: Math.max(0, VEST_TARGET_AMOUNT - curBal),
+          isLowBalance: curBal < (Number(sv.lowThreshold) || VEST_LOW_THRESHOLD),
+          latestTopupInfo: sv.latestTopupDate ? `${sv.latestTopupDate} (+${formatMoney(sv.latestTopupAmount || 0)})` : '',
+          transactions: Array.isArray(sv.transactions) ? sv.transactions : []
+        };
+      }
+
+      // Fallback tính đồng bộ tại client theo đúng thuật toán Code.gs v2.3
+      const relevant = [];
+      const history = [];
+      (transactions || []).forEach(tx => {
+        if (isOpeningTx(tx)) return;
+        const isTopup = isVestTopupTx(tx);
+        const isPull = !isTopup && isVestPullTx(tx);
+        if (!isTopup && !isPull) return;
+
+        const meta = parseClientSmsVestMeta(tx.ghiChu, tx.ngayIso, tx.rowIndex);
+        const amt = Number(tx.soTien) || 0;
+        relevant.push({
+          tx,
+          isTopup,
+          isPull,
+          soTien: amt,
+          ...meta
+        });
+        history.push({
+          rowIndex: tx.rowIndex,
+          ngay: tx.ngay,
+          type: isTopup ? 'TOPUP' : 'PULL',
+          typeLabel: isTopup ? 'Nạp / Bù VETC' : 'Trừ phí VETC',
+          danhMuc: tx.danhMuc,
+          soTien: amt,
+          smsTimeLabel: meta.smsTimeLabel || tx.ngay,
+          smsBalance: meta.smsBalance,
+          ghiChu: tx.ghiChu
+        });
+      });
+
+      relevant.sort((a, b) => (a.smsTimestampMs - b.smsTimestampMs) || (a.rowIndex - b.rowIndex));
+
+      let anchorIdx = -1;
+      for (let i = relevant.length - 1; i >= 0; i--) {
+        if (relevant[i].hasSmsBalance) {
+          anchorIdx = i;
+          break;
+        }
+      }
+
+      let baseBalance = VEST_CHECKPOINT_AMOUNT;
+      let anchorSmsTime = VEST_CHECKPOINT_DATE_LABEL;
+      let startIdx = 0;
+
+      if (anchorIdx !== -1) {
+        baseBalance = relevant[anchorIdx].smsBalance;
+        anchorSmsTime = relevant[anchorIdx].smsTimeLabel || relevant[anchorIdx].tx.ngay || VEST_CHECKPOINT_DATE_LABEL;
+        startIdx = anchorIdx + 1;
+      }
+
+      let pulledAfter = 0;
+      let toppedUpAfter = 0;
+      let pullCountAfter = 0;
+      let latestTopupInfo = '';
+
+      for (let j = startIdx; j < relevant.length; j++) {
+        const it = relevant[j];
+        if (it.hasSmsBalance) continue;
+        if (anchorIdx === -1 && it.tx.ngayIso && it.tx.ngayIso <= VEST_CHECKPOINT_DATE_ISO) continue;
+        if (it.isTopup) {
+          toppedUpAfter += it.soTien;
+          latestTopupInfo = `${it.tx.ngay || ''} (+${formatMoney(it.soTien)})`;
+        } else if (it.isPull) {
+          pulledAfter += it.soTien;
+          pullCountAfter += 1;
+        }
+      }
+
+      const currentVestBalance = Math.max(0, baseBalance - pulledAfter + toppedUpAfter);
+      return {
         currentVestBalance,
-        pulledFromVest: pulledAfterCheckpoint,
+        baseSmsBalance: baseBalance,
+        anchorSmsTime,
+        pulledFromVest: pulledAfter,
         pullCountAfter,
-        toppedUpVest: toppedUpAfterCheckpoint,
-        deficitToTarget,
-        latestTopupInfo
+        toppedUpVest: toppedUpAfter,
+        deficitToTarget: Math.max(0, VEST_TARGET_AMOUNT - currentVestBalance),
+        isLowBalance: currentVestBalance < VEST_LOW_THRESHOLD,
+        latestTopupInfo,
+        transactions: history.reverse()
       };
     }
 
@@ -1778,6 +1994,8 @@
     function renderVestTrackerUi() {
       const snap = computeCashflowSnapshot();
       const m = snap.vestMetrics;
+      const trackerBox = document.getElementById('vestTrackerBox');
+      const trackerTitle = document.getElementById('vestTrackerTitleText');
       const balEl = document.getElementById('vestCurrentBalanceText');
       const hintEl = document.getElementById('vestStatusHintText');
       const btnTopup = document.getElementById('btnQuickTopupVest');
@@ -1786,30 +2004,173 @@
 
       balEl.textContent = formatMoney(m.currentVestBalance);
 
-      const parts = [`Mốc ${VEST_CHECKPOINT_DATE_LABEL}: ${formatMoney(VEST_CHECKPOINT_AMOUNT)}`];
+      if (trackerBox) {
+        trackerBox.classList.toggle('is-low', Boolean(m.isLowBalance));
+      }
+      if (trackerTitle) {
+        trackerTitle.textContent = m.isLowBalance
+          ? '⚠️ Ví VETC sắp cạn (dưới 100.000 ₫) — nên nạp bù!'
+          : 'Ví VETC (đồng bộ SMS & phí cầu đường)';
+      }
+
+      const parts = [`Mốc ${m.anchorSmsTime}: ${formatMoney(m.baseSmsBalance)}`];
       if (m.pulledFromVest > 0) {
-        parts.push(`Đã trừ ${m.pullCountAfter} GD (-${formatMoney(m.pulledFromVest)})`);
+        parts.push(`Trừ sau mốc: -${formatMoney(m.pulledFromVest)}`);
       }
       if (m.toppedUpVest > 0) {
-        parts.push(`Đã kết chuyển bù (+${formatMoney(m.toppedUpVest)})`);
+        parts.push(`Bù sau mốc: +${formatMoney(m.toppedUpVest)}`);
       }
-      parts.push(`Tồn cuối khả dụng: ${formatMoney(snap.availableBalance)}`);
+      parts.push(`Khả dụng ngoài VETC: ${formatMoney(snap.availableBalance)}`);
       hintEl.textContent = parts.join(' · ');
 
       if (btnCarryover) {
         const suggestCarry = m.deficitToTarget > 0 ? Math.min(m.deficitToTarget, Math.max(0, snap.availableBalance)) : 0;
         btnCarryover.innerHTML = suggestCarry > 0
           ? `<span>⇄</span><span>Kết chuyển tồn cuối (+${formatDotThousands(suggestCarry)} ₫)</span>`
-          : `<span>⇄</span><span>Kết chuyển tồn cuối → Ví vest</span>`;
+          : `<span>⇄</span><span>Kết chuyển tồn cuối → Ví VETC</span>`;
       }
 
       if (btnTopup) {
         btnTopup.innerHTML = m.deficitToTarget > 0
           ? `<span>+</span><span>Bù đủ 500k (+${formatDotThousands(m.deficitToTarget)} ₫)</span>`
-          : `<span>+</span><span>Nạp thêm ví vest</span>`;
+          : `<span>+</span><span>Nạp thêm Ví VETC</span>`;
       }
 
+      renderVestHistoryMiniList(m.transactions || []);
       onPullVestCheckChange();
+    }
+
+    function renderVestHistoryMiniList(txList) {
+      const box = document.getElementById('vestHistBox');
+      const title = document.getElementById('vestHistCountTitle');
+      const listEl = document.getElementById('vestHistList');
+      if (!box || !title || !listEl) return;
+
+      if (!txList.length) {
+        box.classList.add('hide');
+        return;
+      }
+
+      box.classList.remove('hide');
+      title.textContent = `Lịch sử biến động Ví VETC (${txList.length} lượt)`;
+      listEl.innerHTML = txList.slice(0, 12).map(it => {
+        const isTopup = it.type === 'TOPUP';
+        const color = isTopup ? '#059669' : '#dc2626';
+        const sign = isTopup ? '+' : '-';
+        const smsBadge = it.smsBalance !== null && it.smsBalance !== undefined
+          ? `<span style="color:#0f766e; font-weight:800;"> · SMS dư: ${formatMoney(it.smsBalance)}</span>`
+          : '';
+        return `
+          <div class="vest-hist-item">
+            <div style="min-width:0; flex:1;">
+              <div style="font-weight:800; color:#0f172a; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+                ${it.smsTimeLabel || it.ngay || ''} · ${it.danhMuc || it.typeLabel}${smsBadge}
+              </div>
+              <div style="color:#64748b; font-size:10px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+                ${it.ghiChu || ''}
+              </div>
+            </div>
+            <strong style="color:${color}; white-space:nowrap;">${sign}${formatMoney(it.soTien)}</strong>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function toggleVestHistList() {
+      const listEl = document.getElementById('vestHistList');
+      const arrow = document.getElementById('vestHistToggleArrow');
+      if (!listEl) return;
+      const hidden = listEl.classList.toggle('hide');
+      if (arrow) arrow.textContent = hidden ? '▸' : '▾';
+    }
+
+    function openVestCheckpointModal() {
+      const m = computeVestMetrics(state.allTransactions);
+      setVestCheckpointAmount(m.currentVestBalance);
+      document.getElementById('vestCheckpointNoteInput').value = 'Chốt số dư Ví VETC thực tế từ V2.3';
+      document.getElementById('chkVestRecordDeltaTx').checked = true;
+      document.getElementById('vestCheckpointModal').classList.add('open');
+      setTimeout(() => document.getElementById('vestCheckpointAmtInput').focus(), 80);
+    }
+
+    function closeVestCheckpointModal() {
+      document.getElementById('vestCheckpointModal').classList.remove('open');
+    }
+
+    function setVestCheckpointAmount(num) {
+      const inp = document.getElementById('vestCheckpointAmtInput');
+      const prev = document.getElementById('vestCheckpointPreview');
+      const clean = Math.max(0, Math.round(Number(num || 0)));
+      inp.value = clean ? formatDotThousands(clean) : '0';
+      const curM = computeVestMetrics(state.allTransactions);
+      const delta = clean - curM.currentVestBalance;
+      if (delta === 0) {
+        prev.textContent = `Khớp số dư hiện tại (${formatMoney(clean)})`;
+      } else if (delta > 0) {
+        prev.textContent = `Tăng thêm +${formatMoney(delta)} so với số dư hiện tại`;
+      } else {
+        prev.textContent = `Giảm -${formatMoney(Math.abs(delta))} so với số dư hiện tại`;
+      }
+    }
+
+    function onVestCheckpointInput() {
+      const raw = parseRawDigitsAmount(document.getElementById('vestCheckpointAmtInput').value);
+      setVestCheckpointAmount(raw);
+    }
+
+    function submitVestCheckpoint() {
+      const newBalance = parseRawDigitsAmount(document.getElementById('vestCheckpointAmtInput').value);
+      const note = document.getElementById('vestCheckpointNoteInput').value.trim() || 'Chốt số dư Ví VETC từ V2.3';
+      const recordTx = document.getElementById('chkVestRecordDeltaTx').checked;
+      const curM = computeVestMetrics(state.allTransactions);
+      const deltaAmount = newBalance - curM.currentVestBalance;
+
+      closeVestCheckpointModal();
+      setLoadingOverlay(true, 'Đang chốt số dư Ví VETC lên hệ thống...');
+
+      const payload = {
+        action: 'updateVestBalance',
+        newBalance: newBalance,
+        deltaAmount: deltaAmount,
+        note: note,
+        recordTx: recordTx,
+        ngay: new Date().toISOString().slice(0, 10)
+      };
+
+      if (typeof google !== 'undefined' && google.script && google.script.run) {
+        google.script.run
+          .withSuccessHandler(res => {
+            state.localVestDirty = false;
+            applySheetPayload(res);
+            setLoadingOverlay(false);
+            showToast(`Đã chốt số dư Ví VETC: ${formatMoney(newBalance)}`);
+          })
+          .withFailureHandler(err => {
+            setLoadingOverlay(false);
+            showToast('Lỗi chốt Ví VETC: ' + err.message);
+          })
+          .updateVestBalance(payload);
+        return;
+      }
+
+      fetch(APPS_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(payload)
+      })
+        .then(() => {
+          setTimeout(() => {
+            state.localVestDirty = false;
+            fetchSheetData(false);
+            setLoadingOverlay(false);
+            showToast(`Đã chốt số dư Ví VETC: ${formatMoney(newBalance)}`);
+          }, 900);
+        })
+        .catch(err => {
+          setLoadingOverlay(false);
+          showToast('Lỗi chốt Ví VETC: ' + err.message);
+        });
     }
 
     function onPullVestCheckChange() {
@@ -1823,7 +2184,7 @@
         return;
       }
       const afterPull = Math.max(0, m.currentVestBalance - amt);
-      prev.textContent = `Ví vest còn lại ~ ${formatMoney(afterPull)}`;
+      prev.textContent = `Ví VETC còn lại ~ ${formatMoney(afterPull)}`;
     }
 
     function onEntryCatChange() {
@@ -1844,18 +2205,18 @@
       document.getElementById('entryCat').value = 'Phí cầu đường/VETC';
       const chk = document.getElementById('chkPullFromVest');
       if (chk) chk.checked = true;
-      document.getElementById('entryMethod').value = 'Chuyển khoản';
+      document.getElementById('entryMethod').value = 'VETC';
       onPullVestCheckChange();
       document.getElementById('entryAmount').focus();
-      showToast('Đã chọn Chi Phí cầu đường/VETC & trừ trực tiếp Ví vest');
+      showToast('Đã chọn Chi Phí cầu đường/VETC & trừ trực tiếp Ví VETC');
     }
 
     function prepareQuickCarryoverVest() {
       const snap = computeCashflowSnapshot();
       const m = snap.vestMetrics;
       selectEntryType('Transfer');
-      document.getElementById('entryCat').value = 'Kết chuyển tồn cuối → Ví vest';
-      document.getElementById('entryMethod').value = 'Kết chuyển tồn cuối → Ví vest';
+      document.getElementById('entryCat').value = 'Kết chuyển tồn cuối → Ví VETC';
+      document.getElementById('entryMethod').value = 'Kết chuyển tồn cuối → Ví VETC';
 
       const suggestAmt = m.deficitToTarget > 0
         ? Math.min(m.deficitToTarget, Math.max(0, snap.availableBalance))
@@ -1866,28 +2227,28 @@
 
       const todayStr = new Date().toLocaleDateString('vi-VN');
       document.getElementById('entryNote').value =
-        `[Bù ví vest] Kết chuyển từ tồn cuối quỹ (${formatMoney(snap.totalEndingBalance)}) sang Ví vest ngày ${todayStr}`;
+        `[Bù ví vest] Kết chuyển từ tồn cuối quỹ (${formatMoney(snap.totalEndingBalance)}) sang Ví VETC ngày ${todayStr}`;
 
       document.getElementById('entryAmount').focus();
       showToast(suggestAmt > 0
-        ? `Đã điền kết chuyển ${formatMoney(suggestAmt)} từ tồn cuối vào Ví vest — bấm Lưu NKTC`
-        : 'Nhập số tiền muốn kết chuyển từ tồn cuối vào Ví vest rồi bấm Lưu NKTC');
+        ? `Đã điền kết chuyển ${formatMoney(suggestAmt)} từ tồn cuối vào Ví VETC — bấm Lưu NKTC`
+        : 'Nhập số tiền muốn kết chuyển từ tồn cuối vào Ví VETC rồi bấm Lưu NKTC');
     }
 
     function prepareQuickTopupVest() {
       const m = computeVestMetrics(state.allTransactions);
       selectEntryType('Transfer');
-      document.getElementById('entryCat').value = 'Nạp bù ví vest';
-      document.getElementById('entryMethod').value = 'Chuyển khoản → Ví vest';
+      document.getElementById('entryCat').value = 'Nạp Ví VETC';
+      document.getElementById('entryMethod').value = 'Chuyển khoản → Ví VETC';
       if (m.deficitToTarget > 0) {
         setAmountFieldValue(m.deficitToTarget);
       }
       if (!document.getElementById('entryNote').value.trim()) {
-        document.getElementById('entryNote').value = '[Bù ví vest] Nạp bù ví vest';
+        document.getElementById('entryNote').value = '[Bù ví vest] Nạp bù Ví VETC';
       }
       showToast(m.deficitToTarget > 0
         ? `Đã điền số tiền bù ${formatMoney(m.deficitToTarget)} — kiểm tra và bấm Lưu NKTC`
-        : 'Đã mở tab Kết chuyển nội bộ — nhập số tiền cần bù ví vest');
+        : 'Đã mở tab Kết chuyển nội bộ — nhập số tiền cần nạp Ví VETC');
     }
 
     /* ===== HỒ SƠ XE & GIẤY TỜ (INDEXEDDB) ===== */
@@ -2182,6 +2543,8 @@
     const state = {
       dauKy: 0,
       allTransactions: [],
+      serverViVest: null,
+      localVestDirty: false,
       loanData: DEFAULT_LOAN_DATA,
       selectedTypes: [],
       selectedCats: [],
@@ -2527,7 +2890,7 @@
           <strong>Tổng cộng THU (100% = ${formatMoney(sumThu)}):</strong> ${topThu || 'Chưa có thu'}
         </div>
         <div class="analysis-row net-note">
-          <strong>Cân đối dòng tiền &amp; Ví Vest:</strong> Đầu kỳ <strong>${formatMoney(state.dauKy)}</strong> · Chênh lệch Thu - Chi: <strong>${formatMoney(netFlow)}</strong> · Cuối kỳ: <strong>${formatMoney(cuoiKy)}</strong> · Ví Vest: <strong>${formatMoney(vestBalance)}</strong> (mốc ${VEST_CHECKPOINT_DATE_LABEL}: ${formatMoney(VEST_CHECKPOINT_AMOUNT)}, trừ VETC/giật ví: -${formatMoney(vestM.pulledFromVest)}, kết chuyển bù: +${formatMoney(vestM.toppedUpVest)}) · Khả dụng: <strong>${formatMoney(khaDung)}</strong> · Tỷ lệ Chi/Thu: <strong>${ratio}%</strong>
+          <strong>Cân đối dòng tiền &amp; Ví VETC:</strong> Đầu kỳ <strong>${formatMoney(state.dauKy)}</strong> · Chênh lệch Thu - Chi: <strong>${formatMoney(netFlow)}</strong> · Cuối kỳ: <strong>${formatMoney(cuoiKy)}</strong> · Ví VETC: <strong>${formatMoney(vestBalance)}</strong> (mốc ${vestM.anchorSmsTime}: ${formatMoney(vestM.baseSmsBalance)}, trừ sau mốc: -${formatMoney(vestM.pulledFromVest)}, nạp bù: +${formatMoney(vestM.toppedUpVest)}) · Khả dụng ngoài VETC: <strong>${formatMoney(khaDung)}</strong> · Tỷ lệ Chi/Thu: <strong>${ratio}%</strong>
         </div>
       `;
     }
@@ -2551,7 +2914,6 @@
         }
       });
 
-      // Kết chuyển nội bộ giữa tồn cuối quỹ và Ví Vest không làm thay đổi tổng tài sản Cuối kỳ
       const cuoiKy = state.dauKy + sumThu - sumChi;
       const vestM = computeVestMetrics(state.allTransactions);
       const vestBalance = vestM.currentVestBalance;
@@ -2564,13 +2926,22 @@
       document.getElementById('valKpiCuoiKy').textContent = formatMoney(cuoiKy);
       document.getElementById('valKpiViVest').textContent = formatMoney(vestBalance);
 
+      const vestCardEl = document.getElementById('kpiViVestCard');
+      const vestLblEl = document.getElementById('lblKpiViVest');
       const vestSubEl = document.getElementById('subKpiViVest');
-      if (vestM.toppedUpVest > 0 && vestM.latestTopupInfo) {
-        vestSubEl.textContent = `Đã bù ${vestM.latestTopupInfo}`;
-      } else if (vestM.pulledFromVest > 0) {
-        vestSubEl.textContent = `Mốc 23/11: -${formatDotThousands(vestM.pulledFromVest)} ₫`;
-      } else {
-        vestSubEl.textContent = `Mốc 23/11: ${formatMoney(VEST_CHECKPOINT_AMOUNT)}`;
+      if (vestCardEl) vestCardEl.classList.toggle('is-low', Boolean(vestM.isLowBalance));
+      if (vestLblEl) vestLblEl.textContent = vestM.isLowBalance ? 'Ví VETC (!)' : 'Ví VETC';
+
+      if (vestSubEl) {
+        if (vestM.isLowBalance) {
+          vestSubEl.textContent = 'Sắp cạn (<100k) · Bấm nạp';
+        } else if (vestM.toppedUpVest > 0 && vestM.latestTopupInfo) {
+          vestSubEl.textContent = `Bù ${vestM.latestTopupInfo}`;
+        } else if (vestM.pulledFromVest > 0) {
+          vestSubEl.textContent = `Trừ sau mốc: -${formatDotThousands(vestM.pulledFromVest)} ₫`;
+        } else {
+          vestSubEl.textContent = `Mốc ${vestM.anchorSmsTime}`;
+        }
       }
 
       document.getElementById('valKpiKhaDung').textContent = formatMoney(khaDung);
@@ -2802,7 +3173,7 @@
               <div>
                 <div style="display:flex; align-items:center; gap:5px; flex-wrap:wrap;">
                   <span class="tx-badge">${typeLabel}</span>
-                  ${isVestDeduction ? '<span class="pill-badge" style="background:#ccfbf1;color:#0f766e;font-size:9.5px;">Trừ Ví Vest</span>' : ''}
+                  ${isVestDeduction ? '<span class="pill-badge" style="background:#ccfbf1;color:#0f766e;font-size:9.5px;">Trừ Ví VETC</span>' : ''}
                 </div>
                 <div class="tx-cat">${tx.danhMuc || 'Giao dịch'}</div>
               </div>
@@ -2859,6 +3230,8 @@
       const backendOpening = Number(d.tonDauKy) || 0;
       state.dauKy = backendOpening > 0 ? backendOpening : openingFromTx;
       state.allTransactions = rawTxList.filter(tx => !isOpeningTx(tx));
+      state.serverViVest = d.viVest || null;
+      state.localVestDirty = false;
 
       if (d.loanData) {
         state.loanData = d.loanData;
@@ -2917,16 +3290,17 @@
       const methodSel = document.getElementById('entryMethod');
       if (isXfr) {
         methodSel.innerHTML = `
-          <option value="Kết chuyển tồn cuối → Ví vest">Kết chuyển tồn cuối → Ví vest</option>
-          <option value="Chuyển khoản → Ví vest">Chuyển khoản → Ví vest</option>
-          <option value="Tiền mặt → Ví vest">Tiền mặt → Ví vest</option>
-          <option value="Ví vest → Tiền mặt">Ví vest → Tiền mặt</option>
+          <option value="Kết chuyển tồn cuối → Ví VETC">Kết chuyển tồn cuối → Ví VETC</option>
+          <option value="Chuyển khoản → Ví VETC">Chuyển khoản → Ví VETC</option>
+          <option value="Tiền mặt → Ví VETC">Tiền mặt → Ví VETC</option>
+          <option value="Ví VETC → Tiền mặt">Ví VETC → Tiền mặt</option>
           <option value="Kết chuyển nội bộ">Kết chuyển nội bộ</option>
         `;
       } else {
         methodSel.innerHTML = `
           <option value="Chuyển khoản">Chuyển khoản</option>
           <option value="Tiền mặt">Tiền mặt</option>
+          <option value="VETC">VETC</option>
         `;
       }
 
@@ -3355,14 +3729,14 @@
       document.getElementById('voiceTranscript').textContent = 'Đã nghe: "' + cleanText + '"';
       const lower = cleanText.toLowerCase();
 
-      const isXfr = lower.includes('kết chuyển') || lower.includes('bù ví vest') || lower.includes('nạp bù');
+      const isXfr = lower.includes('kết chuyển') || lower.includes('bù ví vest') || lower.includes('nạp bù') || lower.includes('nạp vetc') || lower.includes('nạp ví vetc');
       const isThu = !isXfr && (lower.startsWith('thu ') || lower.includes('khoản thu') || lower.includes('doanh thu') || lower.includes('nhận tiền') || lower.includes('lương'));
       const targetType = isXfr ? 'Transfer' : (isThu ? 'Thu' : 'Chi');
       selectEntryType(targetType);
 
       const catSel = document.getElementById('entryCat');
       if (targetType === 'Transfer') {
-        catSel.value = lower.includes('tồn cuối') ? 'Kết chuyển tồn cuối → Ví vest' : 'Nạp bù ví vest';
+        catSel.value = lower.includes('tồn cuối') ? 'Kết chuyển tồn cuối → Ví VETC' : 'Nạp Ví VETC';
       } else if (targetType === 'Thu') {
         catSel.value = lower.includes('khác') ? 'Thu nhập khác' : 'Doanh thu dịch vụ/Lương';
       } else {
@@ -3598,7 +3972,7 @@
         extra.textContent = found.danhMuc;
         catSel.appendChild(extra);
       }
-      catSel.value = found.danhMuc || (typeName === 'Transfer' ? 'Kết chuyển tồn cuối → Ví vest' : 'Khác');
+      catSel.value = found.danhMuc || (typeName === 'Transfer' ? 'Kết chuyển tồn cuối → Ví VETC' : 'Khác');
 
       if (typeName === 'Chi') {
         const chk = document.getElementById('chkPullFromVest');
@@ -3617,6 +3991,7 @@
       if (!confirm('Xóa giao dịch dòng #' + rowIndex + ' trên sheet NKTC?')) return;
 
       setLoadingOverlay(true, 'Đang xóa giao dịch dòng #' + rowIndex + '...');
+      state.localVestDirty = true;
 
       if (typeof google !== 'undefined' && google.script && google.script.run) {
         google.script.run
@@ -3677,13 +4052,14 @@
       let sheetLoai = uiType;
       if (uiType === 'Transfer') {
         sheetLoai = 'Kết chuyển nội bộ';
-        const tag = catVal.toLowerCase().includes('ví vest') ? '[Bù ví vest]' : '[Kết chuyển]';
+        const isVestTag = catVal.toLowerCase().includes('ví vest') || catVal.toLowerCase().includes('vetc');
+        const tag = isVestTag ? '[Bù ví vest]' : '[Kết chuyển]';
         if (!noteVal.toLowerCase().includes('[bù ví vest]') && !noteVal.toLowerCase().includes('[kết chuyển]')) {
           noteVal = noteVal ? `${tag} ${noteVal}` : `${tag} ${catVal}`;
         }
       } else if (uiType === 'Chi' && document.getElementById('chkPullFromVest') && document.getElementById('chkPullFromVest').checked) {
         if (!noteVal.toLowerCase().includes('[ví vest]')) {
-          noteVal = noteVal ? `[Ví vest] ${noteVal}` : `[Ví vest] Chi từ ví vest`;
+          noteVal = noteVal ? `[Ví vest] ${noteVal}` : `[Ví vest] Chi từ Ví VETC`;
         }
       }
 
@@ -3696,6 +4072,7 @@
       btn.disabled = true;
       btn.textContent = isEdit ? 'Đang cập nhật...' : 'Đang lưu NKTC...';
       setLoadingOverlay(true, isEdit ? 'Đang cập nhật giao dịch...' : 'Đang lưu giao dịch vào NKTC...');
+      state.localVestDirty = true;
 
       const payload = {
         action: isEdit ? 'updateTransaction' : 'addTransaction',
